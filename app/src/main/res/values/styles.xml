@@ -6,9 +6,14 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="buttonStyle">@style/MyButton</item>
+    </style>
+
+    <style name="MyButton" parent="Widget.AppCompat.Button">
+        <item name="android:textAllCaps">false</item>
+    </style>
 <!--        <item name="windowActionBar">false</item>-->
 <!--        <item name="windowNoTitle">true</item>-->
-    </style>
 
 <!--    <style name="TextAppearance.AppCompat.Widget.ActionBar.Title" parent="@android:style/TextApperance" </style>-->
     <style name="MyTheme.ActionBar.TitleTextStyle" parent="@android:style/TextAppearance">

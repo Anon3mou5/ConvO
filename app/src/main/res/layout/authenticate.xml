@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/gradient"
+    android:textAllCaps="false"
     tools:context=".MainActivity" >
 
     <TextView
@@ -26,8 +27,8 @@
         android:id="@+id/editText"
         android:layout_width="273dp"
         android:layout_height="47dp"
-        android:layout_marginStart="65dp"
-        android:layout_marginTop="64dp"
+        android:layout_marginStart="64dp"
+        android:layout_marginTop="56dp"
         android:background="@drawable/strokes"
         android:ems="10"
         android:fontFamily="sans-serif-light"
@@ -41,13 +42,14 @@
         android:id="@+id/textView2"
         android:layout_width="138dp"
         android:layout_height="36dp"
-        android:layout_marginStart="64dp"
-        android:layout_marginBottom="12dp"
+        android:layout_marginStart="68dp"
+        android:layout_marginBottom="6dp"
         android:fontFamily="@font/cabin_semibold"
         android:paddingTop="10dp"
-        android:text="TextView"
-        android:textSize="18sp"
+        android:text="Password"
         android:textColor="#FFFFFF"
+        android:textSize="18sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/editText"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -70,13 +72,52 @@
         android:id="@+id/textView3"
         android:layout_width="131dp"
         android:layout_height="37dp"
-        android:layout_marginStart="64dp"
-        android:layout_marginBottom="76dp"
+        android:layout_marginStart="68dp"
+        android:layout_marginBottom="68dp"
         android:fontFamily="@font/cabin_semibold"
         android:paddingTop="12dp"
+        android:text="Email"
         android:textColor="#FFFFFF"
-        android:text="TextView"
         android:textSize="18dp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/textView2"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="172dp"
+        android:layout_height="64dp"
+        android:background="@drawable/strokes"
+        android:fontFamily="@font/cabin_semibold"
+        android:text="Login Now"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editText2" />
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="141dp"
+        android:layout_height="43dp"
+        android:background="#00FFFFFF"
+        android:fontFamily="@font/cabin_semibold"
+        android:text="Forgot Password"
+        android:textColor="#FFFFFF"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/button3"
+        android:layout_width="116dp"
+        android:layout_height="42dp"
+        android:background="#00FFFFFF"
+        android:fontFamily="@font/cabin_semibold"
+        android:text="Sign Up"
+        android:textColor="#FFFFFF"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
