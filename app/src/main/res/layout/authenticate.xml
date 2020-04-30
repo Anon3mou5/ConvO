@@ -3,121 +3,149 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:transitionName="constraint"
+    android:id="@+id/constraint2"
     android:layout_height="match_parent"
     android:background="@drawable/gradient"
     android:textAllCaps="false"
+    android:fitsSystemWindows="true"
     tools:context=".MainActivity" >
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="162dp"
-        android:layout_height="59dp"
-        android:layout_marginStart="65dp"
-        android:layout_marginTop="200dp"
-        android:fontFamily="@font/cabin_semibold"
-        android:paddingTop="20dp"
-        android:text="Login"
-        android:textAlignment="viewStart"
-        android:textColor="#FFFFFF"
-        android:textSize="28sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:fitsSystemWindows="true"
+        android:id="@+id/constraint"
+        android:layout_height="match_parent" >
 
-    <EditText
-        android:id="@+id/editText"
-        android:layout_width="273dp"
-        android:layout_height="47dp"
-        android:layout_marginStart="64dp"
-        android:layout_marginTop="56dp"
-        android:background="@drawable/strokes"
-        android:ems="10"
-        android:fontFamily="sans-serif-light"
-        android:inputType="textPersonName"
-        android:text="Name"
-        android:textColor="#FFFFFF"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText2" />
+        <TextView
+            android:id="@+id/login"
+            android:layout_width="162dp"
+            android:layout_height="59dp"
+            android:layout_marginStart="44dp"
+            android:layout_marginTop="200dp"
+            android:fontFamily="@font/cabin_semibold"
+            android:paddingTop="20dp"
+            android:shadowColor="#00FFFFFF"
+            android:text="Login"
+            android:textAlignment="viewStart"
+            android:textColor="#FFFFFF"
+            android:textSize="28sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="138dp"
-        android:layout_height="36dp"
-        android:layout_marginStart="68dp"
-        android:layout_marginBottom="6dp"
-        android:fontFamily="@font/cabin_semibold"
-        android:paddingTop="10dp"
-        android:text="Password"
-        android:textColor="#FFFFFF"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/editText"
-        app:layout_constraintStart_toStartOf="parent" />
+        <EditText
+            android:id="@+id/passedit"
+            android:layout_width="273dp"
+            android:layout_height="47dp"
+            android:layout_marginStart="64dp"
+            android:layout_marginTop="64dp"
+            android:background="@drawable/strokes"
+            android:ems="10"
+            android:transitionName="passedit"
+            android:fontFamily="sans-serif-light"
+            android:inputType="textPersonName"
+            android:textColor="#FFFFFF"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/emailedit" />
 
-    <EditText
-        android:id="@+id/editText2"
-        android:layout_width="268dp"
-        android:layout_height="49dp"
-        android:layout_marginStart="65dp"
-        android:layout_marginTop="65dp"
-        android:background="@drawable/strokes"
-        android:ems="10"
-        android:fontFamily="sans-serif-light"
-        android:inputType="textPersonName"
-        android:text="Name"
-        android:textColor="#FFFFFF"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        <TextView
+            android:id="@+id/pass"
+            android:layout_width="138dp"
+            android:layout_height="36dp"
+            android:layout_marginStart="64dp"
+            android:layout_marginBottom="9dp"
+            android:fontFamily="@font/cabin_semibold"
+            android:paddingTop="10dp"
+            android:transitionName="pass"
+            android:text="Password"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/passedit"
+            app:layout_constraintStart_toStartOf="parent" />
 
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="131dp"
-        android:layout_height="37dp"
-        android:layout_marginStart="68dp"
-        android:layout_marginBottom="68dp"
-        android:fontFamily="@font/cabin_semibold"
-        android:paddingTop="12dp"
-        android:text="Email"
-        android:textColor="#FFFFFF"
-        android:textSize="18dp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/textView2"
-        app:layout_constraintStart_toStartOf="parent" />
+        <EditText
+            android:id="@+id/emailedit"
+            android:layout_width="268dp"
+            android:layout_height="49dp"
+            android:layout_marginStart="64dp"
+            android:layout_marginTop="80dp"
+            android:background="@drawable/strokes"
+            android:ems="10"
+            android:transitionName="emailedit"
+            android:fontFamily="sans-serif-light"
+            android:inputType="textPersonName"
+            android:textColor="#FFFFFF"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/login" />
 
-    <Button
-        android:id="@+id/button"
-        android:layout_width="172dp"
-        android:layout_height="64dp"
-        android:background="@drawable/strokes"
-        android:fontFamily="@font/cabin_semibold"
-        android:text="Login Now"
-        android:textColor="#FFFFFF"
-        android:textSize="18sp"
-        android:textStyle="bold"
+        <TextView
+            android:id="@+id/email"
+            android:layout_width="131dp"
+            android:layout_height="37dp"
+            android:layout_marginStart="64dp"
+            android:layout_marginBottom="9dp"
+            android:fontFamily="@font/cabin_semibold"
+            android:paddingTop="12dp"
+            android:transitionName="email"
+            android:text="Email"
+            android:textColor="#FFFFFF"
+            android:textSize="18dp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/emailedit"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <Button
+            android:id="@+id/button"
+            android:layout_width="172dp"
+            android:layout_height="64dp"
+            android:layout_marginBottom="124dp"
+            android:background="@drawable/strokes"
+            android:fontFamily="@font/cabin_semibold"
+            android:text="Login Now"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.497"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <Button
+            android:id="@+id/button2"
+            android:layout_width="141dp"
+            android:layout_height="43dp"
+            android:layout_marginBottom="50dp"
+            android:background="#00FFFFFF"
+            android:fontFamily="@font/cabin_semibold"
+            android:text="Forgot Password"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <Button
+            android:id="@+id/button3"
+            android:layout_width="116dp"
+            android:layout_height="42dp"
+            android:layout_marginBottom="50dp"
+            android:background="#00FFFFFF"
+            android:fontFamily="@font/cabin_semibold"
+            android:text="Sign Up"
+            android:textColor="#FFFFFF"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="254dp"
+        android:layout_height="328dp"
+        android:tint="#FFFFFF"
+        android:transitionName="logo"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText2" />
-
-    <Button
-        android:id="@+id/button2"
-        android:layout_width="141dp"
-        android:layout_height="43dp"
-        android:background="#00FFFFFF"
-        android:fontFamily="@font/cabin_semibold"
-        android:text="Forgot Password"
-        android:textColor="#FFFFFF"
-        android:textSize="14sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
-        android:id="@+id/button3"
-        android:layout_width="116dp"
-        android:layout_height="42dp"
-        android:background="#00FFFFFF"
-        android:fontFamily="@font/cabin_semibold"
-        android:text="Sign Up"
-        android:textColor="#FFFFFF"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/logo" />
 </androidx.constraintlayout.widget.ConstraintLayout>
