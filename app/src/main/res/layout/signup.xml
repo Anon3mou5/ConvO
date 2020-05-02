@@ -11,11 +11,16 @@
     android:fitsSystemWindows="true"
     tools:context=".MainActivity" >
 
+
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
         android:id="@+id/constraint3"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:fitsSystemWindows="true"
-        android:layout_height="match_parent" >
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <TextView
             android:id="@+id/signup"
@@ -56,10 +61,10 @@
             android:fontFamily="@font/cabin_semibold"
             android:paddingTop="10dp"
             android:text="Email"
-            android:transitionName="email"
             android:textColor="#FFFFFF"
             android:textSize="18sp"
             android:textStyle="bold"
+            android:transitionName="email"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/nameedit" />
 
@@ -102,10 +107,10 @@
             android:layout_marginTop="7dp"
             android:background="@drawable/strokes"
             android:ems="10"
-            android:transitionName="passedit"
             android:fontFamily="sans-serif-light"
             android:inputType="textPersonName"
             android:textColor="#FFFFFF"
+            android:transitionName="passedit"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/pass" />
 
@@ -118,11 +123,11 @@
             android:layout_marginTop="7dp"
             android:fontFamily="@font/cabin_semibold"
             android:paddingTop="10dp"
-            android:transitionName="pass"
             android:text="Password"
             android:textColor="#FFFFFF"
             android:textSize="18sp"
             android:textStyle="bold"
+            android:transitionName="pass"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/emailedit" />
 
@@ -156,13 +161,13 @@
             app:layout_constraintTop_toBottomOf="@+id/passedit" />
 
         <Button
-            android:id="@+id/button"
+            android:id="@+id/signin"
             android:layout_width="172dp"
             android:layout_height="64dp"
             android:layout_marginBottom="20dp"
             android:background="@drawable/strokes"
             android:fontFamily="@font/cabin_semibold"
-            android:text="Login Now"
+            android:text="Sign In"
             android:textColor="#FFFFFF"
             android:textSize="18sp"
             android:textStyle="bold"
@@ -172,20 +177,42 @@
             app:layout_constraintTop_toBottomOf="@+id/confirmpassedit" />
 
         <TextView
-            android:id="@+id/textView"
-            android:layout_width="154dp"
-            android:layout_height="120dp"
-            android:text="TextView"
-            android:textColor="#FFFFFF"
-            android:textSize="50sp"
+            android:id="@+id/passindication"
+            android:layout_width="176dp"
+            android:layout_height="29dp"
+            android:background="@drawable/text_design"
+            android:fontFamily="@font/cabin_semibold"
+            android:text="must conatain 6 letters and a number"
+            android:textAlignment="center"
+            android:textColor="#000000"
+            android:textSize="10dp"
             android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.466"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.611" />
+
+        <TextView
+            android:id="@+id/emailindication"
+            android:layout_width="171dp"
+            android:layout_height="27dp"
+            android:background="@drawable/text_design"
+            android:fontFamily="@font/cabin_semibold"
+            android:text="Inavild emailAddress"
+            android:textAlignment="center"
+            android:textColor="#020202"
+            android:textSize="10dp"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.466"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.489" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 
     <ImageView
         android:id="@+id/imageView"
