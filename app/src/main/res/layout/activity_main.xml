@@ -4,17 +4,55 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="3dp"
     tools:context=".MainActivity">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycle"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="match_parent"
+        android:layout_height="598dp"
+        android:layout_marginTop="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.141">
 
     </androidx.recyclerview.widget.RecyclerView>
 
+    <EditText
+        android:id="@+id/msg"
+        android:layout_width="352dp"
+        android:layout_height="56dp"
+        android:background="@drawable/purple_blue"
+        android:elevation="6dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:padding="4dp"
+        android:paddingStart="13dp"
+        android:text="Name"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/recycle" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/send"
+        android:layout_width="51dp"
+        android:layout_height="86dp"
+        android:layout_marginTop="3dp"
+        android:elevation="6dp"
+        android:src="@mipmap/send"
+        android:tint="#00922D2D"
+        app:fabCustomSize="50dp"
+        app:fabSize="normal"
+        app:layout_constraintStart_toEndOf="@+id/msg"
+        app:layout_constraintTop_toBottomOf="@+id/recycle"
+        app:maxImageSize="50dp"
+        app:rippleColor="#FFFFFF" /><![CDATA[
+        app:layout_constraintEnd_toEndOf="@+id/recycle" />
+
+    "/>
+]]>
 </androidx.constraintlayout.widget.ConstraintLayout>

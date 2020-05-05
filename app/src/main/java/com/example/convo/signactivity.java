@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,22 +26,25 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class signactivity extends AppCompatActivity {
-    TextView name = findViewById(R.id.nameedit);
-
-    TextView email = findViewById(R.id.emailedit);
-
-    TextView emailindication = findViewById(R.id.emailindication);
-
-    final TextView pass = findViewById(R.id.passedit);
-
-    final TextView indication = findViewById(R.id.passindication);
-
-    final TextView confirmpass = findViewById(R.id.confirmpassedit);
+//    final EditText name = findViewById(R.id.nameedit);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.signup);
+
+
+        final  EditText email = findViewById(R.id.emailedit);
+
+        // TextView emailindication = findViewById(R.id.emailindication);
+
+        final EditText pass = findViewById(R.id.passedit);
+
+        final TextView indication = findViewById(R.id.passindication);
+
+        final EditText confirmpass = findViewById(R.id.confirmpassedit);
+
         ConstraintLayout l = findViewById(R.id.constraint3);
 
         Button signin = findViewById(R.id.signin);
@@ -71,28 +75,28 @@ public class signactivity extends AppCompatActivity {
                     Toast.makeText(signactivity.this,"Invalid email format",Toast.LENGTH_SHORT).show();
                 }
 
-                if(!isPasswordValidMethod(pass.getText().toString())) {
+                if(isPasswordValidMethod(pass.getText().toString())==false) {
                     Toast.makeText(signactivity.this, "Invalid format", Toast.LENGTH_SHORT).show();
-
+                }
                     if (pass.getText().toString() == confirmpass.getText().toString()) {
 
                         auth.createUserWithEmailAndPassword(email.getText().toString(), pass.getText().toString()).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if (task.isSuccessful()) {
-                                    Toast.makeText(signactivity.this,"Account Created Succesfully",Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(signactivity.this, "Account Created Succesfully", Toast.LENGTH_SHORT).show();
 
                                     auth.signInWithEmailAndPassword(email.getText().toString(), pass.getText().toString()).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                                         @Override
                                         public void onComplete(@NonNull Task<AuthResult> task) {
                                             if (task.isSuccessful()) {
 
-                                                Intent recycle = new Intent(signactivity.this,MainActivity.class);
+                                                Intent recycle = new Intent(signactivity.this, MainActivity.class);
                                                 startActivity(recycle);
                                                 finish();
                                             } else {
                                                 Toast.makeText(signactivity.this, "UnSuccessfull LogIn", Toast.LENGTH_LONG).show();
-                                                Intent j = new Intent(signactivity.this,loginactivity.class);
+                                                Intent j = new Intent(signactivity.this, loginactivity.class);
                                                 startActivity(j);
                                                 finish();
                                             }
@@ -100,11 +104,12 @@ public class signactivity extends AppCompatActivity {
                                     });
 
                                 } else {
-                                    Toast.makeText(signactivity.this,"Account Creation UnSuccesfull",Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(signactivity.this, "Account Creation UnSuccesfull", Toast.LENGTH_SHORT).show();
 
                                 }
                             }
                         });
+                    }
 
 
 
@@ -112,48 +117,29 @@ public class signactivity extends AppCompatActivity {
 
 
                     }
-                }
+                });
             }
-        });
-    }
-
-
 
         // Validate password
          public boolean isPasswordValidMethod(String pas)
         {
-
-            String yourString = pass.getText().toString();
-
             boolean isValid = false;
 
             // ^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$
             // ^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$
 
-            String expression = "^(?=.*[A-Za-z])(?=.*\\\\d)(?=.*[$@$!%*#?&])[A-Za-z\\\\d$@$!%*#?&]{8,}$";
+            String expression = "^((?=.*[a-z])(?=.*d)(?=.*[@#$%])(?=.*[A-Z]).{6,16})$";
             CharSequence inputStr = pas;
 
-            Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
-            Matcher matcher = pattern.matcher(inputStr);
+            Pattern pattern;
+            Matcher matcher;
+            final String PASSWORD_PATTERN = "^(?=.*[0-9])(?=.*[A-Z])(?=.*[@#$%^&+=!])(?=\\S+$).{6,16}$";
+            pattern = Pattern.compile(PASSWORD_PATTERN);
+            matcher = pattern.matcher(pas);
 
-            if (matcher.matches()) {
-                isValid = true;
-            }else{
-                isValid=false;
-            }
-            return isValid;
+            return matcher.matches();
         }
 
-
-    @Override
-    public void finish() {
-        super.finish();
-        ConstraintLayout l = findViewById(R.id.constraint3);
-                Animation ab = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.left_to_right);
-                l.startAnimation(ab);
-
-
-    }
 
 }
 

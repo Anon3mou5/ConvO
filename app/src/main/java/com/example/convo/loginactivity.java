@@ -29,7 +29,7 @@ public class loginactivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.authenticate);
-        final ImageView logo = findViewById(R.id.imageView);
+        final ImageView logo = findViewById(R.id.img);
         //logo.animate().translationY(500).setDuration(100);
         Animation b = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.transition);
 

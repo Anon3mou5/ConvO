@@ -13,15 +13,17 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.sql.Time;
+import java.util.Date;
 import java.util.List;
 
 public class Modelclass extends RecyclerView.Adapter<viewholder> {
 
-    List<Data> modelclasslist;
+    List<message> modelclasslist;
     String name;
     String chat;
 
-    public Modelclass(List<Data> modelclasslist) {
+    public Modelclass(List<message> modelclasslist) {
         this.modelclasslist = modelclasslist;
         Log.d("Inside", " Adapter,constructor");
     }
@@ -37,8 +39,8 @@ public class Modelclass extends RecyclerView.Adapter<viewholder> {
 
     @Override
     public void onBindViewHolder(@NonNull viewholder holder, int position) {
-        name = modelclasslist.get(position).getname();
-        chat = modelclasslist.get(position).getchat();
+        name = modelclasslist.get(position).getUid();
+        chat = modelclasslist.get(position).getMsgg();
         viewholder.setdata(name, chat);
         Log.d("holder", "View holder Binded");
     }
@@ -53,19 +55,22 @@ public class Modelclass extends RecyclerView.Adapter<viewholder> {
  class viewholder extends RecyclerView.ViewHolder{
 
     static TextView t1 ;
-    static EditText t2 ;
+    static TextView t2,t3 ;
 
     public viewholder(@NonNull View itemView) {
         super(itemView);
 
         t1 = itemView.findViewById(R.id.name);
         t2 = itemView.findViewById(R.id.chat);
+        t3 = itemView.findViewById(R.id.textView);
     }
     static void setdata(String name,String chat)
     {
        t1.setText(name);
        t2.setText(chat);
         Log.d("setdata","settingdata");
+        Date d = new Date();
+        t3.setText((int) d.getTime());
 
     }
 }
