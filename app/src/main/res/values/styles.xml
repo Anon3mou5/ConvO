@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
@@ -26,6 +26,11 @@
     <style name="MyButton" parent="Widget.AppCompat.Button">
         <item name="android:textAllCaps">false</item>
     </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:textColorPrimary">@color/colorPrimary</item>
+        <item name="android:textColorSecondary">@color/colorPrimaryDark</item>
+    </style>
 <!--        <item name="windowActionBar">false</item>-->
 <!--        <item name="windowNoTitle">true</item>-->
 
@@ -38,5 +43,22 @@
 
     </style>
 
+
+    <style name="AppTheme2" parent="Theme.AppCompat.Light.NoActionBar">
+    <!-- Customize your theme here. -->
+    <item name="colorPrimary"  tools:ignore="DuplicateDefinition">@color/colorPrimary</item>
+    <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="android:windowLightStatusBar">true</item>
+    <item name="colorAccent">@color/colorAccent</item>
+    <item name="buttonStyle">@style/MyButton</item>
+    <item name="android:windowTranslucentStatus">false</item>
+    <item name="android:windowTranslucentNavigation">true </item>
+    <!-- enable window content transitions -->
+    <item name="android:windowActivityTransitions">true</item>
+    <!-- specify enter and exit transitions -->
+    <item name="android:windowEnterTransition">@android:transition/slide_left</item>
+    <item name="android:windowExitTransition">@android:transition/slide_right</item>
+
+    </style>
 
 </resources>

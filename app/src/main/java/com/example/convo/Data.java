@@ -5,11 +5,11 @@ import android.util.Log;
 public class Data {
 
     String name;
-    String chat;
-    public Data(String nm,String chat)
+    String url;
+    public Data(String nm,String url)
     {
         name=nm;
-        this.chat=chat;
+        this.url=url;
     }
 
     public String getname()
@@ -17,8 +17,8 @@ public class Data {
         Log.d("Getters called","");
         return name;
     }
-    public String getchat()
+    public String geturl()
     {
-        return chat;
+        return url;
     }
 }

@@ -1,58 +1,157 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="3dp"
+    android:background="@drawable/bg"
+    android:backgroundTint="#27BCBFC0"
+    android:backgroundTintMode="src_in"
+    android:fitsSystemWindows="true"
+    android:orientation="horizontal"
+    android:windowSoftInputMode="adjustPan"
     tools:context=".MainActivity">
+
+    <!--    <View-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="5dp"-->
+    <!--        android:background="@drawable/shadow"-->
+    <!--        android:visibility="invisible"-->
+    <!--        app:layout_constraintTop_toBottomOf="@+id/tool"-->
+    <!--        tools:layout_editor_absoluteX="3dp" />-->
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycle"
-        android:layout_width="match_parent"
-        android:layout_height="598dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_width="408dp"
+        android:layout_height="573dp"
+        android:layout_below="@+id/toolbar"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="46dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.141">
+        app:layout_constraintTop_toBottomOf="@id/toolbar">
 
     </androidx.recyclerview.widget.RecyclerView>
 
-    <EditText
-        android:id="@+id/msg"
-        android:layout_width="352dp"
-        android:layout_height="56dp"
-        android:background="@drawable/purple_blue"
-        android:elevation="6dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:padding="4dp"
-        android:paddingStart="13dp"
-        android:text="Name"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/recycle" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cd"
+        android:layout_width="325dp"
+        android:layout_height="50dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="10dp"
+        android:layout_marginBottom="10dp"
+        app:cardCornerRadius="30dp"
+        app:cardElevation="15dp">
+
+        <EditText
+            android:id="@+id/msg"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginStart="3dp"
+            android:layout_marginBottom="3dp"
+            android:background="@drawable/gradient2"
+            android:elevation="6dp"
+            android:hint="Type here"
+            android:maxLines="4"
+            android:minLines="2"
+            android:padding="5dp"
+            android:paddingStart="15dp"
+            android:paddingEnd="15dp"
+            android:textColor="#FFFFFF"
+            android:textColorHint="#D0FFFFFF"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent" />
+
+    </androidx.cardview.widget.CardView>
+
+    <!--    <include-->
+    <!--        android:id="@+id/tool"-->
+    <!--        layout="@layout/toolbar"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_alignParentStart="true"-->
+    <!--        android:layout_alignParentTop="true"-->
+    <!--        android:layout_alignParentEnd="true"-->
+    <!--        tools:layout_editor_absoluteX="3dp"-->
+    <!--        tools:layout_editor_absoluteY="3dp" />-->
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/send"
-        android:layout_width="51dp"
-        android:layout_height="86dp"
-        android:layout_marginTop="3dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="15dp"
+        android:background="#FFFFFF"
         android:elevation="6dp"
         android:src="@mipmap/send"
-        android:tint="#00922D2D"
-        app:fabCustomSize="50dp"
+        app:fabCustomSize="45dp"
         app:fabSize="normal"
-        app:layout_constraintStart_toEndOf="@+id/msg"
-        app:layout_constraintTop_toBottomOf="@+id/recycle"
-        app:maxImageSize="50dp"
-        app:rippleColor="#FFFFFF" /><![CDATA[
-        app:layout_constraintEnd_toEndOf="@+id/recycle" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:maxImageSize="45dp"
+        app:rippleColor="#d5e2f7" />
 
-    "/>
-]]>
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@drawable/round_card_white_stroke"
+        android:elevation="7dp"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/img"
+                android:layout_width="119dp"
+                android:layout_height="36dp"
+                android:layout_marginStart="118dp"
+                android:foregroundTint="#000000"
+                android:tint="#00BCD4"
+                android:transitionName="logo"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/logo" />
+
+            <ImageView
+                android:id="@+id/rtrn"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_alignParentBottom="true"
+                android:layout_marginStart="5dp"
+                android:layout_marginBottom="12dp"
+                android:background="#FFFFFF"
+                android:src="@drawable/rtnr"
+                android:tint="#00922D2D"
+                app:backgroundTint="#FFFFFF"
+                app:fabCustomSize="30dp"
+                app:fabSize="normal"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:rippleColor="#cccdcf" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.appcompat.widget.Toolbar>
+
+</RelativeLayout>

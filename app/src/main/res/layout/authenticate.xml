@@ -6,16 +6,16 @@
     android:transitionName="constraint"
     android:id="@+id/constraint2"
     android:layout_height="match_parent"
-    android:background="@drawable/gradient"
+    android:background="@drawable/gradient3"
     android:textAllCaps="false"
     android:fitsSystemWindows="true"
     tools:context=".MainActivity" >
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:fitsSystemWindows="true"
         android:id="@+id/constraint"
-        android:layout_height="match_parent" >
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true">
 
         <TextView
             android:id="@+id/login"
@@ -33,18 +33,37 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <TextView
+            android:id="@+id/email"
+            android:layout_width="131dp"
+            android:layout_height="37dp"
+            android:layout_marginStart="52dp"
+            android:layout_marginBottom="8dp"
+            android:fontFamily="@font/cabin_semibold"
+            android:paddingTop="12dp"
+            android:text="Email"
+            android:textColor="#FFFFFF"
+            android:textSize="18dp"
+            android:textStyle="bold"
+            android:transitionName="email"
+            app:layout_constraintBottom_toTopOf="@+id/emailedit"
+            app:layout_constraintStart_toStartOf="parent" />
+
         <EditText
             android:id="@+id/passedit"
-            android:layout_width="273dp"
+            android:layout_width="310dp"
             android:layout_height="47dp"
-            android:layout_marginStart="64dp"
+            android:layout_marginStart="52dp"
             android:layout_marginTop="64dp"
             android:background="@drawable/strokes"
             android:ems="10"
-            android:transitionName="passedit"
             android:fontFamily="sans-serif-light"
             android:inputType="textPersonName"
+            android:padding="5dp"
+            android:paddingStart="15dp"
+            android:paddingEnd="15dp"
             android:textColor="#FFFFFF"
+            android:transitionName="passedit"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/emailedit" />
 
@@ -52,48 +71,35 @@
             android:id="@+id/pass"
             android:layout_width="138dp"
             android:layout_height="36dp"
-            android:layout_marginStart="64dp"
-            android:layout_marginBottom="9dp"
+            android:layout_marginStart="52dp"
+            android:layout_marginBottom="8dp"
             android:fontFamily="@font/cabin_semibold"
             android:paddingTop="10dp"
-            android:transitionName="pass"
             android:text="Password"
             android:textColor="#FFFFFF"
             android:textSize="18sp"
             android:textStyle="bold"
+            android:transitionName="pass"
             app:layout_constraintBottom_toTopOf="@+id/passedit"
             app:layout_constraintStart_toStartOf="parent" />
 
         <EditText
             android:id="@+id/emailedit"
-            android:layout_width="268dp"
+            android:layout_width="310dp"
             android:layout_height="49dp"
-            android:layout_marginStart="64dp"
+            android:layout_marginStart="52dp"
             android:layout_marginTop="80dp"
             android:background="@drawable/strokes"
             android:ems="10"
-            android:transitionName="emailedit"
             android:fontFamily="sans-serif-light"
             android:inputType="textPersonName"
+            android:padding="5dp"
+            android:paddingStart="15dp"
+            android:paddingEnd="15dp"
             android:textColor="#FFFFFF"
+            android:transitionName="emailedit"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/login" />
-
-        <TextView
-            android:id="@+id/email"
-            android:layout_width="131dp"
-            android:layout_height="37dp"
-            android:layout_marginStart="64dp"
-            android:layout_marginBottom="9dp"
-            android:fontFamily="@font/cabin_semibold"
-            android:paddingTop="12dp"
-            android:transitionName="email"
-            android:text="Email"
-            android:textColor="#FFFFFF"
-            android:textSize="18dp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/emailedit"
-            app:layout_constraintStart_toStartOf="parent" />
 
         <Button
             android:id="@+id/button"
@@ -135,7 +141,7 @@
             android:textColor="#FFFFFF"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <ImageView
         android:id="@+id/img"

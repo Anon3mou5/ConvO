@@ -3,8 +3,9 @@
 
     <color name="common_border_color">#FFF890</color>
     <color name="colorPrimary">#FFC107</color>
-    <color name="colorPrimaryDark">#00FFFFFF</color>
-    <color name="backgroundcolor">#fcfcfc</color>
+    <color name="colorPrimaryDark">#f5f2f2</color>
+    <color name="grd">#00BCD4</color>
+    <color name="backgroundcolor">#FFFFFF</color>
     <color name="lightgray">#ededed</color>
     <color name="deeppurple">#7c4dff</color>
     <color name="yellow">#ffb300</color>
