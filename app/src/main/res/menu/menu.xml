@@ -5,6 +5,7 @@
     <item
         android:id="@+id/logout"
         android:title="Logout"
+        android:iconTint="@color/deeppurple"
         />
 
 </menu>

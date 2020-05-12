@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+    <item>
+        <shape>
+            <gradient
+                android:startColor="#fee140"
+                android:endColor="#fa709a"
+                android:angle="315"
+                android:type="linear"
+                />
+            <corners
+                android:radius="30dp"
+                ></corners>
+
+        </shape>
+    </item>
+    <item android:gravity="center"
+        android:left="10dp"
+        android:right="10dp"
+        android:top="10dp"
+        android:bottom="10dp">
+
+        <bitmap android:src="@mipmap/startchat"
+            android:tint="#FFFFFF"/>
+    </item>
+</layer-list>

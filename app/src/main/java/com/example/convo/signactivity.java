@@ -44,6 +44,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
@@ -127,11 +128,6 @@ public class signactivity extends AppCompatActivity {
                                                 @Override
                                                 public void onComplete(@NonNull Task<AuthResult> task) {
                                                     if (task.isSuccessful()) {
-                                                        auth.signInWithEmailAndPassword(email.getText().toString(), pass.getText().toString()).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                                                                                @Override
-                                                                                public void onComplete(@NonNull Task<AuthResult> task) {
-                                                                                    if (task.isSuccessful()) {
-
                                                                                         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                                                                                         UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
                                                                                                 .setDisplayName(name.getText().toString())
@@ -139,14 +135,23 @@ public class signactivity extends AppCompatActivity {
                                                                                         uploadImage();
                                                                                         FirebaseFirestore db = FirebaseFirestore.getInstance();
                                                                                         CollectionReference cd = db.collection("users");
+                                                                                        CollectionReference z = db.collection("phonelist");
                                                                                         HashMap<String, String> map = new HashMap<>();
+                                                                                        HashMap<String,String>  phuid=new HashMap<>();
                                                                                         map.put("uid", FirebaseAuth.getInstance().getCurrentUser().getUid());
                                                                                         map.put("name", name.getText().toString());
                                                                                         map.put("ph", ph.getText().toString());
-                                                                                        map.put("photo", downloadUrl.toString());
-                                                                                        map.put("email",email.getText().toString());
+                                                                                        phuid.put(ph.getText().toString(),FirebaseAuth.getInstance().getCurrentUser().getUid());
+                                                                                        if(downloadUrl==null)
+                                                                                        {
+                                                                                            map.put("photo","not found");
+                                                                                        }
+                                                                                        else {
+                                                                                            map.put("photo", downloadUrl.toString());
+                                                                                        }map.put("email",email.getText().toString());
 
                                                                                         cd.document(user.getUid()).set(map);
+                                                                                        z.document("list").set(phuid, SetOptions.merge());
                                                                                         user.updateProfile(profileUpdates)
                                                                                                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                                                                                                     @Override
@@ -154,21 +159,13 @@ public class signactivity extends AppCompatActivity {
                                                                                                         if (task.isSuccessful()) {
                                                                                                             Log.d("username", "User profile updated.");
 
-
                                                                                                             Intent recycle = new Intent(signactivity.this, MainActivity.class);
                                                                                         startActivity(recycle);
                                                                                         finish();
-                                                                                    } else {
-                                                                                        Toast.makeText(signactivity.this, "UnSuccessfull LogIn", Toast.LENGTH_LONG).show();
-                                                                                        Intent j = new Intent(signactivity.this, loginactivity.class);
-                                                                                        startActivity(j);
-                                                                                        finish();
-                                                                                    }
-                                                                                }
+                                                                                    }                               Intent recycle = new Intent(signactivity.this, MainActivity.class);
+                                                                                                        startActivity(recycle);
+                                                                                                        finish();                                                      }
                                                                             });
-                                                                        }
-                                                                    }
-                                                                });
                                                         Toast.makeText(signactivity.this, "Account Created Succesfully", Toast.LENGTH_SHORT).show();
                                                     } else {
                                                         Toast.makeText(signactivity.this, "Account Creation UnSuccesfull", Toast.LENGTH_SHORT).show();
@@ -337,7 +334,6 @@ public class signactivity extends AppCompatActivity {
                 bmp.compress(Bitmap.CompressFormat.JPEG, 25, baos);
                 Log.d("SUCESS","Data compressed");
                 byte[] data = baos.toByteArray();
-                UploadTask uploadTask2 = ref.putBytes(data);
                 ref.putBytes(data).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
@@ -350,11 +346,6 @@ public class signactivity extends AppCompatActivity {
                     public void onSuccess(Uri uri) {
                         downloadUrl=uri;
                         Toast.makeText(signactivity.this,"url: "+uri.toString(),Toast.LENGTH_SHORT).show();
-                    }
-                }).addOnCompleteListener(new OnCompleteListener<Uri>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Uri> task) {
-                        downloadUrl=task.getResult();
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override

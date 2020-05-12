@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:fitsSystemWindows="true"
+    android:orientation="horizontal"
+    android:padding="1dp"
+    tools:context=".MainActivity">
+
+    <androidx.cardview.widget.CardView
+
+        android:id="@+id/card"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="false"
+        android:layout_alignParentBottom="false"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/recycleround"
+        android:dividerHeight="0.0px"
+        android:elevation="10dp"
+        android:foregroundGravity="left"
+        app:cardBackgroundColor="#FFFFFF"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="10dp"
+        app:cardMaxElevation="30dp"
+        app:cardPreventCornerOverlap="false"
+        app:cardUseCompatPadding="false"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/lay"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#FFFFFF"
+            android:backgroundTint="#FFFFFF"
+            android:fitsSystemWindows="true"
+            android:padding="1dp"
+            tools:context=".MainActivity">
+
+
+            <TextView
+                android:id="@+id/naam"
+                android:layout_width="255dp"
+                android:layout_height="30dp"
+                android:layout_above="@+id/status"
+                android:layout_alignParentEnd="true"
+                android:layout_marginStart="15dp"
+                android:layout_toEndOf="@+id/profile"
+                android:fontFamily="@font/cabin_bold"
+                android:padding="1dp"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                android:text="TextView"
+                android:textColor="#000000"
+                android:textSize="21dp"
+                android:textStyle="bold"
+                android:transitionName="name"
+                app:layout_constraintStart_toEndOf="@+id/profile"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/profile"
+                android:layout_width="46dp"
+                android:layout_height="49dp"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="7dp"
+                android:layout_marginTop="6dp"
+                android:elevation="0dp"
+                android:src="@mipmap/send"
+                android:transitionName="profile"
+                app:fabCustomSize="45dp"
+                app:fabSize="normal"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:maxImageSize="35dp" />
+
+            <TextView
+                android:id="@+id/status"
+                android:layout_width="wrap_content"
+                android:layout_height="28dp"
+                android:layout_below="@+id/name"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="15dp"
+                android:background="#FFFFFF"
+                android:fontFamily="@font/cabin"
+                android:inputType="textMultiLine"
+                android:maxWidth="290dp"
+                android:minWidth="80dp"
+                android:padding="2dp"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:text="TextView"
+                android:textAlignment="viewStart"
+                android:textColor="#000000"
+                android:textSize="15sp"
+                android:visibility="visible"
+                app:layout_constraintStart_toEndOf="@+id/profile"
+                app:layout_constraintTop_toBottomOf="@+id/naam" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

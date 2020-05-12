@@ -2,14 +2,11 @@ package com.example.convo;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -18,15 +15,14 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Date;
 import java.util.List;
 
 public class Modelclass extends RecyclerView.Adapter<viewholder> {
@@ -106,7 +102,7 @@ public class Modelclass extends RecyclerView.Adapter<viewholder> {
          super(itemView);
 
          t1 = itemView.findViewById(R.id.name);
-         t2 = itemView.findViewById(R.id.chat);
+         t2 = itemView.findViewById(R.id.status);
          photo=itemView.findViewById(R.id.profile);
          //t3 = itemView.findViewById(R.id.textView);
          card = itemView.findViewById(R.id.cardView);
@@ -172,8 +168,22 @@ public class Modelclass extends RecyclerView.Adapter<viewholder> {
 
              t1.setText(name);
              t2.setText(chat);
-             Bitmap b =loadImageFromStorage(MainActivity.PATH);
-             photo.setImageBitmap(b);
+             Log.d("URL",""+url);
+             if(url.equals("not found") || url.equals(null)) {
+
+             }else
+             {
+
+         //  Bitmap b =loadImageFromStorage(MainActivity.PATH);
+             try {
+                 Bitmap bitmap = BitmapFactory.decodeStream((InputStream) new URL(url).getContent());
+                 photo.setImageBitmap(bitmap);
+             } catch (MalformedURLException e) {
+                 e.printStackTrace();
+             } catch (IOException e) {
+                 e.printStackTrace();
+             }
+         }
 
 //             t1.setLayoutParams(t2.getLayoutParams());
 //             Date d = new Date();

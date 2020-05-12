@@ -1,9 +1,6 @@
 package com.example.convo;
 
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-
-public class read {
+public class chat {
 
     String msg,suid,ruid,url,phno;
 
@@ -27,9 +24,10 @@ public class read {
         return phno;
     }
 
-    public read(String suid, String msg, String ruid, String phno)
+    public chat(String suid, String msg, String ruid, String url, String phno)
     {
         this.suid=suid;
+        this.url=url;
         this.msg=msg;
         this.ruid=ruid;
         this.phno=phno;
