@@ -2,11 +2,17 @@ package com.example.convo;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,35 +21,66 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.common.data.DataHolder;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.jaeger.library.StatusBarUtil;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
 public class ContactsActivity extends AppCompatActivity
 {
 
+    final HashMap<String,String> phuid = new HashMap<String, String>();
    final  List<Data> model = new ArrayList<Data>();
+    final contactmodel m = new contactmodel(model);
+
+    contactsfetcher contacts = new contactsfetcher();
+
+//    @Override
+//    public void onBackPressed() {
+//        final TextView startachat = findViewById(R.id.startachat);
+//        final TextView numberofchat = findViewById(R.id.numberofcontacts);
+//
+//        final FloatingActionButton button4 = findViewById(R.id.button4);
+//
+//        final EditText searchField = findViewById(R.id.searchview);
+//        searchField.animate().alpha(0).setDuration(235).setStartDelay(0);
+//        searchField.setVisibility(View.INVISIBLE);
+//        numberofchat.animate().translationX(100).alpha(0).setDuration(250).setStartDelay(0);
+//        startachat.animate().translationX(100).alpha(1).setDuration(250).setStartDelay(0);
+//        button4.animate().translationX(680).setDuration(250).setStartDelay(0);
+//        startachat.animate().translationX(100).alpha(1).setDuration(250).setStartDelay(0);
+//
+//
+//    }
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        final HashMap<String, String> map = contacts.getContactList(ContactsActivity.this);
 
         setContentView(R.layout.contacts_view);
+        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
         Toolbar tool = findViewById(R.id.toolbar2);
         setSupportActionBar(tool);
 
         // StatusBarUtil.setTransparent(this);
 
 //
-     Intent z = getIntent();
-      //final HashMap<String,String> map2 =(HashMap<String,String>) z.getSerializableExtra("map");
+        Intent z = getIntent();
+        //final HashMap<String,String> map2 =(HashMap<String,String>) z.getSerializableExtra("map");
 //
 
 //        Thread t4 = new Thread(new Runnable() {
@@ -65,23 +102,20 @@ public class ContactsActivity extends AppCompatActivity
 //            }
 //        });
 //        t4.start();
-        contactsfetcher contacts = new contactsfetcher();
-        final HashMap<String,String> map = contacts.getContactList(getApplicationContext());
-        Log.d("CONTACTS",""+map);
-        Log.d("MAPKEYSET",""+map.keySet());
-        for(String j:map.keySet())
-        {
-            Log.d("MAP",map.get(j));
-            Data e = new Data(map.get(j),"not found",0,ContactsActivity.this,"null",j);
-         //   Log.d("XYZ",""+model.);
+        Log.d("CONTACTS", "" + map);
+        Log.d("MAPKEYSET", "" + map.keySet());
+        for (String j : map.keySet()) {
+            Log.d("MAP", map.get(j));
+            Data e = new Data(map.get(j), "not found", 0, ContactsActivity.this, "null", j);
+            //   Log.d("XYZ",""+model.);
             model.add(e);
 
         }
 
-        Log.d("modeldataplshelp",""+model);
-        final contactmodel m = new contactmodel(model);
+        Log.d("modeldataplshelp", "" + model);
+
         //final Model m2 = new Model(model);
-        RecyclerView recycle = findViewById(R.id.contactsrecycle);
+        final RecyclerView recycle = findViewById(R.id.contactsrecycle);
         LinearLayoutManager lm = new LinearLayoutManager(getApplicationContext());
         lm.setOrientation(LinearLayoutManager.VERTICAL);
         recycle.setLayoutManager(lm);
@@ -96,7 +130,88 @@ public class ContactsActivity extends AppCompatActivity
             }
         });
 
+        final TextView startachat = findViewById(R.id.startachat);
+        final TextView numberofchat = findViewById(R.id.numberofcontacts);
+
+        final FloatingActionButton button4 = findViewById(R.id.button4);
+
+        final ImageView button5 = findViewById(R.id.button5);
+
+        final EditText searchField = findViewById(R.id.searchview);
+        button4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                button4.animate().translationX(-680).setDuration(250).setStartDelay(0);
+                startachat.animate().translationX(-100).alpha(0).setDuration(250).setStartDelay(0);
+                button5.setVisibility(View.VISIBLE);
+                numberofchat.animate().translationX(-100).alpha(0).setDuration(250).setStartDelay(0);
+                Animation vz = AnimationUtils.loadAnimation(ContactsActivity.this,R.anim.serachbartool);
+               button5.startAnimation(vz);
+                searchField.setVisibility(View.VISIBLE);
+                searchField.animate().alpha(1).setDuration(235).setStartDelay(0);
+                searchField.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                        // TODO Auto-generated method stub
+                    }
+
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                        // TODO Auto-generated method stub
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable s) {
+
+                        // filter your list from your input
+                        filter(s.toString());
+                        //you can use runnable postDelayed like 500 ms to delay search text
+                    }
+                });
+            }
+
+            void filter(String text) {
+                final List<Data> temp = new ArrayList();
+                for (final HashMap.Entry<String, String> d : map.entrySet()) {
+
+
+                    //or use .equal(text) with you want equal match
+                    //use .toLowerCase() for better matches
+                    if (d.getValue().toLowerCase().contains(text.toLowerCase())) {
+                        if(phuid.get(d.getKey())!=null){
+                            Data e = new Data(d.getValue(), "not found", 1, ContactsActivity.this, phuid.get(d.getKey()), d.getKey());
+                            temp.add(e);
+                        } else{
+                            Data e = new Data(d.getValue(), "not found", 0, ContactsActivity.this, " ", d.getKey());
+                            temp.add(e);
+                        }
+
+                        m.updateList(temp);
+                    }
+                }   //update recyclerview
+
+            }
+        });
+        button5.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Animation vz = AnimationUtils.loadAnimation(ContactsActivity.this,R.anim.ulta);
+                button5.startAnimation(vz);
+                button5.setVisibility(View.INVISIBLE);
+                searchField.animate().alpha(0).setDuration(235).setStartDelay(0);
+                searchField.setVisibility(View.INVISIBLE);
+                numberofchat.animate().translationX(100).alpha(1).setDuration(250).setStartDelay(0);
+                startachat.animate().translationX(100).alpha(1).setDuration(250).setStartDelay(0);
+                button4.animate().translationX(40).setDuration(250).setStartDelay(0);
+
+
+
+            }
+        });
     }
+
 
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
@@ -113,11 +228,9 @@ public class ContactsActivity extends AppCompatActivity
         switch (id){
             case R.id.refresh:
                 model.clear();
-                contactsfetcher contacts = new contactsfetcher();
-                final HashMap<String,String> map = contacts.getContactList(getApplicationContext());
+                final HashMap<String,String> map = contacts.getContactList(ContactsActivity.this);
                 FirebaseFirestore fb = FirebaseFirestore.getInstance();
                 DocumentReference df = fb.collection("phonelist").document("list");
-                HashMap<String,String> phuid = new HashMap<String, String>();
                 df.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
@@ -131,21 +244,23 @@ public class ContactsActivity extends AppCompatActivity
                                         @Override
                                         public void onSuccess(DocumentSnapshot documentSnapshot) {
                                             if (documentSnapshot.exists()) {
-                                                Data d = new Data(map.get(j), documentSnapshot.getString("photo"), 1, ContactsActivity.this, userid, j);
-                                                model.add(d);
+                                               // Data d = new Data(map.get(j), documentSnapshot.getString("photo"), 1, ContactsActivity.this, userid, j);
+                                               // model.add(d);
                                             }
                                         }
                                     });
                                             Data d = new Data(map.get(j), "not found", 1, ContactsActivity.this, userid, j);
+                                          phuid.put(j,userid);
                                             model.add(d);
                                 }
-                                else{
-                                        Data d = new Data(map.get(j), "not found", 0, ContactsActivity.this, "null", j);
-                                        model.add(d);
-                                    }
+//                                else{
+//                                        Data d = new Data(map.get(j), "not found", 0, ContactsActivity.this, "null", j);
+//                                        model.add(d);
+//                                    }
                             }
-                            final contactmodel m = new contactmodel(model);
+
                             //final Model m2 = new Model(model);
+                            Collections.sort(model, new sortbyfound());
                             RecyclerView recycle = findViewById(R.id.contactsrecycle);
                             LinearLayoutManager lm = new LinearLayoutManager(getApplicationContext());
                             lm.setOrientation(LinearLayoutManager.VERTICAL);
@@ -163,4 +278,11 @@ public class ContactsActivity extends AppCompatActivity
         }
     }
 
+    }
+    class sortbyfound implements Comparator<Data>
+    {
+        public int compare(Data a,Data b)
+        {
+            return a.getFound()-b.getFound();
+        }
     }

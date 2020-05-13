@@ -42,7 +42,7 @@ private  int Present=1;
     String name,phno;
     String url,uid;
     int j;
-Activity a;
+     Activity a;
     public contactmodel(List<Data> modelclasslist) {
         this.modelclasslist = modelclasslist;
         setHasStableIds(true);
@@ -84,6 +84,11 @@ Activity a;
     @Override
     public int getItemCount() {
         return  modelclasslist.size();
+    }
+
+    public void updateList(List<Data> list){
+        modelclasslist = list;
+        notifyDataSetChanged();
     }
 
     @Override
@@ -160,6 +165,7 @@ class contactviewholder extends RecyclerView.ViewHolder {
                     t.putExtra("phno", phno);
                     ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation((Activity) view.getContext(), pairs);
                     view.getContext().startActivity(t, options.toBundle());
+                    ((Activity) view.getContext()).finish();
                 }
             });
         }

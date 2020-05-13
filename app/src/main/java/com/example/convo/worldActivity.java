@@ -50,8 +50,8 @@ public class worldActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
         setContentView(R.layout.activity_main);
+        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
         Toolbar t = findViewById(R.id.toolbar2);
         setSupportActionBar(t);
 
@@ -86,7 +86,6 @@ public class worldActivity extends AppCompatActivity {
 
 
         /////////////////////////////////////////////////////////////////////////////////SEND
-        StatusBarUtil.setTransparent(this);
         final EditText msg = findViewById(R.id.msg);
         FloatingActionButton send = findViewById(R.id.send);
         send.setOnClickListener(new View.OnClickListener() {

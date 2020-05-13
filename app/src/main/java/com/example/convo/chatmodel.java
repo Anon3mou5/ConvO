@@ -40,13 +40,13 @@ public class chatmodel extends RecyclerView.Adapter<chatviewholder> {
     public int MSG_RIGHT = 0;
     public int MSG_LEFT = 1;
 
-    List<chat> modelclasslist;
+    public List<chat> modelclasslisting;
     String suid,phno;
     String chat, ruid, url;
     Boolean s;
 
     public chatmodel(List<chat> modelclasslist) {
-        this.modelclasslist = modelclasslist;
+        this.modelclasslisting = modelclasslist;
         Log.d("Inside", " Adapter,constructor");
     }
 
@@ -69,11 +69,11 @@ public class chatmodel extends RecyclerView.Adapter<chatviewholder> {
 
     @Override
     public void onBindViewHolder(@NonNull chatviewholder holder, int position) {
-        suid = modelclasslist.get(position).getSuid();
-        chat = modelclasslist.get(position).getMsg();
-        ruid = modelclasslist.get(position).getRuid();
-        url = modelclasslist.get(position).getUrl();
-        phno=modelclasslist.get(position).getPhno();
+        suid = modelclasslisting.get(position).getSuid();
+        chat = modelclasslisting.get(position).getMsg();
+        ruid = modelclasslisting.get(position).getRuid();
+        url = modelclasslisting.get(position).getUrl();
+        phno=modelclasslisting.get(position).getPhno();
         holder.setdata(suid, chat, ruid, url,phno);
         Log.d("holder", "View holder Binded");
     }
@@ -81,13 +81,15 @@ public class chatmodel extends RecyclerView.Adapter<chatviewholder> {
 
     @Override
     public int getItemCount() {
-        return modelclasslist.size();
+        return modelclasslisting.size();
     }
 
     @Override
     public int getItemViewType(int position) {
         return super.getItemViewType(position);
     }
+
+
     //    public int getItemViewType(int position)
 //    {
 //        FirebaseAuth f = FirebaseAuth.getInstance();
@@ -126,7 +128,7 @@ class chatviewholder extends RecyclerView.ViewHolder {
         //t3 = itemView.findViewById(R.id.textView);
     }
 
-    void setdata(String suid, String chat,final String ruid,String url,final String phno) {
+    void setdata(final String suid, String chat,final String ruid,String url,final String phno) {
         //card.setLayoutParams(t2.getLayoutParams());
 //             ConstraintLayout.LayoutParams p = new ConstraintLayout.LayoutParams(
 //                     ConstraintLayout.LayoutParams.WRAP_CONTENT,
@@ -225,8 +227,14 @@ class chatviewholder extends RecyclerView.ViewHolder {
 //                pairs[3]=new Pair<View,String>(password,"pass");
 //                pairs[4]=new Pair<View,String>(passeditid,"passedit");
                     Intent t = new Intent(view.getContext(),Singleactivity.class);
-                    t.putExtra("uid",ruid);
-                    t.putExtra("name",name);
+                    if(ruid.equals(FirebaseAuth.getInstance().getCurrentUser().getUid().toString()))
+                    {
+                        t.putExtra("uid",suid);
+                    }
+                    else {
+                        t.putExtra("uid", ruid);
+
+                    }t.putExtra("name",name);
                     t.putExtra("phno",phno);
                     ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation( (Activity) view.getContext(),pairs);
                     view.getContext().startActivity(t,options.toBundle());

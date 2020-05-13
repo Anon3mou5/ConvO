@@ -65,7 +65,7 @@
 
 
                 <TextView
-                    android:id="@+id/naam"
+                    android:id="@+id/nameView"
                     android:layout_width="255dp"
                     android:layout_height="32dp"
                     android:layout_alignParentTop="true"

@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -24,6 +25,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -49,7 +51,7 @@ public class Singleactivity extends AppCompatActivity {
      //   contactsfetcher cf = new contactsfetcher();
     //    contacts= cf.getContactList(getApplicationContext());
          setContentView(R.layout.single_main);
-        StatusBarUtil.setTransparent(this);
+        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
         final EditText msg = findViewById(R.id.msg);
         TextView profilename = findViewById(R.id.profilename);
     //   String name = contacts.get(phno);
@@ -66,15 +68,40 @@ public class Singleactivity extends AppCompatActivity {
                     String url;
                     final FirebaseUser u = FirebaseAuth.getInstance().getCurrentUser();
                     final DatabaseReference db = FirebaseDatabase.getInstance().getReference("Private chats");
+                    final String text = msg.getText().toString();
                     read me = new read(u.getUid(), msg.getText().toString(), ruid,phno);
+                    FirebaseFirestore bd = FirebaseFirestore.getInstance();
+                    CollectionReference cd = bd.collection("phonelist");
+                    DocumentReference ref = cd.document("list");
+                    ref.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        @Override
+                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                            if(documentSnapshot.exists())
+                            {
+                                Map<String,Object> entity = documentSnapshot.getData();
+                                for(Map.Entry<String,Object> ent : entity.entrySet())
+                                {
+                                    if(ent.getValue().toString().equals(u.getUid()))
+                                    {
+                                        String ph = ent.getKey().toString();
+                                        read m = new read(u.getUid(), text, ruid,ph);
+                                        db.child(ruid).child(u.getUid()).push().setValue(m);
+                                    }
+                                }
+//                                String ph = documentSnapshot.getString("phno");
+//                                read m = new read(u.getUid(), msg.getText().toString(), ruid,ph);
+//                                db.child(ruid).child(u.getUid()).push().setValue(m);
+                            }
+                        }
+                    });
                     db.child(u.getUid()).child(ruid).push().setValue(me);
-                    db.child(ruid).child(u.getUid()).push().setValue(me);;
                 }
                 msg.setText("");
                         }
                     });
          final  FirebaseUser u = FirebaseAuth.getInstance().getCurrentUser();
-        final DatabaseReference db = FirebaseDatabase.getInstance().getReference("Private chats").child(u.getUid()).child(ruid);
+        final DatabaseReference db = FirebaseDatabase.getInstance().getReference("Private chats").child(u.getUid().toString()).child(ruid.toString());
+        //Toast.makeText(Singleactivity.this,"ruid  "+ ruid,Toast.LENGTH_SHORT).show();
         db.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
