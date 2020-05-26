@@ -33,7 +33,7 @@ public class loginactivity extends AppCompatActivity {
         //logo.animate().translationY(500).setDuration(100);
         Animation b = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.transition);
 
-        logo.animate().translationY(-600).translationX(-100).setDuration(600).setStartDelay(400).scaleX((float)0.8).scaleY((float)0.8);
+        logo.animate().translationY(-600).translationX(-123).setDuration(600).setStartDelay(400).scaleX((float)0.9).scaleY((float)0.9);
 
         Animation a = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.fading);
 
@@ -82,7 +82,7 @@ public class loginactivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             Toast.makeText(loginactivity.this, "Successfully Logged In", Toast.LENGTH_LONG).show();
-                            Intent intent = new Intent(loginactivity.this, MainActivity.class);
+                            Intent intent = new Intent(loginactivity.this, Acti.class);
                             startActivity(intent);
                             finish();
                         } else {

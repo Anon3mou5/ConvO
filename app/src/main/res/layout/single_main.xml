@@ -22,13 +22,13 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/singlerecycle"
-        android:layout_width="408dp"
-        android:layout_height="573dp"
+        android:layout_width="409dp"
+        android:layout_height="587dp"
         android:layout_below="@+id/toolbar2"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
-        android:layout_marginBottom="46dp"
+        android:layout_marginBottom="74dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -48,11 +48,12 @@
         android:layout_marginEnd="17dp"
         android:layout_marginBottom="10dp"
         app:cardCornerRadius="30dp"
-        app:cardElevation="15dp">
+        app:cardElevation="7dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:background="@drawable/gradient2">
 
             <EditText
                 android:id="@+id/msg"
@@ -78,12 +79,12 @@
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent" />
 
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
+            <ImageView
                 android:id="@+id/send"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="52dp"
+                android:layout_height="37dp"
                 android:layout_marginEnd="10dp"
-                android:layout_marginBottom="2dp"
+                android:layout_marginBottom="3dp"
                 android:background="#00FFFFFF"
                 android:src="@mipmap/send3"
                 app:backgroundTint="#00FFFFFF"

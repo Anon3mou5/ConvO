@@ -10,8 +10,11 @@ import android.media.MediaCodec;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.util.Patterns;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -62,8 +65,18 @@ public class signactivity extends AppCompatActivity {
     //    final EditText name = findViewById(R.id.nameedit);
     Uri filePath;
     StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("images");
- static  public  Uri downloadUrl;
- static public StorageReference str;
+    static  public  Uri downloadUrl;
+    static public StorageReference str;
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        ConstraintLayout l = findViewById(R.id.constraint3);
+        Animation a = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.transition2);
+        l.startAnimation(a);
+        finish();
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,19 +99,36 @@ public class signactivity extends AppCompatActivity {
 
         final EditText confirmpass = findViewById(R.id.confirmpassedit);
 
-        ConstraintLayout l = findViewById(R.id.constraint3);
 
         Button signin = findViewById(R.id.signin);
 
         final FirebaseAuth auth = FirebaseAuth.getInstance();
 
+        ConstraintLayout l = findViewById(R.id.constraint3);
+
         Animation a = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.transition);
         l.startAnimation(a);
 
-        pass.setOnClickListener(new View.OnClickListener() {
+        pass.addTextChangedListener(new TextWatcher() {
             @Override
-            public void onClick(View v) {
-                indication.setVisibility(TextView.VISIBLE);
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                if (count == 0) {
+                    indication.setVisibility(View.INVISIBLE);
+                } else {
+                    indication.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+
             }
         });
 
@@ -162,7 +192,7 @@ public class signactivity extends AppCompatActivity {
                                                                                                             Intent recycle = new Intent(signactivity.this, MainActivity.class);
                                                                                         startActivity(recycle);
                                                                                         finish();
-                                                                                    }                               Intent recycle = new Intent(signactivity.this, MainActivity.class);
+                                                                                    }                               Intent recycle = new Intent(signactivity.this,MainActivity.class);
                                                                                                         startActivity(recycle);
                                                                                                         finish();                                                      }
                                                                             });
@@ -253,7 +283,7 @@ public class signactivity extends AppCompatActivity {
 
         Pattern pattern;
         Matcher matcher;
-        final String PASSWORD_PATTERN = "^(?=.*[0-9])(?=.*[A-Z])(?=.*[@#$%^&+=!]).{6,16}$";
+        final String PASSWORD_PATTERN = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=!]).{6,17}$";
         pattern = Pattern.compile(PASSWORD_PATTERN);
         matcher = pattern.matcher(pas);
 
@@ -280,7 +310,7 @@ public class signactivity extends AppCompatActivity {
         super.onActivityResult(requestCode,
                 resultCode,
                 data);
-        ImageView btn_choose_photo = findViewById(R.id.photo);
+        FloatingActionButton btn_choose_photo = findViewById(R.id.photo);
 
         // checking request code and result code
         // if request code is PICK_IMAGE_REQUEST and
@@ -323,47 +353,48 @@ public class signactivity extends AppCompatActivity {
                     .child(
                             "images/"
                                     + FirebaseAuth.getInstance().getUid());
-            Log.d("SUCESS","Inside upload()");
+            Log.d("SUCESS", "Inside upload()");
 
             // adding listeners on upload
             // or failure of image
             Bitmap bmp;
             try {
-                bmp = MediaStore.Images.Media.getBitmap(getContentResolver(),filePath);
+                bmp = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
                 bmp.compress(Bitmap.CompressFormat.JPEG, 25, baos);
-                Log.d("SUCESS","Data compressed");
+                Log.d("SUCESS", "Data compressed");
                 byte[] data = baos.toByteArray();
                 ref.putBytes(data).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        Toast.makeText(signactivity.this,"success",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(signactivity.this, "success", Toast.LENGTH_SHORT).show();
                     }
-                    });
-                str=ref;
+                });
+                str = ref;
                 ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                     @Override
                     public void onSuccess(Uri uri) {
-                        downloadUrl=uri;
-                        Toast.makeText(signactivity.this,"url: "+uri.toString(),Toast.LENGTH_SHORT).show();
+                        downloadUrl = uri;
+                        Toast.makeText(signactivity.this, "url: " + uri.toString(), Toast.LENGTH_SHORT).show();
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.d("Failure","idk why");
+                        Log.d("Failure", "idk why");
                     }
                 }).addOnCanceledListener(new OnCanceledListener() {
                     @Override
                     public void onCanceled() {
-                        Log.d("Cancelled","idk why");
+                        Log.d("Cancelled", "idk why");
                     }
                 });
-            }catch(Exception e)
-            {
-                Toast.makeText(signactivity.this,"Unsuccessfull compress",Toast.LENGTH_SHORT).show();
+            } catch (Exception e) {
+                Toast.makeText(signactivity.this, "Unsuccessfull compress", Toast.LENGTH_SHORT).show();
             }
 
         }
+
     }
+
 }
 

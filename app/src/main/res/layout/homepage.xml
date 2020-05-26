@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:transitionName="constraint"
+    android:id="@+id/homepage"
+    android:layout_height="match_parent"
+    android:background="@drawable/gradient3"
+    android:textAllCaps="false"
+    android:fitsSystemWindows="true"
+    tools:context=".MainActivity" >
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraint"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true"/>
+
+    <ImageView
+        android:id="@+id/img"
+        android:layout_width="254dp"
+        android:layout_height="328dp"
+        android:layout_marginTop="60dp"
+        android:alpha="0"
+        android:tint="#FFFFFF"
+        android:transitionName="logo"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/logo" />
+</androidx.constraintlayout.widget.ConstraintLayout>

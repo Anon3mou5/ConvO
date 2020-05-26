@@ -7,8 +7,11 @@
     <translate
         android:fromYDelta="100%p"
         android:toYDelta="0%p"
-        android:duration="400"
+        android:duration="200"
         />
+    <alpha android:fromAlpha="0"
+        android:toAlpha="1"
+        ></alpha>
 
 
 </set>

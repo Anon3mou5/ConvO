@@ -9,6 +9,8 @@ import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.ImageView;
 
@@ -87,12 +89,13 @@ public class worldActivity extends AppCompatActivity {
 
         /////////////////////////////////////////////////////////////////////////////////SEND
         final EditText msg = findViewById(R.id.msg);
-        FloatingActionButton send = findViewById(R.id.send);
+       final ImageView send = findViewById(R.id.send);
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (!TextUtils.isEmpty(msg.getText().toString())) {
-
+                    Animation anim = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.sendrotate);
+                    send.startAnimation(anim);
                     final DatabaseReference db = FirebaseDatabase.getInstance().getReference("");
                     final FirebaseUser u = FirebaseAuth.getInstance().getCurrentUser();
                     final String currentuser = u.getDisplayName();

@@ -1,6 +1,7 @@
 package com.example.convo;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -38,14 +39,19 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
-public class ContactsActivity extends AppCompatActivity
-{
+import static com.example.convo.MainActivity.model2;
+import static com.example.convo.MainActivity.map2;
+//import static com.example.convo.MainActivity.contacts;
 
-    final HashMap<String,String> phuid = new HashMap<String, String>();
-   final  List<Data> model = new ArrayList<Data>();
-    final contactmodel m = new contactmodel(model);
+public class ContactsActivity extends AppCompatActivity {
 
-    contactsfetcher contacts = new contactsfetcher();
+    final HashMap<String, String> phuid = new HashMap<String, String>();
+
+
+   // final List<Data> model = new ArrayList<Data>();
+
+    final contactmodel m = new contactmodel(model2);
+
 
 //    @Override
 //    public void onBackPressed() {
@@ -69,12 +75,35 @@ public class ContactsActivity extends AppCompatActivity
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        final HashMap<String, String> map = contacts.getContactList(ContactsActivity.this);
+//        Thread tz = new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                map = contacts.getContactList(ContactsActivity.this);
+//            }
+//        });
+//        tz.start();
 
         setContentView(R.layout.contacts_view);
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
         Toolbar tool = findViewById(R.id.toolbar2);
         setSupportActionBar(tool);
+//        Thread ti = new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//               // Log.d("CONTACTS", "" + map);
+//              //  Log.d("MAPKEYSET", "" + map.keySet());
+//                for (String j : map.keySet()) {
+//                    Log.d("MAP", map.get(j));
+//                    Data e = new Data(map.get(j), "not found", 0, ContactsActivity.this, "null", j);
+//                    //   Log.d("XYZ",""+model.);
+//                    model.add(e);
+//
+//                }
+//
+//                Log.d("modeldataplshelp", "" + model);
+//            }
+//        });
+
 
         // StatusBarUtil.setTransparent(this);
 
@@ -102,17 +131,17 @@ public class ContactsActivity extends AppCompatActivity
 //            }
 //        });
 //        t4.start();
-        Log.d("CONTACTS", "" + map);
-        Log.d("MAPKEYSET", "" + map.keySet());
-        for (String j : map.keySet()) {
-            Log.d("MAP", map.get(j));
-            Data e = new Data(map.get(j), "not found", 0, ContactsActivity.this, "null", j);
-            //   Log.d("XYZ",""+model.);
-            model.add(e);
-
-        }
-
-        Log.d("modeldataplshelp", "" + model);
+//        Log.d("CONTACTS", "" + map);
+//        Log.d("MAPKEYSET", "" + map.keySet());
+//        for (String j : map.keySet()) {
+//            Log.d("MAP", map.get(j));
+//            Data e = new Data(map.get(j), "not found", 0, ContactsActivity.this, "null", j);
+//            //   Log.d("XYZ",""+model.);
+//            model.add(e);
+//
+//        }
+//
+//        Log.d("modeldataplshelp", "" + model);
 
         //final Model m2 = new Model(model);
         final RecyclerView recycle = findViewById(R.id.contactsrecycle);
@@ -138,6 +167,16 @@ public class ContactsActivity extends AppCompatActivity
         final ImageView button5 = findViewById(R.id.button5);
 
         final EditText searchField = findViewById(R.id.searchview);
+
+        TextView numberoffilm = findViewById(R.id.numberofcontacts);
+        numberoffilm.setText(model2.size() + " Contacts");
+
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               finish();
+            }
+        });
         button4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -166,7 +205,7 @@ public class ContactsActivity extends AppCompatActivity
                     public void afterTextChanged(Editable s) {
 
                         // filter your list from your input
-                        filter(s.toString());
+                         filter(s.toString());
                         //you can use runnable postDelayed like 500 ms to delay search text
                     }
                 });
@@ -174,7 +213,7 @@ public class ContactsActivity extends AppCompatActivity
 
             void filter(String text) {
                 final List<Data> temp = new ArrayList();
-                for (final HashMap.Entry<String, String> d : map.entrySet()) {
+                for (final HashMap.Entry<String, String> d : map2.entrySet()) {
 
 
                     //or use .equal(text) with you want equal match
@@ -227,15 +266,15 @@ public class ContactsActivity extends AppCompatActivity
         int id = item.getItemId();
         switch (id){
             case R.id.refresh:
-                model.clear();
-                final HashMap<String,String> map = contacts.getContactList(ContactsActivity.this);
+                model2.clear();
+               // final HashMap<String,String> map = contacts.getContactList(ContactsActivity.this);
                 FirebaseFirestore fb = FirebaseFirestore.getInstance();
                 DocumentReference df = fb.collection("phonelist").document("list");
                 df.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
                         if(documentSnapshot.exists()) {
-                            for (final String j : map.keySet()) {
+                            for (final String j : map2.keySet()) {
                                 if (documentSnapshot.getString(j) != null) {
                                     final String userid = documentSnapshot.getString(j);
                                     FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -249,9 +288,9 @@ public class ContactsActivity extends AppCompatActivity
                                             }
                                         }
                                     });
-                                            Data d = new Data(map.get(j), "not found", 1, ContactsActivity.this, userid, j);
+                                            Data d = new Data(map2.get(j), "not found", 1, ContactsActivity.this, userid, j);
                                           phuid.put(j,userid);
-                                            model.add(d);
+                                            model2.add(d);
                                 }
 //                                else{
 //                                        Data d = new Data(map.get(j), "not found", 0, ContactsActivity.this, "null", j);
@@ -260,13 +299,13 @@ public class ContactsActivity extends AppCompatActivity
                             }
 
                             //final Model m2 = new Model(model);
-                            Collections.sort(model, new sortbyfound());
+                            Collections.sort(model2, new sortbyfound());
                             RecyclerView recycle = findViewById(R.id.contactsrecycle);
                             LinearLayoutManager lm = new LinearLayoutManager(getApplicationContext());
                             lm.setOrientation(LinearLayoutManager.VERTICAL);
                             recycle.setLayoutManager(lm);
                             recycle.setAdapter(m);
-                            recycle.getLayoutManager().scrollToPosition(model.size() - 1);
+                            recycle.getLayoutManager().scrollToPosition(model2.size() - 1);
                             m.notifyDataSetChanged();
                             Log.d("Phone",""+documentSnapshot.getData());
                         }

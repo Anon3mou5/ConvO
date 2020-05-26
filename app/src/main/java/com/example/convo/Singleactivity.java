@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -60,11 +62,13 @@ public class Singleactivity extends AppCompatActivity {
            name=phno;
        }
        profilename.setText(name);
-        FloatingActionButton fb = findViewById(R.id.send);
+        final ImageView fb = findViewById(R.id.send);
         fb.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (!TextUtils.isEmpty(msg.getText().toString())) {
+                    Animation anim = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.sendrotate);
+                    fb.startAnimation(anim);
                     String url;
                     final FirebaseUser u = FirebaseAuth.getInstance().getCurrentUser();
                     final DatabaseReference db = FirebaseDatabase.getInstance().getReference("Private chats");
@@ -137,7 +141,7 @@ public class Singleactivity extends AppCompatActivity {
         rtrn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent t = new Intent(Singleactivity.this,MainActivity.class);
+                Intent t = new Intent(Singleactivity.this,Acti.class);
                 startActivity(t);
             }
         });
