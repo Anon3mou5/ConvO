@@ -35,9 +35,9 @@ public class contactsfetcher {
                     while (pCur.moveToNext()) {
                         String phoneNo = pCur.getString(pCur.getColumnIndex(
                                 ContactsContract.CommonDataKinds.Phone.NUMBER));
-                        Log.i("NAME", "Name: " + name);
+                       // Log.i("NAME", "Name: " + name);
                         contacts.put(trimmer(phoneNo),name);
-                        Log.i("PHONE", "Phone Number: " + phoneNo);
+                      //  Log.i("PHONE", "Phone Number: " + phoneNo);
 
                     }
                     pCur.close();

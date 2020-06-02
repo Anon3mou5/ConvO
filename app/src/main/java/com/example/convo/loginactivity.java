@@ -82,7 +82,7 @@ public class loginactivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             Toast.makeText(loginactivity.this, "Successfully Logged In", Toast.LENGTH_LONG).show();
-                            Intent intent = new Intent(loginactivity.this, Acti.class);
+                            Intent intent = new Intent(loginactivity.this, MainActivity.class);
                             startActivity(intent);
                             finish();
                         } else {

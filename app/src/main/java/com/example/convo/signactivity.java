@@ -2,6 +2,7 @@ package com.example.convo;
 
 import android.animation.Animator;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -55,11 +56,15 @@ import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static com.example.convo.asynch.saveObjectToSharedPreference;
 
 public class signactivity extends AppCompatActivity {
     //    final EditText name = findViewById(R.id.nameedit);
@@ -194,8 +199,11 @@ public class signactivity extends AppCompatActivity {
                                                                                         finish();
                                                                                     }                               Intent recycle = new Intent(signactivity.this,MainActivity.class);
                                                                                                         startActivity(recycle);
-                                                                                                        finish();                                                      }
+                                                                                                        finish();
+                                                                                                    }
                                                                             });
+                                                        read zz = new read(user.getUid(),name.getText().toString(),user.getUid(),ph.getText().toString());
+                                                        saveObjectToSharedPreference(getApplicationContext(),"urnum", user.getUid(),zz);
                                                         Toast.makeText(signactivity.this, "Account Created Succesfully", Toast.LENGTH_SHORT).show();
                                                     } else {
                                                         Toast.makeText(signactivity.this, "Account Creation UnSuccesfull", Toast.LENGTH_SHORT).show();

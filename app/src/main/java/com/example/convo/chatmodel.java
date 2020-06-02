@@ -36,6 +36,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.example.convo.MainActivity.map2;
+
 public class chatmodel extends RecyclerView.Adapter<chatviewholder> {
     public int MSG_RIGHT = 0;
     public int MSG_LEFT = 1;
@@ -74,7 +76,11 @@ public class chatmodel extends RecyclerView.Adapter<chatviewholder> {
         ruid = modelclasslisting.get(position).getRuid();
         url = modelclasslisting.get(position).getUrl();
         phno=modelclasslisting.get(position).getPhno();
-        holder.setdata(suid, chat, ruid, url,phno);
+        try {
+            holder.setdata(suid, chat, ruid, url,phno);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         Log.d("holder", "View holder Binded");
     }
 
@@ -109,11 +115,10 @@ class chatviewholder extends RecyclerView.ViewHolder {
 
      TextView t1;
      TextView t2;
-    CardView card;
+     CardView card;
      FloatingActionButton photo;
-    ConstraintLayout lay;
-    View view;
-    String name=null;
+     View view;
+     String name=null;
 
     public chatviewholder(@NonNull View itemView,int j) {
 
@@ -123,12 +128,12 @@ class chatviewholder extends RecyclerView.ViewHolder {
         t2= itemView.findViewById(R.id.status);
         photo=itemView.findViewById(R.id.profile);
         view = itemView;
-        card=itemView.findViewById(R.id.card);
+        card = itemView.findViewById(R.id.card);
 
         //t3 = itemView.findViewById(R.id.textView);
     }
 
-    void setdata(final String suid, String chat,final String ruid,String url,final String phno) {
+    void setdata(final String suid, String chat,final String ruid,String url,final String phno) throws InterruptedException {
         //card.setLayoutParams(t2.getLayoutParams());
 //             ConstraintLayout.LayoutParams p = new ConstraintLayout.LayoutParams(
 //                     ConstraintLayout.LayoutParams.WRAP_CONTENT,
@@ -195,10 +200,12 @@ class chatviewholder extends RecyclerView.ViewHolder {
 //                }
 //            }
 //        })
-
-        contactsfetcher cf =  new contactsfetcher();
-        HashMap<String,String> m=cf.getContactList(view.getContext().getApplicationContext());
-         name=m.get(phno);
+if(map2==null)
+{
+    Thread.currentThread().sleep(1100);
+}
+         map2.put("not null","9897968");
+         name=map2.get(phno);
          if(name==null)
          {
              name=phno;
@@ -206,14 +213,14 @@ class chatviewholder extends RecyclerView.ViewHolder {
           t2.setText(chat);
           t1.setText(name);
         //  Bitmap b =loadImageFromStorage(MainActivity.PATH);
-            try {
-                Bitmap bitmap = BitmapFactory.decodeStream((InputStream)new URL(url).getContent());
-                photo.setImageBitmap(bitmap);
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+//            try {
+//                Bitmap bitmap = BitmapFactory.decodeStream((InputStream)new URL(url).getContent());
+//                photo.setImageBitmap(bitmap);
+//            } catch (MalformedURLException e) {
+//                e.printStackTrace();
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
 
 
             card.setOnClickListener(new View.OnClickListener() {

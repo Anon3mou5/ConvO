@@ -16,6 +16,7 @@ import android.content.ClipData;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -62,14 +63,20 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.jaeger.library.StatusBarUtil;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Type;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -79,61 +86,80 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import static android.view.View.VISIBLE;
+import static com.example.convo.asynch.getSavedObjectFromPreference;
 import static com.google.firebase.database.FirebaseDatabase.getInstance;
 
 public class MainActivity extends AppCompatActivity {
 
     static List<Data> model2 = new ArrayList<Data>();
+    static List<chat> model = new ArrayList<chat>();
+    static List<read> model3 = new ArrayList<read>();
+    static List<read> model4 = new ArrayList<read>();
     static contactsfetcher contacts;
     static HashMap<String,String> map2;
+    chat ch;
 
     //  List<message> listmsg = new ArrayList<>();
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         StatusBarUtil.setTransparent(this);
 
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
         final Context c = getApplicationContext();
         final FirebaseAuth auth = FirebaseAuth.getInstance();
-        if(auth.getCurrentUser() == null) {
+        if (auth.getCurrentUser() == null) {
 
             Intent intent = new Intent(MainActivity.this, loginactivity.class);
             startActivity(intent);
             finish();
             return;
-        }
-        else {
+        } else {
             Log.d("Loggedin", "Previous user");
         }
 
-        setContentView(R.layout.homepage);
-            //After this point you wait for callback in onRequestPermissionsResult(int, String[], int[]) overriden method
-        final ConstraintLayout lay = findViewById(R.id.homepage);
-        final Animation a = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.faded);
+//        Type collectionType = new TypeToken<List<chat>>(){}.getType();
+       final read zz = getSavedObjectFromPreference(getApplicationContext(), "urnum", auth.getUid(), read.class);
 
-        final Thread k = new Thread(new Runnable() {
+        setContentView(R.layout.homepage);
+        Thread k = new Thread(new Runnable() {
             @Override
             public void run() {
-                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && checkSelfPermission(Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && checkSelfPermission(Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
                     requestPermissions(new String[]{Manifest.permission.READ_CONTACTS}, 100);
                 }
                 contacts = new contactsfetcher();
                 map2 = contacts.getContactList(MainActivity.this);
-                for(String j:map2.keySet())
-                {
-                   // Log.d("MAP",map2.get(j));
-                    Data e = new Data(map2.get(j),"not found",0,MainActivity.this,"null",j);
-                    //   Log.d("XYZ",""+model.);
-                    model2.add(e);
+                Log.d("MAPVALUzzz",""+map2);
+                for (String j : map2.keySet()) {
+                    // Log.d("MAP",map2.get(j));
+                    Data e = new Data(map2.get(j), "not found", 0, MainActivity.this, "null", j);
+                    if (zz != null) {
+                        if (!zz.phno.toLowerCase().equals(j)) {
+                            model2.add(e);
+                        }
+                        //   Log.d("XYZ",""+model.);
 
+                    }
+                    else
+                    {
+                        model2.add(e);
+                    }
                 }
-               // Log.d("MAPVALUzzz",""+map2);
+
             }
         });
         k.start();
-//        final Thread z = new Thread(new Runnable() {
+        k.setPriority(10);
+        //After this point you wait for callback in onRequestPermissionsResult(int, String[], int[]) overriden method
+        final ConstraintLayout lay = findViewById(R.id.homepage);
+        final Animation a = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.faded);
+
+        new asynch().execute(getApplicationContext());
+
+
+
+       // final Thread z = new Thread(new Runnable() {
 //            @Override
 //            public void run() {
 //
@@ -240,7 +266,7 @@ public class MainActivity extends AppCompatActivity {
 //        });
 //        z.start();
 
-        final ImageView img =findViewById(R.id.img);
+        final ImageView img = findViewById(R.id.img);
         img.setVisibility(View.VISIBLE);
         img.animate().alpha(1).translationY(-135).setDuration(300);
         Handler handler2 = new Handler();
@@ -248,7 +274,7 @@ public class MainActivity extends AppCompatActivity {
             public void run() {
                 img.animate().alpha(0).translationY(135).setDuration(300);
             }
-        }, 2700);
+        }, 3400);
 
 //        TimerTask tim = new TimerTask() {
 //            @Override
@@ -272,19 +298,99 @@ public class MainActivity extends AppCompatActivity {
 //            }
 //        }
         Handler handler = new Handler();
+
         handler.postDelayed(new Runnable() {
             public void run() {
-    Intent in = new Intent(MainActivity.this,Acti.class);
-    lay.startAnimation(a);
-    startActivity(in);
-    overridePendingTransition(0,0);
-    finish();
+                Intent in = new Intent(MainActivity.this, Acti.class);
+                lay.startAnimation(a);
+                startActivity(in);
+                overridePendingTransition(0, 0);
+                finish();
             }
-        }, 2940);
+        }, 3950);
+
+//
+//        FirebaseInstanceId.getInstance().getInstanceId()
+//                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+//                                           @Override
+//                                           public void onComplete(@NonNull Task<InstanceIdResult> task) {
+//                                               if (!task.isSuccessful()) {
+//                                                   Log.d("idk", "getInstanceId failed", task.getException());
+//                                                   return;
+//                                               }
+//
+//                                               // Get new Instance ID token
+//                                               String token = task.getResult().getToken();
+//
+//                                               // Log and toast
+//                                               String msg = token;
+//                                               Log.d("idk", msg);
+//                                               Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
+//                                           }
+//
+//                                           public void onNewToken(String token) {
+//                                               Log.d("idk", "Refreshed token: " + token);
+//
+//                                               // If you want to send messages to this application instance or
+//                                               // manage this apps subscriptions on the server side, send the
+//                                               // Instance ID token to your app server.
+//                                               //sendRegistrationToServer(token);
+//                                           }
+//                                       }
+//                );
+
+//      Thread imp = new Thread(new Runnable() {
+//          @Override
+//          public void run() {
+//              FirebaseAuth user = FirebaseAuth.getInstance();
+//              DatabaseReference data = FirebaseDatabase.getInstance().getReference("Private chats").child(user.getUid());
+//              data.addValueEventListener(new ValueEventListener() {
+//                  @Override
+//                  public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//
+//                  }
+//
+//                  @Override
+//                  public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//                  }
+//              });
+//          }
+//      });
 
 
+//        Thread work = new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//
+//
+//        work.setPriority(2);
+//        work.start();
+
+//    }
     }
-
+//    public static void saveObjectToSharedPreference(Context context, String preferenceFileName, String serializedObjectKey, Object object) {
+//        SharedPreferences sharedPreferences = context.getSharedPreferences(preferenceFileName, 0);
+//        SharedPreferences.Editor sharedPreferencesEditor = sharedPreferences.edit();
+//        final Gson gson = new Gson();
+//        String serializedObject = gson.toJson(object);
+//        sharedPreferencesEditor.putString(serializedObjectKey, serializedObject);
+//        sharedPreferencesEditor.apply();
+//        Acti t = new Acti();
+//        t.setview();
+//        Singleactivity t2 = new
+//                Singleactivity();
+//        t2.setview();
+//    }
+//
+//    public static <GenericClass> GenericClass getSavedObjectFromPreference(Context context, String preferenceFileName, String preferenceKey, Type classType) {
+//        SharedPreferences sharedPreferences = context.getSharedPreferences(preferenceFileName, 0);
+//        if (sharedPreferences.contains(preferenceKey)) {
+//            final Gson gson = new Gson();
+//            return gson.fromJson(sharedPreferences.getString(preferenceKey, ""), classType);
+//        }
+//        return null;
+//    }
 
 
 ///////////////////////////////////////////MENU
@@ -337,5 +443,6 @@ public class MainActivity extends AppCompatActivity {
         }
         return directory.getAbsolutePath();
     }
+
 }
 

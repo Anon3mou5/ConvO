@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -34,22 +35,29 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.gson.reflect.TypeToken;
 import com.jaeger.library.StatusBarUtil;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import static com.example.convo.MainActivity.model;
+import static com.example.convo.MainActivity.model3;
+import static com.example.convo.asynch.getSavedObjectFromPreference;
 
 
 public class Acti extends AppCompatActivity {
 
     public int MSG_RIGHT = 0;
+    static List<chat> mdl2 = new ArrayList<chat>();
     public int MSG_LEFT = 1;
     static String PATH = null;
     static chat ch;
-    List<chat> model = new ArrayList<chat>();
     static contactsfetcher contacts;
-    static HashMap<String, String> map2;
+    chatmodel m;
+    RecyclerView recycle;
 
     //  List<message> listmsg = new ArrayList<>();
     @Override
@@ -59,7 +67,8 @@ public class Acti extends AppCompatActivity {
         StatusBarUtil.setTransparent(this);
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
         final Context c = getApplicationContext();
-        if(checkSelfPermission(Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
+
+        if (checkSelfPermission(Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(new String[]{Manifest.permission.READ_CONTACTS}, 100);
         }
         final FirebaseAuth auth = FirebaseAuth.getInstance();
@@ -67,114 +76,83 @@ public class Acti extends AppCompatActivity {
         Toolbar t = findViewById(R.id.maintoolbar);
         setSupportActionBar(t);
 
-                DatabaseReference db = FirebaseDatabase.getInstance().getReference("Private chats").child(auth.getCurrentUser().getUid());
-                db.addChildEventListener(new ChildEventListener() {
-                    @Override
-                    public void onChildAdded(@NonNull final DataSnapshot dataSnapshot, @Nullable String s) {
-                        model.clear();
-                        String key = dataSnapshot.getKey();
-                        DatabaseReference bd = FirebaseDatabase.getInstance().getReference("Private chats").child(auth.getCurrentUser().getUid()).child(key);
-                        Query q = bd.orderByValue().limitToLast(1);
-                        q.addValueEventListener(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                for (DataSnapshot data : dataSnapshot.getChildren()) {
-                                    HashMap<String, String> map = (HashMap<String, String>) data.getValue();
-                                    final String msg = (String) map.get("msg").toString();
-                                    final String suid = (String) map.get("suid").toString();
-                                    final String ruid = (String) map.get("ruid").toString();
-                                    Log.d("ruid", "" + ruid);
-                                    final String phno = (String) map.get("phno").toString();
-                                    FirebaseFirestore ref = FirebaseFirestore.getInstance();
-                                    DocumentReference df = ref.collection("users").document(ruid.substring(1, ruid.length() - 1));
-                                    df.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                                        @Override
-                                        public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                            if (documentSnapshot.exists()) {
-                                                final String photourl;
-                                                photourl = documentSnapshot.getString("photo");
 
-                                            }
-                                        }
-                                    });
-                                    ch = new chat(suid, msg, ruid, "not found", phno);
-                                    model.add(ch);
+
+
+        Type collectionType = new TypeToken<List<chat>>(){}.getType();
+        mdl2 = getSavedObjectFromPreference(getApplicationContext(), "preference", "chatmodel", collectionType);
+      if(mdl2==null)
+      {
+          mdl2=new ArrayList<chat>();
+      }
+            m = new chatmodel(mdl2);
+            recycle = findViewById(R.id.chatrecycle);
+            LinearLayoutManager lm = new LinearLayoutManager(getApplicationContext());
+            lm.setOrientation(LinearLayoutManager.VERTICAL);
+            recycle.setLayoutManager(lm);
+            recycle.getLayoutManager().scrollToPosition(mdl2.size() - 1);
+            m.notifyDataSetChanged();
+            recycle.setAdapter(m);
+
+
+
+
+
+        final DatabaseReference db = FirebaseDatabase.getInstance().getReference("Private chats").child(auth.getCurrentUser().getUid());
+        db.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull final DataSnapshot dataSnapshot, @Nullable String s) {
+                final String key = dataSnapshot.getKey();
+                DatabaseReference bd = FirebaseDatabase.getInstance().getReference("Private chats").child(auth.getCurrentUser().getUid()).child(key);
+                Query q = bd.orderByValue().limitToLast(1);
+                q.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        for (DataSnapshot data : dataSnapshot.getChildren()) {
+                            HashMap<String, String> map = (HashMap<String, String>) data.getValue();
+                            final String msg = (String) map.get("msg").toString();
+                            final String suid = (String) map.get("suid").toString();
+                            final String ruid = (String) map.get("ruid").toString();
+                            Log.d("ruid", "" + ruid);
+                            final String phno = (String) map.get("phno").toString();
+                            FirebaseFirestore ref = FirebaseFirestore.getInstance();
+                            DocumentReference df = ref.collection("users").document(ruid.substring(1, ruid.length() - 1));
+                            df.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                @Override
+                                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                    if (documentSnapshot.exists()) {
+                                        final String photourl;
+                                        photourl = documentSnapshot.getString("photo");
+
+                                    }
                                 }
-                                final chatmodel m = new chatmodel(model);
-                                RecyclerView recycle = findViewById(R.id.chatrecycle);
-                                LinearLayoutManager lm = new LinearLayoutManager(getApplicationContext());
-                                lm.setOrientation(LinearLayoutManager.VERTICAL);
-                                recycle.setLayoutManager(lm);
-                                recycle.setAdapter(m);
-                                recycle.getLayoutManager().scrollToPosition(model.size() - 1);
-                                m.notifyDataSetChanged();
-
-                            }
-
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                            }
-                        });
-                    }
-
-
-                    @Override
-                    public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                        model.clear();
-                        String key = dataSnapshot.getKey();
-                        DatabaseReference bd = FirebaseDatabase.getInstance().getReference("Private chats").child(auth.getCurrentUser().getUid()).child(key);
-                        Query q = bd.orderByKey().limitToLast(1);
-                        q.addValueEventListener(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                for (DataSnapshot data : dataSnapshot.getChildren()) {
-                                    HashMap<String, String> map = (HashMap<String, String>) data.getValue();
-                                    final String msg = (String) map.get("msg").toString();
-                                    final String suid = (String) map.get("suid").toString();
-                                    final String ruid = (String) map.get("ruid").toString();
-                                    Log.d("ruid", "" + ruid);
-                                    final String phno = (String) map.get("phno").toString();
-                                    FirebaseFirestore ref = FirebaseFirestore.getInstance();
-                                    DocumentReference df = ref.collection("users").document(ruid.substring(1, ruid.length() - 1));
-                                    df.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                                        @Override
-                                        public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                            if (documentSnapshot.exists()) {
-                                                final String photourl;
-                                                photourl = documentSnapshot.getString("photo");
-
-                                            }
-                                        }
-                                    });
-                                    ch = new chat(suid, msg, ruid, "not found", phno);
-                                    model.add(ch);
+                            });
+                            ch = new chat(suid, msg, ruid, "not found", phno);
+                            for(int i = mdl2.size()-1;i>=0;i--)
+                            {
+                                if(mdl2.get(i).phno.equals(ch.phno))
+                                {
+                                    mdl2.remove(i);
+                                    mdl2.add(ch);
+                                    break;
                                 }
-                                final chatmodel m = new chatmodel(model);
-                                RecyclerView recycle = findViewById(R.id.chatrecycle);
-                                LinearLayoutManager lm = new LinearLayoutManager(getApplicationContext());
-                                lm.setOrientation(LinearLayoutManager.VERTICAL);
-                                recycle.setLayoutManager(lm);
-                                recycle.setAdapter(m);
-                                recycle.getLayoutManager().scrollToPosition(model.size() - 1);
-                                m.notifyDataSetChanged();
+                            }
+                            if(mdl2.get(mdl2.size()-1).phno.equals(ch.phno))
+                            {
 
                             }
-
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                            else
+                            {
+                                mdl2.add(ch);
                             }
-                        });
-                    }
-
-                    @Override
-                    public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
-                    }
-
-                    @Override
-                    public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                        }
+//                        final chatmodel m = new chatmodel(model);
+//                        RecyclerView recycle = findViewById(R.id.chatrecycle);
+//                        LinearLayoutManager lm = new LinearLayoutManager(getApplicationContext());
+//                        lm.setOrientation(LinearLayoutManager.VERTICAL);
+//                        recycle.setLayoutManager(lm);
+//                        recycle.setAdapter(m);
+                          m.notifyDataSetChanged();
 
                     }
 
@@ -183,6 +161,100 @@ public class Acti extends AppCompatActivity {
 
                     }
                 });
+            }
+
+            @Override
+            public void onChildChanged(@NonNull final DataSnapshot dataSnapshot, @Nullable String s) {
+//                        String key = dataSnapshot.getKey();
+//                        DatabaseReference bd = FirebaseDatabase.getInstance().getReference("Private chats").child(auth.getCurrentUser().getUid()).child(key);
+//                        Query q = bd.orderByKey().limitToLast(1);
+//                        q.addValueEventListener(new ValueEventListener() {
+//                            @Override
+//                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                                for (DataSnapshot data : dataSnapshot.getChildren()) {
+//                                    HashMap<String, String> map = (HashMap<String, String>) data.getValue();
+//                                    final String msg = (String) map.get("msg").toString();
+//                                    final String suid = (String) map.get("suid").toString();
+//                                    final String ruid = (String) map.get("ruid").toString();
+//                                    Log.d("ruid", "" + ruid);
+//                                    final String phno = (String) map.get("phno").toString();
+//                                    FirebaseFirestore ref = FirebaseFirestore.getInstance();
+//                                    DocumentReference df = ref.collection("users").document(ruid.substring(1, ruid.length() - 1));
+//                                    df.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+//                                        @Override
+//                                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+//                                            if (documentSnapshot.exists()) {
+//                                                final String photourl;
+//                                                photourl = documentSnapshot.getString("photo");
+//
+//                                            }
+//                                        }
+//                                    });
+//                                    ch = new chat(suid, msg, ruid, "not found", phno);
+//                                    model.add(ch);
+//                                }
+//                                final chatmodel m = new chatmodel(model);
+//                                RecyclerView recycle = findViewById(R.id.chatrecycle);
+//                                LinearLayoutManager lm = new LinearLayoutManager(getApplicationContext());
+//                                lm.setOrientation(LinearLayoutManager.VERTICAL);
+//                                recycle.setLayoutManager(lm);
+//                                recycle.setAdapter(m);
+//                                recycle.getLayoutManager().scrollToPosition(model.size() - 1);
+//                                m.notifyDataSetChanged();
+//                            }
+//
+//                            @Override
+//                            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//                            }
+//                        });
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//Thread getter = new Thread(new Runnable() {
+//    @Override
+//    public void run() {
+//
+//
+//
+//    }
+//});
+//
+//
+//       getter.start();
+//
+
+
+
 
 
 //            if (auth.getCurrentUser() == null) {
@@ -404,12 +476,23 @@ public class Acti extends AppCompatActivity {
     }
 
 
+    public void setview()
+    {
+        List<chat> mdl;
+        Type collectionType = new TypeToken<List<chat>>(){}.getType();
+        if ((mdl = getSavedObjectFromPreference(getApplicationContext(), "preference", "chatmodel", collectionType)) != null) {
+             m = new chatmodel(mdl);
+            m.notifyDataSetChanged();
+        }
+
+    }
+
     ///////////////////////////////////////CHOOSE ITEM
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         switch (id) {
             case R.id.logout:
-                Intent t = new Intent(Acti.this, loginactivity.class);
+                Intent t = new Intent(getApplicationContext(), loginactivity.class);
                 FirebaseAuth c = FirebaseAuth.getInstance();
                 c.signOut();
                 startActivity(t);

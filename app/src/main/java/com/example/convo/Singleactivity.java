@@ -1,6 +1,8 @@
 package com.example.convo;
 
+import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -22,23 +24,36 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.gson.reflect.TypeToken;
 import com.jaeger.library.StatusBarUtil;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.example.convo.MainActivity.model;
+import static com.example.convo.MainActivity.model3;
+import static com.example.convo.asynch.getSavedObjectFromPreference;
+
 public class Singleactivity extends AppCompatActivity {
+    static String ruid;
+    static List<read> mdl = new ArrayList<read>();
+   static  msgmodel m ;
+   Context context;
+    RecyclerView recycle ;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,7 +61,7 @@ public class Singleactivity extends AppCompatActivity {
        final List<read> model = new ArrayList<read>();
       //  HashMap<String,String> contacts;
         Intent intent = getIntent();
-        final String ruid=intent.getStringExtra("uid");
+        ruid=intent.getStringExtra("uid");
         Log.d("ruid",ruid);
         final String phno=intent.getStringExtra("phno");
         String name=intent.getStringExtra("name");
@@ -63,6 +78,7 @@ public class Singleactivity extends AppCompatActivity {
        }
        profilename.setText(name);
         final ImageView fb = findViewById(R.id.send);
+
         fb.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -103,40 +119,97 @@ public class Singleactivity extends AppCompatActivity {
                 msg.setText("");
                         }
                     });
-         final  FirebaseUser u = FirebaseAuth.getInstance().getCurrentUser();
-        final DatabaseReference db = FirebaseDatabase.getInstance().getReference("Private chats").child(u.getUid().toString()).child(ruid.toString());
-        //Toast.makeText(Singleactivity.this,"ruid  "+ ruid,Toast.LENGTH_SHORT).show();
-        db.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                model.clear();
-                for (DataSnapshot post : dataSnapshot.getChildren()) {
-                    // message m = (message)  post.getValue(message.class);
-                    String msg = (String) post.child("msg").getValue();
-                    final String suid = (String) post.child("suid").getValue();
-                    String ruid = (String) post.child("ruid").getValue();
-                  //  String url=(String) post.child("url").getValue();
-                    //    Boolean b = (Boolean)post.child("s").getValue();
-                    //   Log.d("NAME",""+uid.toString());{
-                   // message dz = new message(uid, msg, Boolean.TRUE, orguid,url);
-                    read dz = new read(suid,msg,ruid,phno);
-                    model.add(dz);
-                    //   Log.d("MSG", "" + msg.toString());
-                }
-                final msgmodel m = new msgmodel(model);
-                RecyclerView recycle = findViewById(R.id.singlerecycle);
-                LinearLayoutManager lm = new LinearLayoutManager(getApplicationContext());
-                lm.setOrientation(LinearLayoutManager.VERTICAL);
-                recycle.setLayoutManager(lm);
-                recycle.setAdapter(m);
-                recycle.getLayoutManager().scrollToPosition(model.size() - 1);
-                m.notifyDataSetChanged();
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
 
-            }
-        });
+
+            Type collectionType = new TypeToken<List<read>>(){}.getType();
+            mdl = getSavedObjectFromPreference(getApplicationContext(), "preference", ruid, collectionType);
+if(mdl==null)
+{
+    mdl = new ArrayList<read>();
+}
+            final msgmodel m = new msgmodel(mdl);
+           final  RecyclerView recycle = findViewById(R.id.singlerecycle);
+            LinearLayoutManager lm = new LinearLayoutManager(getApplicationContext());
+            lm.setOrientation(LinearLayoutManager.VERTICAL);
+            recycle.setLayoutManager(lm);
+            recycle.setAdapter(m);
+            recycle.getLayoutManager().scrollToPosition(mdl.size() - 1);
+            m.notifyDataSetChanged();
+
+
+
+        final FirebaseAuth auth = FirebaseAuth.getInstance();
+        final DatabaseReference db = FirebaseDatabase.getInstance().getReference("Private chats").child(auth.getCurrentUser().getUid()).child(ruid);
+        db.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        for (DataSnapshot post : dataSnapshot.getChildren()) {
+
+                            // message m = (message)  post.getValue(message.class);
+                            String msg = (String) post.child("msg").getValue();
+                            final String suid = (String) post.child("suid").getValue();
+                            String ruid = (String) post.child("ruid").getValue();
+                            String phno = (String) post.child("phno").getValue();
+                            read rd = new read(suid, msg, ruid, phno);
+                            mdl.add(rd);
+                        }
+//                        final msgmodel m = new msgmodel(model3);
+//                        RecyclerView recycle = findViewById(R.id.singlerecycle);
+//                        LinearLayoutManager lm = new LinearLayoutManager(getApplicationContext());
+//                        lm.setOrientation(LinearLayoutManager.VERTICAL);
+//                        recycle.setLayoutManager(lm);
+//                        recycle.setAdapter(m);
+                        recycle.getLayoutManager().scrollToPosition(mdl.size() - 1);
+                        m.notifyDataSetChanged();
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+
+
+                });
+
+
+
+
+
+//        final DatabaseReference db = FirebaseDatabase.getInstance().getReference("Private chats").child(u.getUid().toString()).child(ruid.toString());
+//        //Toast.makeText(Singleactivity.this,"ruid  "+ ruid,Toast.LENGTH_SHORT).show();
+//        db.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                model.clear();
+//                for (DataSnapshot post : dataSnapshot.getChildren()) {
+//                    // message m = (message)  post.getValue(message.class);
+//                    String msg = (String) post.child("msg").getValue();
+//                    final String suid = (String) post.child("suid").getValue();
+//                    String ruid = (String) post.child("ruid").getValue();
+//                  //  String url=(String) post.child("url").getValue();
+//                    //    Boolean b = (Boolean)post.child("s").getValue();
+//                    //   Log.d("NAME",""+uid.toString());{
+//                   // message dz = new message(uid, msg, Boolean.TRUE, orguid,url);
+//                    read dz = new read(suid,msg,ruid,phno);
+//                    model.add(dz);
+//                    //   Log.d("MSG", "" + msg.toString());
+//                }''
+
+
+//            }
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        });
+
+
+
+
+
+
+
+
         ImageView rtrn = findViewById(R.id.rtrn);
         rtrn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -146,6 +219,16 @@ public class Singleactivity extends AppCompatActivity {
             }
         });
 
+        }
+        public void setview() {
+            Type collectionType = new TypeToken<List<read>>() {
+            }.getType();
+            if (getSavedObjectFromPreference(Singleactivity.this, "preference", ruid, collectionType) != null) {
+                List<read> mdl = getSavedObjectFromPreference(getApplicationContext(), "preference", ruid, collectionType);
+
+                m = new msgmodel(mdl);
+                m.notifyDataSetChanged();
+            }
         }
 
     }
