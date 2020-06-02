@@ -106,8 +106,14 @@ public class MainActivity extends AppCompatActivity {
         StatusBarUtil.setTransparent(this);
 
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-        final Context c = getApplicationContext();
+      //  final Context c = getApplicationContext();
+
         final FirebaseAuth auth = FirebaseAuth.getInstance();
+
+        if (checkSelfPermission(Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[]{Manifest.permission.READ_CONTACTS}, 100);
+        }
+
         if (auth.getCurrentUser() == null) {
 
             Intent intent = new Intent(MainActivity.this, loginactivity.class);
@@ -125,7 +131,7 @@ public class MainActivity extends AppCompatActivity {
         Thread k = new Thread(new Runnable() {
             @Override
             public void run() {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && checkSelfPermission(Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
+                if (checkSelfPermission(Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
                     requestPermissions(new String[]{Manifest.permission.READ_CONTACTS}, 100);
                 }
                 contacts = new contactsfetcher();

@@ -123,7 +123,7 @@ public class Singleactivity extends AppCompatActivity {
 
             Type collectionType = new TypeToken<List<read>>(){}.getType();
             mdl = getSavedObjectFromPreference(getApplicationContext(), "preference", ruid, collectionType);
-if(mdl==null)
+            if(mdl==null)
 {
     mdl = new ArrayList<read>();
 }
@@ -140,36 +140,81 @@ if(mdl==null)
 
         final FirebaseAuth auth = FirebaseAuth.getInstance();
         final DatabaseReference db = FirebaseDatabase.getInstance().getReference("Private chats").child(auth.getCurrentUser().getUid()).child(ruid);
-        db.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        for (DataSnapshot post : dataSnapshot.getChildren()) {
-
-                            // message m = (message)  post.getValue(message.class);
-                            String msg = (String) post.child("msg").getValue();
-                            final String suid = (String) post.child("suid").getValue();
-                            String ruid = (String) post.child("ruid").getValue();
-                            String phno = (String) post.child("phno").getValue();
-                            read rd = new read(suid, msg, ruid, phno);
-                            mdl.add(rd);
-                        }
+        db.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot post, @Nullable String s) {
+                // for (DataSnapshot post : dataSnapshot.getChildren()) {
+//
+                // message m = (message)  post.getValue(message.class);
+                String msg = (String) post.child("msg").getValue();
+                final String suid = (String) post.child("suid").getValue();
+                String ruid = (String) post.child("ruid").getValue();
+                String phno = (String) post.child("phno").getValue();
+                read rd = new read(suid, msg, ruid, phno);
+                mdl.add(rd);
+                //    }
 //                        final msgmodel m = new msgmodel(model3);
 //                        RecyclerView recycle = findViewById(R.id.singlerecycle);
 //                        LinearLayoutManager lm = new LinearLayoutManager(getApplicationContext());
 //                        lm.setOrientation(LinearLayoutManager.VERTICAL);
 //                        recycle.setLayoutManager(lm);
 //                        recycle.setAdapter(m);
-                        recycle.getLayoutManager().scrollToPosition(mdl.size() - 1);
-                        m.notifyDataSetChanged();
-                    }
+                recycle.getLayoutManager().scrollToPosition(mdl.size() - 1);
+                m.notifyDataSetChanged();
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
 
-                    }
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
 
+            }
 
-                });
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+//        db.addValueEventListener(new ValueEventListener() {
+//                    @Override
+//                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                        for (DataSnapshot post : dataSnapshot.getChildren()) {
+//
+//                            // message m = (message)  post.getValue(message.class);
+//                            String msg = (String) post.child("msg").getValue();
+//                            final String suid = (String) post.child("suid").getValue();
+//                            String ruid = (String) post.child("ruid").getValue();
+//                            String phno = (String) post.child("phno").getValue();
+//                            read rd = new read(suid, msg, ruid, phno);
+//                            mdl.add(rd);
+//                        }
+////                        final msgmodel m = new msgmodel(model3);
+////                        RecyclerView recycle = findViewById(R.id.singlerecycle);
+////                        LinearLayoutManager lm = new LinearLayoutManager(getApplicationContext());
+////                        lm.setOrientation(LinearLayoutManager.VERTICAL);
+////                        recycle.setLayoutManager(lm);
+////                        recycle.setAdapter(m);
+//                        recycle.getLayoutManager().scrollToPosition(mdl.size() - 1);
+//                        m.notifyDataSetChanged();
+//                    }
+//
+//                    @Override
+//                    public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//                    }
+//
+//
+//                });
 
 
 

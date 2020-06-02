@@ -1,7 +1,10 @@
 package com.example.convo;
 
+import android.app.Activity;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,20 +13,36 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.res.ResourcesCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+import com.google.gson.reflect.TypeToken;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Type;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
+
+import static com.example.convo.asynch.getSavedObjectFromPreference;
+import static com.example.convo.asynch.saveObjectToSharedPreference;
 
 public class msgmodel extends RecyclerView.Adapter<msgviewholder> {
         public  int MSG_RIGHT=0;
@@ -33,6 +52,7 @@ public class msgmodel extends RecyclerView.Adapter<msgviewholder> {
         String suid,phno;
         String chat,ruid;
         Boolean s;
+        read model;
 
         public msgmodel(List<read> modelclasslist) {
             this.modelclasslist = modelclasslist;
@@ -64,7 +84,8 @@ public class msgmodel extends RecyclerView.Adapter<msgviewholder> {
             chat = modelclasslist.get(position).getMsg();
             ruid=modelclasslist.get(position).getRuid();
             phno=modelclasslist.get(position).getPhno();
-            holder.setdata(suid, chat,ruid,phno);
+            model = modelclasslist.get(position);
+            holder.setdata(suid, chat,ruid,phno,model);
             Log.d("holder", "View holder Binded");
         }
 
@@ -93,18 +114,23 @@ public class msgmodel extends RecyclerView.Adapter<msgviewholder> {
          TextView t1;
          TextView t2;
          CardView card;
+         static int i=0;
+         Context c;
         ImageView photo;
-        ConstraintLayout lay;
+        ConstraintLayout cont;
 
         public msgviewholder(@NonNull View itemView,int j) {
 
             super(itemView);
 
             t1 = itemView.findViewById(R.id.status);
+            cont = itemView.findViewById(R.id.cont);
+            c=itemView.getContext();
+
             //t3 = itemView.findViewById(R.id.textView);
         }
 
-        void setdata(String suid, String chat,String ruid,String phno) {
+        void setdata(final String suid, final String chat, final String ruid, final String phno, final read model) {
             //card.setLayoutParams(t2.getLayoutParams());
 //             ConstraintLayout.LayoutParams p = new ConstraintLayout.LayoutParams(
 //                     ConstraintLayout.LayoutParams.WRAP_CONTENT,
@@ -160,8 +186,84 @@ public class msgmodel extends RecyclerView.Adapter<msgviewholder> {
 //             t1.setWidth(w);
 //             t1.setHeight(h);
 //         }
-
             t1.setText(chat);
+
+
+            t1.setOnLongClickListener(new View.OnLongClickListener() {
+                                          @Override
+                                          public boolean onLongClick(View v) {
+
+                                              //  Drawable d = ResourcesCompat.getDrawable(c.getResources(),R.drawable.bg2,null);
+                                              //     cont.setForeground(d);
+                                              final AlertDialog.Builder builder = new AlertDialog.Builder(c);
+                                              LayoutInflater lf = (LayoutInflater) c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                                              View v2 = lf.inflate(R.layout.pop2, null);
+                                              final TextView cancel = v2.findViewById(R.id.cancel);
+                                              final TextView b = v2.findViewById(R.id.delete);
+                                              builder.setView(v2);
+                                              final AlertDialog dialog = builder.create();
+                                              dialog.show();
+                                              b.setOnClickListener(new View.OnClickListener() {
+                                                  @Override
+                                                  public void onClick(View v) {
+                                                      dialog.cancel();
+                                                      List<read> mdl;
+                                                      Type collectionType = new TypeToken<List<read>>() {
+                                                      }.getType();
+                                                      mdl = getSavedObjectFromPreference(c, "preference", ruid, collectionType);
+                                                      for (i=mdl.size()-1;i>=0;i--) {
+                                                          read z=mdl.get(i);
+                                                          if (z.msg.equals(model.msg)) {
+                                                              mdl.remove(i);
+                                                              break;
+                                                          }
+                                                      }
+
+
+                                                      Type collectionType2 = new TypeToken<List<chat>>() {
+                                                      }.getType();
+                                                      List<chat>mdl2;
+                                                      mdl2 = getSavedObjectFromPreference(c, "preference", "chatmodel", collectionType2);
+                                                      if(mdl2.size()!=0) {
+                                                          for(int k= mdl2.size() - 1; k >= 0; k--) {
+                                                              chat z = mdl2.get(k);
+                                                              if (z.msg.toLowerCase().equals(chat.toLowerCase())) {
+                                                                  mdl2.remove(k);
+                                                                  FirebaseAuth u = FirebaseAuth.getInstance();
+                                                                  chat zz = new chat(u.getCurrentUser().getUid(), mdl.get(mdl.size() - 2).msg, ruid, "not found", phno);
+                                                                  mdl2.add(zz);
+                                                                  break;
+                                                              }
+                                                          }
+                                                      }
+                                                      final msgmodel m = new msgmodel(mdl);
+                                                      saveObjectToSharedPreference(c,"preference",ruid,mdl);
+                                                      saveObjectToSharedPreference(c,"preference","chatmodel",mdl2);
+                                                      final RecyclerView recycle = ((Activity) c).findViewById(R.id.singlerecycle);
+                                                      LinearLayoutManager lm = new LinearLayoutManager(c);
+                                                      lm.setOrientation(LinearLayoutManager.VERTICAL);
+                                                      recycle.setLayoutManager(lm);
+                                                      recycle.setAdapter(m);
+                                                      recycle.getLayoutManager().scrollToPosition(mdl.size() - 1);
+                                                      m.notifyDataSetChanged();
+                                                  }
+                                              });
+
+                                              cancel.setOnClickListener(new View.OnClickListener() {
+                                                  @Override
+                                                  public void onClick(View v) {
+                                                      dialog.cancel();
+                                                  }
+                                              });
+                                              return true;
+                                          }
+
+
+                                              });
+
+
+
+
             //  Bitmap b =loadImageFromStorage(MainActivity.PATH);
 //            try {
 //

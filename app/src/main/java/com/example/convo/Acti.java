@@ -90,7 +90,7 @@ public class Acti extends AppCompatActivity {
             LinearLayoutManager lm = new LinearLayoutManager(getApplicationContext());
             lm.setOrientation(LinearLayoutManager.VERTICAL);
             recycle.setLayoutManager(lm);
-            recycle.getLayoutManager().scrollToPosition(mdl2.size() - 1);
+           // recycle.getLayoutManager().scrollToPosition(mdl2.size() - 1);
             m.notifyDataSetChanged();
             recycle.setAdapter(m);
 
@@ -128,23 +128,23 @@ public class Acti extends AppCompatActivity {
                                 }
                             });
                             ch = new chat(suid, msg, ruid, "not found", phno);
-                            for(int i = mdl2.size()-1;i>=0;i--)
-                            {
-                                if(mdl2.get(i).phno.equals(ch.phno))
-                                {
-                                    mdl2.remove(i);
-                                    mdl2.add(ch);
-                                    break;
-                                }
-                            }
-                            if(mdl2.get(mdl2.size()-1).phno.equals(ch.phno))
-                            {
 
-                            }
-                            else
-                            {
+                           if(mdl2.size()!=0)
+                           {
+                               for(int i = mdl2.size()-1;i>=0;i--)
+                               {
+                                   if(mdl2.get(i).phno.equals(ch.phno))
+                                   {
+                                       mdl2.remove(i);
+                                       break;
+                                   }
+                               }
+                           }
+//                            if(mdl2.size()==0)
+//                            {
+//                                mdl2.add(ch);
+//                            }
                                 mdl2.add(ch);
-                            }
                         }
 //                        final chatmodel m = new chatmodel(model);
 //                        RecyclerView recycle = findViewById(R.id.chatrecycle);

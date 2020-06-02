@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg"
-    android:backgroundTint="#27BCBFC0"
+    android:background="#16CFCFCF"
     android:backgroundTintMode="src_in"
     android:fitsSystemWindows="true"
     android:orientation="horizontal"
@@ -20,21 +19,39 @@
     <!--        app:layout_constraintTop_toBottomOf="@+id/tool"-->
     <!--        tools:layout_editor_absoluteX="3dp" />-->
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycle"
-        android:layout_width="410dp"
-        android:layout_height="586dp"
-        android:layout_below="@+id/toolbar2"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cd2"
+        android:layout_width="wrap_content"
+        android:layout_height="660dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
-        android:layout_marginBottom="75dp"
+        android:background="#FCFCFC"
+        app:cardCornerRadius="30dp"
+        app:cardElevation="25dp"
+        app:cardMaxElevation="25dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar2">
+        app:layout_constraintTop_toBottomOf="@+id/toolbar3">
 
-    </androidx.recyclerview.widget.RecyclerView>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycle"
+            android:layout_width="408dp"
+            android:layout_height="566dp"
+            android:layout_below="@+id/toolbar2"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="80dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.333"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+        </androidx.recyclerview.widget.RecyclerView>
+    </androidx.cardview.widget.CardView>
 
 
     <androidx.cardview.widget.CardView
@@ -44,16 +61,16 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="17dp"
-        android:layout_marginEnd="17dp"
-        android:layout_marginBottom="10dp"
+        android:layout_marginBottom="7dp"
         app:cardCornerRadius="30dp"
-        app:cardElevation="7dp">
+        app:cardElevation="30dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/gradient2">
+            android:layout_height="wrap_content">
 
             <EditText
                 android:id="@+id/msg"
@@ -63,8 +80,7 @@
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"
                 android:layout_marginStart="3dp"
-                android:layout_marginBottom="3dp"
-                android:background="@drawable/gradient2"
+                android:background="@drawable/gradient"
                 android:elevation="0dp"
                 android:hint="Type here"
                 android:maxLines="4"
@@ -79,22 +95,22 @@
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent" />
 
-            <ImageView
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/send"
-                android:layout_width="52dp"
-                android:layout_height="37dp"
-                android:layout_marginEnd="10dp"
-                android:layout_marginBottom="3dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="15dp"
                 android:background="#00FFFFFF"
+                android:rotation="45"
                 android:src="@mipmap/send3"
                 app:backgroundTint="#00FFFFFF"
                 app:elevation="0dp"
                 app:fabCustomSize="45dp"
                 app:fabSize="normal"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintBottom_toBottomOf="@+id/msg"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:maxImageSize="35dp"
+                app:maxImageSize="25dp"
                 app:rippleColor="#d5e2f7" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
@@ -111,54 +127,55 @@
     <!--        tools:layout_editor_absoluteY="3dp" />-->
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar2"
+        android:id="@+id/toolbar3"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:background="@drawable/gradienttoolbar"
-        android:elevation="7dp"
-        android:minHeight="?attr/actionBarSize"
-        android:theme="?attr/actionBarTheme"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_height="67dp"
+        android:background="#00FFFFFF"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
 
-            <ImageView
-                android:id="@+id/img"
-                android:layout_width="119dp"
-                android:layout_height="36dp"
-                android:layout_marginStart="125dp"
-                android:foregroundTint="#FFFFFF"
-                android:tint="#FFFFFF"
-                android:transitionName="logo"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/logo" />
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
                 android:id="@+id/rtrn"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:layout_alignParentBottom="true"
-                android:layout_marginStart="5dp"
-                android:layout_marginBottom="17dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="19dp"
                 android:background="#FFFFFF"
                 android:src="@mipmap/back"
-                android:tint="#00922D2D"
+                android:tint="#000000"
                 app:backgroundTint="#00FFFFFF"
                 app:fabCustomSize="15dp"
                 app:fabSize="normal"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
                 app:rippleColor="#cccdcf" />
 
+            <ImageView
+                android:id="@+id/img"
+                android:layout_width="119dp"
+                android:layout_height="36dp"
+                android:layout_marginTop="14dp"
+                android:layout_marginEnd="20dp"
+                android:foregroundTint="#000000"
+                android:tint="#000000"
+                android:transitionName="logo"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/logo" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.appcompat.widget.Toolbar>
 
-</RelativeLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+

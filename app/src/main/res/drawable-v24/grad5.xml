@@ -9,7 +9,8 @@
                 android:type="linear"
                 />
             <corners
-                android:radius="10dp"
+                android:topLeftRadius="20dp"
+android:topRightRadius="20dp"
                 ></corners>
 
         </shape>

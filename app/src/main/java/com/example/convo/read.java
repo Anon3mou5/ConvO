@@ -7,6 +7,7 @@ public class read {
 
     String msg,suid,ruid,url,phno;
 
+
     public String getMsg() {
         return msg;
     }

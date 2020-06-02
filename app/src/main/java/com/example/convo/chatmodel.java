@@ -204,7 +204,7 @@ if(map2==null)
 {
     Thread.currentThread().sleep(1100);
 }
-         map2.put("not null","9897968");
+
          name=map2.get(phno);
          if(name==null)
          {
