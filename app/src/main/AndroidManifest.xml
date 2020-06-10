@@ -19,7 +19,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".signactivity"
-            android:windowSoftInputMode="adjustResize">
+            android:windowSoftInputMode="adjustPan">
         </activity>
         <activity android:name=".Acti"
             android:windowSoftInputMode="adjustResize">
@@ -29,7 +29,7 @@
             android:windowSoftInputMode="adjustPan">
         </activity>
         <activity android:name=".ContactsActivity"
-            android:windowSoftInputMode="adjustPan">
+            android:windowSoftInputMode="adjustResize">
 
         </activity>
         <activity android:name=".Singleactivity"
@@ -54,6 +54,8 @@
             </intent-filter>
         </service>
 
+
+        <service android:name=".myservice"/>
     </application>
 
 </manifest>

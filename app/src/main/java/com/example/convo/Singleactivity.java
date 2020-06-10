@@ -45,13 +45,13 @@ import java.util.List;
 import java.util.Map;
 
 import static com.example.convo.MainActivity.model;
-import static com.example.convo.MainActivity.model3;
 import static com.example.convo.asynch.getSavedObjectFromPreference;
 
 public class Singleactivity extends AppCompatActivity {
     static String ruid;
     static List<read> mdl = new ArrayList<read>();
    static  msgmodel m ;
+   static List <read> mdl3= new ArrayList<read>();
    Context context;
     RecyclerView recycle ;
     @Override
@@ -125,7 +125,7 @@ public class Singleactivity extends AppCompatActivity {
             mdl = getSavedObjectFromPreference(getApplicationContext(), "preference", ruid, collectionType);
             if(mdl==null)
 {
-    mdl = new ArrayList<read>();
+        mdl = new ArrayList<read>();
 }
             final msgmodel m = new msgmodel(mdl);
            final  RecyclerView recycle = findViewById(R.id.singlerecycle);
@@ -140,18 +140,18 @@ public class Singleactivity extends AppCompatActivity {
 
         final FirebaseAuth auth = FirebaseAuth.getInstance();
         final DatabaseReference db = FirebaseDatabase.getInstance().getReference("Private chats").child(auth.getCurrentUser().getUid()).child(ruid);
-        db.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot post, @Nullable String s) {
-                // for (DataSnapshot post : dataSnapshot.getChildren()) {
-//
-                // message m = (message)  post.getValue(message.class);
-                String msg = (String) post.child("msg").getValue();
-                final String suid = (String) post.child("suid").getValue();
-                String ruid = (String) post.child("ruid").getValue();
-                String phno = (String) post.child("phno").getValue();
-                read rd = new read(suid, msg, ruid, phno);
-                mdl.add(rd);
+//        db.addChildEventListener(new ChildEventListener() {
+//            @Override
+//            public void onChildAdded(@NonNull DataSnapshot post, @Nullable String s) {
+//                // for (DataSnapshot post : dataSnapshot.getChildren()) {
+////
+//                // message m = (message)  post.getValue(message.class);
+//                String msg = (String) post.child("msg").getValue();
+//                final String suid = (String) post.child("suid").getValue();
+//                String ruid = (String) post.child("ruid").getValue();
+//                String phno = (String) post.child("phno").getValue();
+//                read rd = new read(suid, msg, ruid, phno);
+//                mdl.add(rd);
                 //    }
 //                        final msgmodel m = new msgmodel(model3);
 //                        RecyclerView recycle = findViewById(R.id.singlerecycle);
@@ -159,9 +159,26 @@ public class Singleactivity extends AppCompatActivity {
 //                        lm.setOrientation(LinearLayoutManager.VERTICAL);
 //                        recycle.setLayoutManager(lm);
 //                        recycle.setAdapter(m);
+
+
+
+
+        db.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot post, @Nullable String s) {
+                //mdl3.clear();
+                String ruidd = "";
+                //  for (DataSnapshot post : dataSnapshot.getChildren()) {
+                // message m = (message)  post.getValue(message.class);
+                String msg = (String) post.child("msg").getValue();
+                final String suid = (String) post.child("suid").getValue();
+                String ruid = (String) post.child("ruid").getValue();
+                ruidd = ruid;
+                String phno = (String) post.child("phno").getValue();
+                read rd = new read(suid, msg, ruidd, phno);
+                mdl.add(rd);
                 recycle.getLayoutManager().scrollToPosition(mdl.size() - 1);
                 m.notifyDataSetChanged();
-
             }
 
             @Override

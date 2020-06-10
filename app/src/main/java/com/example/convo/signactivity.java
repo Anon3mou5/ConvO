@@ -319,7 +319,7 @@ public class signactivity extends AppCompatActivity {
         super.onActivityResult(requestCode,
                 resultCode,
                 data);
-        FloatingActionButton btn_choose_photo = findViewById(R.id.photo);
+      FloatingActionButton btn_choose_photo = findViewById(R.id.photo);
 
         // checking request code and result code
         // if request code is PICK_IMAGE_REQUEST and

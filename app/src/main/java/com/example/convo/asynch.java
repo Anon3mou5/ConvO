@@ -42,44 +42,102 @@ public class asynch extends AsyncTask<Context, Void, Void> {
     static chat ch;
     @Override
     protected Void doInBackground(final Context... params) {
-        final FirebaseAuth auth = FirebaseAuth.getInstance();
-        final DatabaseReference db = FirebaseDatabase.getInstance().getReference("Private chats").child(auth.getCurrentUser().getUid());
-        db.addChildEventListener(new ChildEventListener() {
+      final FirebaseAuth auth = FirebaseAuth.getInstance();
+       final DatabaseReference db = FirebaseDatabase.getInstance().getReference("Private chats").child(auth.getCurrentUser().getUid());
+    db.addChildEventListener(new ChildEventListener() {
             @Override
-            public void onChildAdded(@NonNull final DataSnapshot dataSnapshot, @Nullable String s) {
-                    model.clear();
-                    final String key = dataSnapshot.getKey();
-                    DatabaseReference bd = FirebaseDatabase.getInstance().getReference("Private chats").child(auth.getCurrentUser().getUid()).child(key);
-                    bd.addChildEventListener(new ChildEventListener() {
+           public void onChildAdded(@NonNull final DataSnapshot dataSnapshot, @Nullable String s) {
+//                model3.clear();
+//                String key = dataSnapshot.getKey();
+//                DatabaseReference bd = FirebaseDatabase.getInstance().getReference("Private chats").child(auth.getCurrentUser().getUid()).child(key);
+//                final FirebaseAuth auth = FirebaseAuth.getInstance();
+//                final DatabaseReference db = FirebaseDatabase.getInstance().getReference("Private chats").child(auth.getCurrentUser().getUid()).child(key);
+//                db.addChildEventListener(new ChildEventListener() {
+//                    @Override
+//                    public void onChildAdded(@NonNull DataSnapshot post, @Nullable String s) {
+//                        // for (DataSnapshot post : dataSnapshot.getChildren()) {
+////
+//                        // message m = (message)  post.getValue(message.class);
+//                        String msg = (String) post.child("msg").getValue();
+//                        final String suid = (String) post.child("suid").getValue();
+//                        String ruid = (String) post.child("ruid").getValue();
+//                        String phno = (String) post.child("phno").getValue();
+//                        read rd = new read(suid, msg, ruid, phno);
+//                        model3.add(rd);
+//                        //    }
+////                        final msgmodel m = new msgmodel(model3);
+////                        RecyclerView recycle = findViewById(R.id.singlerecycle);
+////                        LinearLayoutManager lm = new LinearLayoutManager(getApplicationContext());
+////                        lm.setOrientation(LinearLayoutManager.VERTICAL);
+////                        recycle.setLayoutManager(lm);
+////                        recycle.setAdapter(m);
+//                        List<read> md;
+//                        Type collectionType = new TypeToken<List<read>>() {
+//                        }.getType();
+//                        md = getSavedObjectFromPreference(params[0], "preference", ruid, collectionType);
+//                        if (md != null && md.size() != 0) {
+//                            for (int j = 0; j < model3.size(); j++) {
+//                                read r = model3.get(j);
+//                                md.add(r);
+//                            }
+//                            saveObjectToSharedPreference(params[0], "preference", ruid, md);
+//                        } else {
+//                            saveObjectToSharedPreference(params[0], "preference", ruid, model3);
+//                        }
+//
+//                    }
+//
+//                    @Override
+//                    public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//                    }
+//                });
+                    String key = dataSnapshot.getKey();
+                 final   DatabaseReference bd = FirebaseDatabase.getInstance().getReference("Private chats").child(auth.getCurrentUser().getUid()).child(key);
+                 final ChildEventListener childevent = new ChildEventListener() {
                         @Override
                         public void onChildAdded(@NonNull DataSnapshot post, @Nullable String s) {
 
                             model3.clear();
                             String ruidd = "";
-                          //  for (DataSnapshot post : dataSnapshot.getChildren()) {
+                            //  for (DataSnapshot post : dataSnapshot.getChildren()) {
 
-                                // message m = (message)  post.getValue(message.class);
-                                String msg = (String) post.child("msg").getValue();
-                                final String suid = (String) post.child("suid").getValue();
-                                String ruid = (String) post.child("ruid").getValue();
-                                ruidd = ruid;
-                                String phno = (String) post.child("phno").getValue();
-                                read rd = new read(suid, msg, ruid, phno);
-                                model3.add(rd);
+                            // message m = (message)  post.getValue(message.class);
+                            String msg = (String) post.child("msg").getValue();
+                            final String suid = (String) post.child("suid").getValue();
+                            String ruid = (String) post.child("ruid").getValue();
+                            ruidd = ruid;
+                            String phno = (String) post.child("phno").getValue();
+                            read rd = new read(suid, msg, ruid, phno);
+                            model3.add(rd);
 
-                            //}
                             List<read> md;
                             Type collectionType = new TypeToken<List<read>>() {
                             }.getType();
-                            md = getSavedObjectFromPreference(params[0], "preference", ruidd, collectionType);
+                            md = getSavedObjectFromPreference(params[0], "preference", ruid, collectionType);
                             if (md != null && md.size() != 0) {
                                 for (int j = 0; j < model3.size(); j++) {
                                     read r = model3.get(j);
                                     md.add(r);
                                 }
-                                saveObjectToSharedPreference(params[0], "preference", ruidd, md);
+                                saveObjectToSharedPreference(params[0], "preference", ruid, md);
                             } else {
-                                saveObjectToSharedPreference(params[0], "preference", ruidd, model3);
+                                saveObjectToSharedPreference(params[0], "preference", ruid, model3);
                             }
                         }
 
@@ -90,7 +148,6 @@ public class asynch extends AsyncTask<Context, Void, Void> {
 
                         @Override
                         public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
                         }
 
                         @Override
@@ -102,7 +159,8 @@ public class asynch extends AsyncTask<Context, Void, Void> {
                         public void onCancelled(@NonNull DatabaseError databaseError) {
 
                         }
-                    });
+                    };
+                    bd.addChildEventListener(childevent);
 //                    bd.addValueEventListner(new ValueEventListener() {
 //                                                 @Override
 //                                                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -180,7 +238,7 @@ public class asynch extends AsyncTask<Context, Void, Void> {
 //                                m.notifyDataSetChanged();
                             Type collectionType = new TypeToken<List<chat>>() {
                             }.getType();
-                            ;
+
                             List<chat> mdl;
 
                             mdl = getSavedObjectFromPreference(params[0], "preference", "chatmodel", collectionType);
@@ -212,8 +270,7 @@ public class asynch extends AsyncTask<Context, Void, Void> {
 
                         }
                     });
-
-                    db.child(key).removeValue();
+               db.child(key).removeValue();
             }
             @Override
             public void onChildChanged(@NonNull final DataSnapshot dataSnapshot, @Nullable String s) {
@@ -349,6 +406,7 @@ public class asynch extends AsyncTask<Context, Void, Void> {
 
             }
         });
+
         return null;
     }
     public static void saveObjectToSharedPreference(Context context, String preferenceFileName, String serializedObjectKey, Object object) {

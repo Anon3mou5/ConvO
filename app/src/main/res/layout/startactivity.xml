@@ -79,7 +79,7 @@
                     android:id="@+id/img"
                     android:layout_width="119dp"
                     android:layout_height="36dp"
-                    android:layout_marginEnd="20dp"
+                    android:layout_marginEnd="15dp"
                     android:foregroundTint="#000000"
                     android:tint="#FFFFFF"
                     android:transitionName="logo"

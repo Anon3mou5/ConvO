@@ -270,17 +270,23 @@
                 app:layout_constraintVertical_bias="0.489" />
 
 
-            <ImageView
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/photo"
-                android:layout_width="144dp"
-                android:layout_height="155dp"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentTop="true"
-                android:layout_marginTop="16dp"
-                android:src="@mipmap/ic_launcher"
+                android:layout_width="180dp"
+                android:layout_height="141dp"
+                android:layout_alignParentStart="true"
+                android:layout_marginTop="180dp"
+                android:elevation="0dp"
+                android:src="@drawable/photo"
+                android:transitionName="profile"
+                app:elevation="0dp"
+                app:fabCustomSize="140dp"
+                app:fabSize="normal"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/signup" />
+                app:layout_constraintTop_toBottomOf="@+id/signup"
+                app:layout_constraintTop_toTopOf="parent"
+                app:maxImageSize="100dp" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

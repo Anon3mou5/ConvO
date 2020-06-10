@@ -161,9 +161,8 @@ public class MainActivity extends AppCompatActivity {
         final ConstraintLayout lay = findViewById(R.id.homepage);
         final Animation a = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.faded);
 
-        new asynch().execute(getApplicationContext());
 
-
+startService(getApplicationContext());
 
        // final Thread z = new Thread(new Runnable() {
 //            @Override
@@ -375,6 +374,12 @@ public class MainActivity extends AppCompatActivity {
 
 //    }
     }
+
+    public void startService(Context context) {
+        startService(new Intent(getBaseContext(), myservice.class));
+    }
+
+
 //    public static void saveObjectToSharedPreference(Context context, String preferenceFileName, String serializedObjectKey, Object object) {
 //        SharedPreferences sharedPreferences = context.getSharedPreferences(preferenceFileName, 0);
 //        SharedPreferences.Editor sharedPreferencesEditor = sharedPreferences.edit();
