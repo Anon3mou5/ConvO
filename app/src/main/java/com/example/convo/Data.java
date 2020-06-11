@@ -5,7 +5,7 @@ import android.util.Log;
 
 public class Data {
 
-    String name,status,phno;
+    String name,status,phno,time;
     int found;
     String url,uid;
     Activity a;
@@ -27,6 +27,8 @@ public class Data {
     public String getPhno() {
         return phno;
     }
+
+
 
     public Data(String nm, String url, int found, Activity a, String uid, String phno)
     {

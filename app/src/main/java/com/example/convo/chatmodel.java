@@ -49,6 +49,7 @@ public class chatmodel extends RecyclerView.Adapter<chatviewholder> {
 
     public chatmodel(List<chat> modelclasslist) {
         this.modelclasslisting = modelclasslist;
+        setHasStableIds(true);
         Log.d("Inside", " Adapter,constructor");
     }
 
@@ -95,8 +96,11 @@ public class chatmodel extends RecyclerView.Adapter<chatviewholder> {
         return super.getItemViewType(position);
     }
 
-
-    //    public int getItemViewType(int position)
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+//    public int getItemViewType(int position)
 //    {
 //        FirebaseAuth f = FirebaseAuth.getInstance();
 //        if(modelclasslist.get(position).getSuid().equals(f.getCurrentUser().getUid()))
@@ -200,10 +204,7 @@ class chatviewholder extends RecyclerView.ViewHolder {
 //                }
 //            }
 //        })
-if(map2==null)
-{
-    Thread.currentThread().sleep(1100);
-}
+
 
          name=map2.get(phno);
          if(name==null)

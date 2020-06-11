@@ -1,8 +1,13 @@
 package com.example.convo;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -17,6 +22,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -35,20 +41,25 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.jaeger.library.StatusBarUtil;
 
 import java.lang.reflect.Type;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import static com.example.convo.MainActivity.model;
+import static com.example.convo.MainActivity.model3;
 import static com.example.convo.asynch.getSavedObjectFromPreference;
 
 public class Singleactivity extends AppCompatActivity {
     static String ruid;
+    static chat ch;
     static List<read> mdl = new ArrayList<read>();
    static  msgmodel m ;
    static List <read> mdl3= new ArrayList<read>();
@@ -89,7 +100,7 @@ public class Singleactivity extends AppCompatActivity {
                     final FirebaseUser u = FirebaseAuth.getInstance().getCurrentUser();
                     final DatabaseReference db = FirebaseDatabase.getInstance().getReference("Private chats");
                     final String text = msg.getText().toString();
-                    read me = new read(u.getUid(), msg.getText().toString(), ruid,phno);
+                    read me = new read(u.getUid(), msg.getText().toString(), ruid,phno,"blah-blah");
                     FirebaseFirestore bd = FirebaseFirestore.getInstance();
                     CollectionReference cd = bd.collection("phonelist");
                     DocumentReference ref = cd.document("list");
@@ -104,7 +115,7 @@ public class Singleactivity extends AppCompatActivity {
                                     if(ent.getValue().toString().equals(u.getUid()))
                                     {
                                         String ph = ent.getKey().toString();
-                                        read m = new read(u.getUid(), text, ruid,ph);
+                                        read m = new read(u.getUid(), text, ruid,ph,"blah-");
                                         db.child(ruid).child(u.getUid()).push().setValue(m);
                                     }
                                 }
@@ -121,8 +132,10 @@ public class Singleactivity extends AppCompatActivity {
                     });
 
 
-            Type collectionType = new TypeToken<List<read>>(){}.getType();
-            mdl = getSavedObjectFromPreference(getApplicationContext(), "preference", ruid, collectionType);
+
+        Type collectionType = new TypeToken<List<read>>() {
+        }.getType();
+        mdl = getSavedObjectFromPreference(getApplicationContext(), "preference", ruid, collectionType);
             if(mdl==null)
 {
         mdl = new ArrayList<read>();
@@ -175,7 +188,10 @@ public class Singleactivity extends AppCompatActivity {
                 String ruid = (String) post.child("ruid").getValue();
                 ruidd = ruid;
                 String phno = (String) post.child("phno").getValue();
-                read rd = new read(suid, msg, ruidd, phno);
+                SimpleDateFormat formatter = new SimpleDateFormat("HH:mm");
+                Date date = new Date();
+                String time1=formatter.format(date);
+                read rd = new read(suid, msg, ruidd, phno,time1);
                 mdl.add(rd);
                 recycle.getLayoutManager().scrollToPosition(mdl.size() - 1);
                 m.notifyDataSetChanged();
@@ -280,7 +296,6 @@ public class Singleactivity extends AppCompatActivity {
                 startActivity(t);
             }
         });
-
         }
         public void setview() {
             Type collectionType = new TypeToken<List<read>>() {

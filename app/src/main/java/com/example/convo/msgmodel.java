@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -38,7 +40,11 @@ import java.io.InputStream;
 import java.lang.reflect.Type;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import static com.example.convo.asynch.getSavedObjectFromPreference;
@@ -50,7 +56,7 @@ public class msgmodel extends RecyclerView.Adapter<msgviewholder> {
 
         List<read> modelclasslist;
         String suid,phno;
-        String chat,ruid;
+        String chat,ruid,time;
         Boolean s;
         read model;
 
@@ -84,8 +90,9 @@ public class msgmodel extends RecyclerView.Adapter<msgviewholder> {
             chat = modelclasslist.get(position).getMsg();
             ruid=modelclasslist.get(position).getRuid();
             phno=modelclasslist.get(position).getPhno();
+            time=modelclasslist.get(position).getTime();
             model = modelclasslist.get(position);
-            holder.setdata(suid, chat,ruid,phno,model);
+            holder.setdata(suid, chat,ruid,phno,model,time);
             Log.d("holder", "View holder Binded");
         }
 
@@ -111,6 +118,7 @@ public class msgmodel extends RecyclerView.Adapter<msgviewholder> {
 
     class msgviewholder extends RecyclerView.ViewHolder {
 
+
          TextView t1;
          TextView t2;
          CardView card;
@@ -126,11 +134,12 @@ public class msgmodel extends RecyclerView.Adapter<msgviewholder> {
             t1 = itemView.findViewById(R.id.status);
             cont = itemView.findViewById(R.id.cont);
             c=itemView.getContext();
+            t2 = itemView.findViewById(R.id.time);
 
             //t3 = itemView.findViewById(R.id.textView);
         }
 
-        void setdata(final String suid, final String chat, final String ruid, final String phno, final read model) {
+        void setdata(final String suid, final String chat, final String ruid, final String phno, final read model,String time1) {
             //card.setLayoutParams(t2.getLayoutParams());
 //             ConstraintLayout.LayoutParams p = new ConstraintLayout.LayoutParams(
 //                     ConstraintLayout.LayoutParams.WRAP_CONTENT,
@@ -175,7 +184,7 @@ public class msgmodel extends RecyclerView.Adapter<msgviewholder> {
 //             int h=p2.height;
 //             t2.setWidth(w);
 //             t2.setHeight(h);
-//         }
+            t2.setText(time1);
 //         else {
 //             t1.setText(name);
 //             t2.setText(chat);

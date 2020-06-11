@@ -2,8 +2,12 @@ package com.example.convo;
 
 public class message {
 
-    String uid,msgg,cd,orguid,url;
+    String uid,msgg,cd,time,orguid,url;
     Boolean s;
+
+    public String getTime() {
+        return time;
+    }
 
     public Boolean getS() {
         return s;
@@ -17,11 +21,12 @@ public class message {
         return url;
     }
 
-    public message(String id, String msg, Boolean b, String orguid, String url)
+    public message(String id, String msg, Boolean b, String orguid, String url,String time)
     {
         uid=id;
         msgg=msg;
         s=b;
+        this.time=time;
         this.url=url;
         this.orguid=orguid;
     }

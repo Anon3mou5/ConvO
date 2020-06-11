@@ -129,15 +129,34 @@ public class asynch extends AsyncTask<Context, Void, Void> {
                             List<read> md;
                             Type collectionType = new TypeToken<List<read>>() {
                             }.getType();
-                            md = getSavedObjectFromPreference(params[0], "preference", ruid, collectionType);
+                            if(ruid.equals(FirebaseAuth.getInstance().getUid())) {
+                                md = getSavedObjectFromPreference(params[0], "preference", suid, collectionType);
+                            }
+                            else
+                            {
+                                md = getSavedObjectFromPreference(params[0], "preference", ruid, collectionType);
+                            }
                             if (md != null && md.size() != 0) {
                                 for (int j = 0; j < model3.size(); j++) {
                                     read r = model3.get(j);
                                     md.add(r);
                                 }
-                                saveObjectToSharedPreference(params[0], "preference", ruid, md);
+                                if(ruid.equals(FirebaseAuth.getInstance().getUid())) {
+                                    saveObjectToSharedPreference(params[0], "preference", suid, md);
+                                }
+                                else
+                                {
+                                    saveObjectToSharedPreference(params[0], "preference", ruid, md);
+                                }
                             } else {
-                                saveObjectToSharedPreference(params[0], "preference", ruid, model3);
+                                if(ruid.equals(FirebaseAuth.getInstance().getUid())) {
+                                    saveObjectToSharedPreference(params[0], "preference", suid, model3);
+                                }
+                                else
+                                {
+                                    saveObjectToSharedPreference(params[0], "preference", ruid, model3);
+                                }
+
                             }
                         }
 
@@ -206,6 +225,7 @@ public class asynch extends AsyncTask<Context, Void, Void> {
                     q.addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            model.clear();
                             for (DataSnapshot data : dataSnapshot.getChildren()) {
                                 HashMap<String, String> map = (HashMap<String, String>) data.getValue();
                                 final String msg = (String) map.get("msg").toString();
@@ -410,7 +430,7 @@ public class asynch extends AsyncTask<Context, Void, Void> {
         return null;
     }
     public static void saveObjectToSharedPreference(Context context, String preferenceFileName, String serializedObjectKey, Object object) {
-        SharedPreferences sharedPreferences = context.getSharedPreferences(preferenceFileName, 0);
+        SharedPreferences sharedPreferences = context.getSharedPreferences(preferenceFileName, Context.MODE_PRIVATE);
         SharedPreferences.Editor sharedPreferencesEditor = sharedPreferences.edit();
         final Gson gson = new Gson();
         String serializedObject = gson.toJson(object);
@@ -428,8 +448,8 @@ public class asynch extends AsyncTask<Context, Void, Void> {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(params);
         builder
                 .setSmallIcon(R.mipmap.ic_round)
-                .setContentTitle(map2.get(model.get(0).getPhno()))
-                .setContentText(model.get(0).getMsg())
+                .setContentTitle(nme)
+                .setContentText(descr)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setContentIntent(pendingIntent).setAutoCancel(true);
         NotificationManager mNotificationManager = (NotificationManager) params.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -453,7 +473,7 @@ public class asynch extends AsyncTask<Context, Void, Void> {
 
 
     public static <GenericClass> GenericClass getSavedObjectFromPreference(Context context, String preferenceFileName, String preferenceKey, Type classType) {
-        SharedPreferences sharedPreferences = context.getSharedPreferences(preferenceFileName, 0);
+        SharedPreferences sharedPreferences = context.getSharedPreferences(preferenceFileName, Context.MODE_PRIVATE);
         if (sharedPreferences.contains(preferenceKey)) {
             final Gson gson = new Gson();
             return gson.fromJson(sharedPreferences.getString(preferenceKey, ""), classType);

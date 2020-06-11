@@ -16,7 +16,7 @@
         android:layout_alignTop="@+id/cardView"
         android:layout_alignParentStart="true"
         android:layout_marginStart="7dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="10dp"
         android:background="@drawable/round2"
         android:elevation="6dp"
         android:src="@mipmap/send"
@@ -35,7 +35,7 @@
         android:layout_alignParentTop="false"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="false"
-        android:layout_marginStart="7dp"
+        android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="10dp"
         android:layout_marginBottom="10dp"
@@ -55,7 +55,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
 
-        <RelativeLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/lay"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -116,7 +116,25 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/name" />
 
-        </RelativeLayout>
+            <TextView
+                android:id="@+id/time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/name"
+                android:layout_alignParentEnd="true"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="7dp"
+                android:layout_marginBottom="3dp"
+                android:layout_toEndOf="@+id/status"
+                android:fontFamily="@font/cabin_semibold"
+                android:text="9:30"
+                android:textColor="#000000"
+                android:textSize="10sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/status" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.cardview.widget.CardView>
     </androidx.constraintlayout.widget.ConstraintLayout>

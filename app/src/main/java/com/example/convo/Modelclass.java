@@ -23,6 +23,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 public class Modelclass extends RecyclerView.Adapter<viewholder> {
@@ -31,12 +33,13 @@ public class Modelclass extends RecyclerView.Adapter<viewholder> {
 
     List<message> modelclasslist;
     String name;
-    String chat,orguid,url;
+    String chat,orguid,url,time;
     Boolean s;
 
     public Modelclass(List<message> modelclasslist) {
         this.modelclasslist = modelclasslist;
         Log.d("Inside", " Adapter,constructor");
+        setHasStableIds(true);
     }
 
     @NonNull
@@ -64,7 +67,8 @@ public class Modelclass extends RecyclerView.Adapter<viewholder> {
         chat = modelclasslist.get(position).getMsgg();
         orguid=modelclasslist.get(position).getOrguid();
         url=modelclasslist.get(position).getUrl();
-        viewholder.setdata(name, chat,orguid,url);
+        time = modelclasslist.get(position).getTime();
+        viewholder.setdata(name, chat,orguid,url,time);
         Log.d("holder", "View holder Binded");
     }
 
@@ -86,30 +90,36 @@ public class Modelclass extends RecyclerView.Adapter<viewholder> {
             return MSG_LEFT;
         }
     }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
 }
+
 
  class viewholder extends RecyclerView.ViewHolder {
 
      static TextView t1;
-     static TextView t2;
+     static TextView t2,t3;
      static CardView card;
      static ImageView photo;
        static ConstraintLayout lay;
 
      public viewholder(@NonNull View itemView,int j) {
 
-
          super(itemView);
 
          t1 = itemView.findViewById(R.id.name);
          t2 = itemView.findViewById(R.id.status);
+         t3=itemView.findViewById(R.id.time);
          photo=itemView.findViewById(R.id.profile);
          //t3 = itemView.findViewById(R.id.textView);
          card = itemView.findViewById(R.id.cardView);
 
      }
 
-     static void setdata(String name, String chat,String orguid,String url) {
+     static void setdata(String name, String chat,String orguid,String url,String time1) {
                   //card.setLayoutParams(t2.getLayoutParams());
 //             ConstraintLayout.LayoutParams p = new ConstraintLayout.LayoutParams(
 //                     ConstraintLayout.LayoutParams.WRAP_CONTENT,
@@ -144,7 +154,7 @@ public class Modelclass extends RecyclerView.Adapter<viewholder> {
             // t2.setTextColor(Color.parseColor("#000000"));
              Log.d("Set", "model data");
           //   Log.d("Set", "model data");
-
+              t3.setText(time1);
 //         if(name.length()>chat.length()) {
 //             t1.setText(name);
 //             t2.setText(chat);

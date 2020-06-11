@@ -5,7 +5,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class read {
 
-    String msg,suid,ruid,url,phno;
+    String msg,suid,ruid,url,phno,time;
 
 
     public String getMsg() {
@@ -28,12 +28,16 @@ public class read {
         return phno;
     }
 
-    public read(String suid, String msg, String ruid, String phno)
+    public String getTime() {
+        return time;
+    }
+
+    public read(String suid, String msg, String ruid, String phno, String time)
     {
         this.suid=suid;
         this.msg=msg;
         this.ruid=ruid;
-        this.phno=phno;
+        this.time=time;
     }
 
 

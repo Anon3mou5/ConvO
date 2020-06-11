@@ -38,7 +38,9 @@ import com.jaeger.library.StatusBarUtil;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class worldActivity extends AppCompatActivity {
@@ -114,7 +116,7 @@ public class worldActivity extends AppCompatActivity {
                     {
                         url="not found";
                     }
-                    final message me = new message(currentuser, msg.getText().toString(), Boolean.TRUE, u.getUid(), url);
+                    final message me = new message(currentuser, msg.getText().toString(), Boolean.TRUE, u.getUid(), url,"blah-");
                     db.child("chat").push().setValue(me);
                 }
                 msg.setText("");
@@ -155,7 +157,10 @@ public class worldActivity extends AppCompatActivity {
                     String url=(String) post.child("url").getValue();
                     //    Boolean b = (Boolean)post.child("s").getValue();
                     //   Log.d("NAME",""+uid.toString());{
-                    message dz = new message(uid, msg, Boolean.TRUE, orguid,url);
+                    SimpleDateFormat formatter = new SimpleDateFormat("HH:mm");
+                    Date date = new Date();
+                    String time1=formatter.format(date);
+                    message dz = new message(uid, msg, Boolean.TRUE, orguid,url,time1);
                     model.add(dz);
                     //   Log.d("MSG", "" + msg.toString());
 
