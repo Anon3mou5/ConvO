@@ -123,7 +123,7 @@ public class asynch extends AsyncTask<Context, Void, Void> {
                             String ruid = (String) post.child("ruid").getValue();
                             ruidd = ruid;
                             String phno = (String) post.child("phno").getValue();
-                            read rd = new read(suid, msg, ruid, phno);
+                            read rd = new read(suid, msg, ruid, phno,"blah");
                             model3.add(rd);
 
                             List<read> md;

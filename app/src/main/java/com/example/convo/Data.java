@@ -8,7 +8,6 @@ public class Data {
     String name,status,phno,time;
     int found;
     String url,uid;
-    Activity a;
     public int getFound() {
         return found;
     }
@@ -16,9 +15,6 @@ public class Data {
         return status;
     }
 
-    public Activity geta() {
-        return a;
-    }
 
     public String getUid() {
         return uid;
@@ -36,7 +32,6 @@ public class Data {
         this.url=url;
         this.phno=phno;
         this.found=found;
-        this.a=a;
         this.uid=uid;
     }
 

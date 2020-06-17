@@ -1,77 +1,36 @@
 package com.example.convo;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.NotificationCompat;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
-import android.app.Activity;
-import android.app.ActivityOptions;
+import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.content.ClipData;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.text.Layout;
-import android.text.TextUtils;
 import android.util.Log;
-import android.util.Pair;
-import android.view.Gravity;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.internal.NavigationMenu;
-import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.iid.InstanceIdResult;
-import com.google.firebase.messaging.FirebaseMessaging;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.jaeger.library.StatusBarUtil;
@@ -79,18 +38,11 @@ import com.jaeger.library.StatusBarUtil;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.lang.reflect.Type;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
-import static android.view.View.VISIBLE;
-import static com.example.convo.asynch.getSavedObjectFromPreference;
 import static com.google.firebase.database.FirebaseDatabase.getInstance;
 
 public class MainActivity extends AppCompatActivity {
@@ -101,6 +53,8 @@ public class MainActivity extends AppCompatActivity {
     static List<read> model4 = new ArrayList<read>();
     static contactsfetcher contacts;
     static HashMap<String,String> map2;
+    static int delay=50;
+    static HashMap<String ,String> phuid =new HashMap<String, String>();
     chat ch;
 
     //  List<message> listmsg = new ArrayList<>();
@@ -127,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
             return;
-        }  else {
+        } else {
             Log.d("Loggedin", "Previous user");
         }
 
@@ -139,15 +93,171 @@ public class MainActivity extends AppCompatActivity {
 //            @Override
 //            public void run() {
 
+
+        Thread k = new Thread(new Runnable() {
+            @Override
+            public void run() {
                 if (checkSelfPermission(Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
                     requestPermissions(new String[]{Manifest.permission.READ_CONTACTS}, 100);
                 }
                 contacts = new contactsfetcher();
                 map2 = contacts.getContactList(MainActivity.this);
-                Log.d("MAPVALUzzz", "" + map2);
-                for (String j : map2.keySet()) {
-                    // Log.d("MAP",map2.get(j));
-                    Data e = new Data(map2.get(j), "not found", 0, MainActivity.this, "null", j);
+                saveObjectToSharedPreference(MainActivity.this, "contacts", "contactnumber", map2);
+                List<Data> md = null ;
+                Type collectionType = new TypeToken<List<Data>>() {
+                }.getType();
+              md = getSavedObjectFromPreference(getApplicationContext(), "contacts", "contact", collectionType);
+                if (md == null) {
+                    md = new ArrayList<Data>();
+                }
+                if (md != null && md.size() == 0) {
+                    model2.clear();
+                    // final HashMap<String,String> map = contacts.getContactList(ContactsActivity.this);
+                    FirebaseFirestore fb = FirebaseFirestore.getInstance();
+                    DocumentReference df = fb.collection("phonelist").document("list");
+                    df.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        @Override
+                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                            if (documentSnapshot.exists()) {
+                                for (final String j : map2.keySet()) {
+                                    if (documentSnapshot.getString(j) != null) {
+                                        final String userid = documentSnapshot.getString(j);
+                                        FirebaseFirestore db = FirebaseFirestore.getInstance();
+                                        DocumentReference zf = db.collection("users").document(userid);
+                                        zf.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                            @Override
+                                            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                                if (documentSnapshot.exists()) {
+                                                    // Data d = new Data(map.get(j), documentSnapshot.getString("photo"), 1, ContactsActivity.this, userid, j);
+                                                    // model.add(d);
+                                                }
+                                            }
+                                        });
+                                        Data d = new Data(map2.get(j), "not found", 1, MainActivity.this, userid, j);
+                                        //  phuid.put(j,userid);
+                                        model2.add(0, d);
+                                    } else {
+                                        Data d = new Data(map2.get(j), "not found", 0, MainActivity.this, "null", j);
+                                        model2.add(d);
+                                    }
+                                }
+                            }
+//                        }
+//                    });
+//                    Thread rollback = new Thread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            List<String> az = new ArrayList<String>();
+//                            while (model2.size() == 0) {
+//                                try {
+//                                    Thread.sleep(100);
+//                                } catch (InterruptedException e) {
+//                                    e.printStackTrace();
+//                                }
+//                                if (model2.size() != 0) {
+//                                    break;
+//                                }
+//                            }
+//                            for (int i = 0; i < model2.size(); i++) {
+//                                Log.d("PHU", model2.get(i).getPhno());
+//                                az.add(model2.get(i).phno);
+//                            }
+//                            for (String j : map2.keySet()) {
+//                                int i;
+//                                for (i = 0; i < az.size(); i++) {
+//                                    if (j.toLowerCase().equals(az.get(i).toLowerCase().toString())) {
+//                                        break;
+//                                    }
+//                                }
+//                                if (i == az.size()) {
+//                                    Data e = new Data(map2.get(j), "not found", 0, MainActivity.this, "null", j);
+//                                    model2.add(e);
+//                                }
+//                            }
+//                        }
+//                    });
+                        }
+                    });
+//                    rollback.start();
+                    saveObjectToSharedPreference(MainActivity.this, "contacts", "contact", model2);
+                } else {
+                    model2 =md;
+                    //                Log.d("MAPVALUzzz", "" + map2);
+//                model2.clear();
+//                FirebaseFirestore fb = FirebaseFirestore.getInstance();
+//                DocumentReference df = fb.collection("phonelist").document("list");
+//                df.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+//                    @Override
+//                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+//                        if (documentSnapshot.exists()) {
+//                            for (final String j : map2.keySet()) {
+//                                if (documentSnapshot.getString(j) != null) {
+//                                    final String userid = documentSnapshot.getString(j);
+//                                    FirebaseFirestore db = FirebaseFirestore.getInstance();
+//                                    DocumentReference zf = db.collection("users").document(userid);
+//                                    zf.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+//                                        @Override
+//                                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+//                                            if (documentSnapshot.exists()) {
+//                                                // Data d = new Data(map.get(j), documentSnapshot.getString("photo"), 1, ContactsActivity.this, userid, j);
+//                                                // model.add(d);
+//                                            }
+//                                        }
+//                                    });
+//                                    Data d = new Data(map2.get(j), "not found", 1, MainActivity.this, userid, j);
+//                                    model2.add(d);
+//                                    phuid.put(j, userid);
+//                                }
+//
+//                                //      Log.d("PHU", j);
+//                            }
+//                        }
+//                    }
+//                });
+//                for (String j : map2.keySet()) {
+//                                Data e = new Data(map2.get(j), "not found", 0, MainActivity.this, "null", j);
+//                                model2.add(e);
+                }
+                //                Thread rollback = new Thread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        List<String> az = new ArrayList<String>();
+//                        while (model2.size() == 0) {
+//                            try {
+//                                Thread.sleep(100);
+//                            } catch (InterruptedException e) {
+//                                e.printStackTrace();
+//                            }
+//                            if(model2.size()!=0)
+//                            {
+//                                break;
+//                            }
+//                        }
+//                        for (int i = 0; i < model2.size(); i++) {
+//                            Log.d("PHU", model2.get(i).getPhno());
+//                            az.add(model2.get(i).phno);
+//                        }
+//                        for (String j : map2.keySet()) {
+//                            int i;
+//                            for (i = 0; i < az.size(); i++) {
+//                                if (j.toLowerCase().equals(az.get(i).toLowerCase().toString())) {
+//                                    break;
+//                                }
+//                            }
+//                            if (i == az.size()) {
+//                                Data e = new Data(map2.get(j), "not found", 0, MainActivity.this, "null", j);
+//                                model2.add(e);
+//                            }
+//                        }
+//                    }
+//                });
+//                rollback.start();
+            }
+        });
+k.start();
+k.setPriority(10);// final HashMap<String,String> map = contacts.getContactList(ContactsActivity.this);
+//startService(getApplicationContext());
+
 //                    if (zz != null) {
 //                        if (!zz.phno.toLowerCase().equals(j)) {
 //                            model2.add(e);
@@ -156,9 +266,9 @@ public class MainActivity extends AppCompatActivity {
 //                    }
 //                    else
 //                    {
-                    model2.add(e);
+
 //                }
-                }
+
 //            }
 //        });
 //        k.start();
@@ -275,12 +385,28 @@ public class MainActivity extends AppCompatActivity {
         final ImageView img = findViewById(R.id.img);
         img.setVisibility(View.VISIBLE);
         img.animate().alpha(1).translationY(-135).setDuration(300);
-        Handler handler2 = new Handler();
+        Handler handler2 = new Handler(
+        );
+
         handler2.postDelayed(new Runnable() {
             public void run() {
+//                while(model2.size()==0)
+//                {
+//                    if(model2.size()!=0)
+//                    {
+//                        break;
+//                    }
+//                    try {
+//                        Thread.sleep(200);
+//                        delay=delay+200;
+//                        Log.d("SLEPT",""+delay);
+//                    } catch (InterruptedException e) {
+//                        e.printStackTrace();
+//                    }
+//                }
                 img.animate().alpha(0).translationY(135).setDuration(300);
             }
-        }, 3400);
+        },3250);
 
 //        TimerTask tim = new TimerTask() {
 //            @Override
@@ -367,167 +493,13 @@ public class MainActivity extends AppCompatActivity {
 
 
         setup(lay,a);
-        final DatabaseReference db = FirebaseDatabase.getInstance().getReference("Private chats").child(auth.getCurrentUser().getUid());
-        db.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(@NonNull final DataSnapshot dataSnapshot, @Nullable String s) {
-                String key = dataSnapshot.getKey();
-                final   DatabaseReference bd = FirebaseDatabase.getInstance().getReference("Private chats").child(auth.getCurrentUser().getUid()).child(key);
-                final ChildEventListener childevent = new ChildEventListener() {
-                    @Override
-                    public void onChildAdded(@NonNull DataSnapshot post, @Nullable String s) {
 
-                        model3.clear();
-                        String ruidd = "";
-                        String msg = (String) post.child("msg").getValue();
-                        final String suid = (String) post.child("suid").getValue();
-                        String ruid = (String) post.child("ruid").getValue();
-                        ruidd = ruid;
-                        String phno = (String) post.child("phno").getValue();
-                        read rd = new read(suid, msg, ruid, phno);
-                        model3.add(rd);
-                        List<read> md;
-                        Type collectionType = new TypeToken<List<read>>() {
-                        }.getType();
-                        if(ruid.equals(FirebaseAuth.getInstance().getUid())) {
-                            md = getSavedObjectFromPreference(getApplicationContext(), "preference", suid, collectionType);
-                        }
-                        else
-                        {
-                            md = getSavedObjectFromPreference(getApplicationContext(), "preference", ruid, collectionType);
-                        }
-                        if (md != null && md.size() != 0) {
-                            for (int j = 0; j < model3.size(); j++) {
-                                read r = model3.get(j);
-                                md.add(r);
-                            }
-                            if(ruid.equals(FirebaseAuth.getInstance().getUid())) {
-                                saveObjectToSharedPreference(getApplicationContext(), "preference", suid, md);
-                            }
-                            else
-                            {
-                                saveObjectToSharedPreference(getApplicationContext(), "preference", ruid, md);
-                            }
-                        } else {
-                            if(ruid.equals(FirebaseAuth.getInstance().getUid())) {
-                                saveObjectToSharedPreference(getApplicationContext(), "preference", suid, model3);
-                            }
-                            else
-                            {
-                                saveObjectToSharedPreference(getApplicationContext(), "preference", ruid, model3);
-                            }
-
-                        }
-                    }
-
-                    @Override
-                    public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-                    }
-
-                    @Override
-                    public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-                    }
-
-                    @Override
-                    public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                    }
-                };
-                bd.addChildEventListener(childevent);
-
-                Query q = bd.orderByValue().limitToLast(1);
-                q.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        model.clear();
-                        for (DataSnapshot data : dataSnapshot.getChildren()) {
-                            HashMap<String, String> map = (HashMap<String, String>) data.getValue();
-                            final String msg = (String) map.get("msg").toString();
-                            final String suid = (String) map.get("suid").toString();
-                            final String ruid = (String) map.get("ruid").toString();
-                            Log.d("ruid", "" + ruid);
-                            final String phno = (String) map.get("phno").toString();
-                            FirebaseFirestore ref = FirebaseFirestore.getInstance();
-                            DocumentReference df = ref.collection("users").document(ruid.substring(1, ruid.length() - 1));
-                            df.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                                @Override
-                                public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                    if (documentSnapshot.exists()) {
-                                        final String photourl;
-                                        photourl = documentSnapshot.getString("photo");
-
-                                    }
-                                }
-                            });
-                            ch = new chat(suid, msg, ruid, "not found", phno);
-                            model.add(ch);
-                        }
-//
-                        Type collectionType = new TypeToken<List<chat>>() {
-                        }.getType();
-
-                        List<chat> mdl;
-                        mdl = getSavedObjectFromPreference(getApplicationContext(), "preference", "chatmodel", collectionType);
-                        if (mdl != null && mdl.size() != 0) {
-                            for (int j = 0; j < model.size(); j++) {
-                                chat r = model.get(j);
-                                for (int i = mdl.size() - 1; i >= 0; i--) {
-                                    if (mdl.get(i).phno.toLowerCase().equals(r.phno.toLowerCase())) {
-                                        mdl.remove(i);
-                                        break;
-                                    }
-                                }
-                                mdl.add(r);
-                            }
-                            saveObjectToSharedPreference(getApplicationContext(), "preference", "chatmodel", mdl);
-                        } else {
-                            saveObjectToSharedPreference(getApplicationContext()
-                                    , "preference", "chatmodel", model);
-                        }
-                        for (chat j : model) {
-                            if (!j.suid.equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
-                                createNotificationChannel(j.phno, j.getMsg(), getApplicationContext());
-                            }
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                    }
-                });
-                db.child(key).removeValue();
-            }
-            @Override
-            public void onChildChanged(@NonNull final DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
         }
 
     public void startService(Context context) {
-        startService(new Intent(getBaseContext(), myservice.class));
+       breceiver br = new breceiver();
+       Intent it = new Intent(context,myservice.class);
+       br.onReceive(context,it);
     }
 
 
@@ -543,7 +515,7 @@ public class MainActivity extends AppCompatActivity {
                overridePendingTransition(0, 0);
                finish();
            }
-       }, 3250);
+       }, 3400);
 
    }
 
@@ -637,18 +609,22 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(params, Acti.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         PendingIntent pendingIntent = PendingIntent.getActivity(params, 0, intent, 0);
+        Drawable dr = getResources().getDrawable(R.drawable.photo);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(params);
         builder
-                .setSmallIcon(R.mipmap.ic_round)
+                .setSmallIcon(R.mipmap.logoz)
                 .setContentTitle(nme)
                 .setContentText(descr)
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setPriority(NotificationCompat.PRIORITY_MAX)
+                .setDefaults(Notification.DEFAULT_ALL)
+                .setSmallIcon(R.mipmap.ic_round)
+                .setLargeIcon(((BitmapDrawable)dr).getBitmap())
                 .setContentIntent(pendingIntent).setAutoCancel(true);
         NotificationManager mNotificationManager = (NotificationManager) params.getSystemService(Context.NOTIFICATION_SERVICE);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            CharSequence name = nme;
-            String description = descr;
+            CharSequence name = getString(R.string.app_name);
+            String description = getString(R.string.decr);
             int importance = NotificationManager.IMPORTANCE_HIGH;
             NotificationChannel channel = new NotificationChannel("123", name, importance);
             channel.setDescription(description);

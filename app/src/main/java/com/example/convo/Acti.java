@@ -1,6 +1,7 @@
 package com.example.convo;
 
 import android.Manifest;
+import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -110,9 +111,9 @@ public class Acti extends AppCompatActivity {
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         for (DataSnapshot data : dataSnapshot.getChildren()) {
                             HashMap<String, String> map = (HashMap<String, String>) data.getValue();
-                            final String msg = (String) map.get("msg").toString();
-                            final String suid = (String) map.get("suid").toString();
-                            final String ruid = (String) map.get("ruid").toString();
+                            final String msg = (String) map.get("msg");
+                            final String suid = (String) map.get("suid");
+                            final String ruid = (String) map.get("ruid");
                             Log.d("ruid", "" + ruid);
                             final String phno = (String) map.get("phno").toString();
                             FirebaseFirestore ref = FirebaseFirestore.getInstance();
@@ -436,6 +437,9 @@ public class Acti extends AppCompatActivity {
 
         // Log.d("MODELLING",model2.toString());
 //        Log.d("Data added","aalll");
+
+        Log.d("RUNNING",""+isMyServiceRunning(myservice.class));
+
         BottomNavigationView v = findViewById(R.id.bottom_navigation);
         v.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
                                                   @Override
@@ -501,6 +505,20 @@ public class Acti extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
+
+    private boolean isMyServiceRunning(Class<?> serviceClass) {
+        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                Log.i ("isMyServiceRunning?", true+"");
+                return true;
+            }
+        }
+        Log.i ("isMyServiceRunning?", false+"");
+        return false;
+    }
+
+
 }
 
 

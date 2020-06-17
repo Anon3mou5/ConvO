@@ -72,11 +72,10 @@ private  int Present=1;
     public void onBindViewHolder(@NonNull contactviewholder holder, int position) {
         name = modelclasslist.get(position).getname();
         url=modelclasslist.get(position).geturl();
-        a=modelclasslist.get(position).geta();
         uid=modelclasslist.get(position).getUid();
         j=modelclasslist.get(position).getFound();
         phno=modelclasslist.get(position).getPhno();
-       holder.setdata(name,url,a,uid,phno,j);
+       holder.setdata(name,url,uid,phno,j);
         Log.d("holder", "View holder Binded");
     }
 
@@ -142,7 +141,7 @@ class contactviewholder extends RecyclerView.ViewHolder {
        cd =itemView.findViewById(R.id.card);
     }
 
-     void setdata(final String name, String url,final Activity a,final String uid,final String phno,int found) {
+     void setdata(final String name, String url,final String uid,final String phno,int found) {
         //card.setLayoutParams(t2.getLayoutParams());
 //             ConstraintLayout.LayoutParams p = new ConstraintLayout.LayoutParams(
 //                     ConstraintLayout.LayoutParams.WRAP_CONTENT,

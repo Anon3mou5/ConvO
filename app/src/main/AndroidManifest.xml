@@ -3,6 +3,7 @@
     package="com.example.convo">
 
     <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
         android:allowBackup="true"
@@ -47,15 +48,47 @@
             android:resource="@array/preloaded_fonts" />
 
         <service
-            android:name=".java.MyFirebaseMessagingService"
-            android:exported="false">
+            android:name=".tokengen"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
+            </intent-filter>
+        </service>
+        <service android:name=".myservice"
+            android:enabled="true"/>
+
+
+        <service
+            android:name=".myfirebasemessaging"
+            android:enabled="true"
+            android:exported="true"
+            android:permission="android.permission.RECEIVE_BOOT_COMPLETED">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
+                <action android:name="RestartService" />
             </intent-filter>
         </service>
 
+        <service android:name=".myservice"
+            android:enabled="true"/>
 
-        <service android:name=".myservice"/>
+        <receiver
+            android:name=".breceiver"
+            android:enabled="true"
+            android:exported="true"
+            android:label="RestartServiceWhenStopped"
+            android:permission="android.permission.RECEIVE_BOOT_COMPLETED">
+            <intent-filter>
+                <action android:name="RestartService" />
+            </intent-filter>
+        </receiver>
+
+        <receiver
+            android:name=".closenotify"
+            android:enabled="true"
+            >
+        </receiver>
     </application>
 
 </manifest>

@@ -15,14 +15,18 @@
         android:id="@+id/constraint"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fitsSystemWindows="true">
+        android:fitsSystemWindows="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <TextView
             android:id="@+id/login"
             android:layout_width="162dp"
             android:layout_height="59dp"
-            android:layout_marginStart="44dp"
-            android:layout_marginTop="200dp"
+            android:layout_marginEnd="150dp"
+            android:layout_marginBottom="80dp"
             android:fontFamily="@font/cabin_semibold"
             android:paddingTop="20dp"
             android:shadowColor="#00FFFFFF"
@@ -30,8 +34,9 @@
             android:textAlignment="viewStart"
             android:textColor="#FFFFFF"
             android:textSize="28sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintBottom_toTopOf="@+id/emailedit"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
             android:id="@+id/email"
@@ -53,8 +58,7 @@
             android:id="@+id/passedit"
             android:layout_width="310dp"
             android:layout_height="47dp"
-            android:layout_marginStart="52dp"
-            android:layout_marginTop="64dp"
+            android:layout_marginBottom="55dp"
             android:background="@drawable/strokes"
             android:ems="10"
             android:fontFamily="sans-serif-light"
@@ -64,8 +68,9 @@
             android:paddingEnd="15dp"
             android:textColor="#FFFFFF"
             android:transitionName="passedit"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/emailedit" />
+            app:layout_constraintBottom_toTopOf="@+id/button"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
             android:id="@+id/pass"
@@ -87,8 +92,7 @@
             android:id="@+id/emailedit"
             android:layout_width="310dp"
             android:layout_height="49dp"
-            android:layout_marginStart="52dp"
-            android:layout_marginTop="80dp"
+            android:layout_marginBottom="64dp"
             android:background="@drawable/strokes"
             android:ems="10"
             android:fontFamily="sans-serif-light"
@@ -98,14 +102,15 @@
             android:paddingEnd="15dp"
             android:textColor="#FFFFFF"
             android:transitionName="emailedit"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/login" />
+            app:layout_constraintBottom_toTopOf="@+id/passedit"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <Button
             android:id="@+id/button"
             android:layout_width="172dp"
             android:layout_height="64dp"
-            android:layout_marginBottom="124dp"
+            android:layout_marginBottom="120dp"
             android:background="@drawable/strokes"
             android:fontFamily="@font/cabin_semibold"
             android:text="Login Now"

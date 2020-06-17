@@ -36,6 +36,7 @@ public class read {
     {
         this.suid=suid;
         this.msg=msg;
+        this.phno=phno;
         this.ruid=ruid;
         this.time=time;
     }

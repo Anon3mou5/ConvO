@@ -49,6 +49,7 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
@@ -187,6 +188,12 @@ public class signactivity extends AppCompatActivity {
 
                                                                                         cd.document(user.getUid()).set(map);
                                                                                         z.document("list").set(phuid, SetOptions.merge());
+
+                                                        FirebaseAuth usr = FirebaseAuth.getInstance();
+                                                       String token = FirebaseInstanceId.getInstance().getToken();
+                                                        DatabaseReference database = FirebaseDatabase.getInstance().getReference().child("Tokens");
+                                                        Token token1 = new Token(token);
+                                                        database.child(usr.getUid()).push().setValue(token1);
                                                                                         user.updateProfile(profileUpdates)
                                                                                                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                                                                                                     @Override
@@ -202,7 +209,7 @@ public class signactivity extends AppCompatActivity {
                                                                                                         finish();
                                                                                                     }
                                                                             });
-                                                        read zz = new read(user.getUid(),name.getText().toString(),user.getUid(),ph.getText().toString());
+                                                        read zz = new read(user.getUid(),name.getText().toString(),user.getUid(),ph.getText().toString(),"blah");
                                                         saveObjectToSharedPreference(getApplicationContext(),"urnum", user.getUid(),zz);
 
                                                         Toast.makeText(signactivity.this, "Account Created Succesfully", Toast.LENGTH_SHORT).show();

@@ -204,7 +204,10 @@ class chatviewholder extends RecyclerView.ViewHolder {
 //                }
 //            }
 //        })
-
+while(map2==null)
+{
+    Thread.currentThread().sleep(500);
+}
 
          name=map2.get(phno);
          if(name==null)

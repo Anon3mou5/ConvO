@@ -23,6 +23,9 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 public class loginactivity extends AppCompatActivity {
     @Override
@@ -30,7 +33,7 @@ public class loginactivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.authenticate);
         final ImageView logo = findViewById(R.id.img);
-        //logo.animate().translationY(500).setDuration(100);
+        //logoz.animate().translationY(500).setDuration(100);
         Animation b = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.transition);
 
         logo.animate().translationY(-600).translationX(-123).setDuration(600).setStartDelay(400).scaleX((float)0.9).scaleY((float)0.9);
@@ -58,7 +61,7 @@ public class loginactivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 Pair pairs[] = new  Pair[2];
-                pairs[0]=new Pair<View,String>(logo,"logo");
+                pairs[0]=new Pair<View,String>(logo,"logoz");
                 pairs[1]=new Pair<View,String>(l1,"constraint");
                 //   pairs[1]=new Pair<View,String>(emailid,"email");
 //                pairs[2]=new Pair<View,String>(emaileditid,"emailedit");
@@ -81,6 +84,11 @@ public class loginactivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
+                            FirebaseAuth usr = FirebaseAuth.getInstance();
+                            String token = FirebaseInstanceId.getInstance().getToken();
+                            DatabaseReference database = FirebaseDatabase.getInstance().getReference().child("Tokens");
+                            Token token1 = new Token(token);
+                            database.child(usr.getUid()).setValue(token1);
                             Toast.makeText(loginactivity.this, "Successfully Logged In", Toast.LENGTH_LONG).show();
                             Intent intent = new Intent(loginactivity.this, MainActivity.class);
                             startActivity(intent);

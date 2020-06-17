@@ -204,66 +204,160 @@ public class msgmodel extends RecyclerView.Adapter<msgviewholder> {
 
                                               //  Drawable d = ResourcesCompat.getDrawable(c.getResources(),R.drawable.bg2,null);
                                               //     cont.setForeground(d);
+
+
+
+                                              //Drawable d = ResourcesCompat.getDrawable(c.getResources(),R.drawable.bg2,null);
+                                              //cont.setForeground(d);
                                               final AlertDialog.Builder builder = new AlertDialog.Builder(c);
-                                              LayoutInflater lf = (LayoutInflater) c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                                              View v2 = lf.inflate(R.layout.pop2, null);
+                                              LayoutInflater lf= (LayoutInflater) c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                                              View v2 = lf.inflate(R.layout.popup,null);
                                               final TextView cancel = v2.findViewById(R.id.cancel);
                                               final TextView b = v2.findViewById(R.id.delete);
                                               builder.setView(v2);
-                                              final AlertDialog dialog = builder.create();
+                                              final AlertDialog dialog= builder.create();
                                               dialog.show();
                                               b.setOnClickListener(new View.OnClickListener() {
                                                   @Override
                                                   public void onClick(View v) {
                                                       dialog.cancel();
-                                                      List<read> mdl;
-                                                      Type collectionType = new TypeToken<List<read>>() {
-                                                      }.getType();
-                                                      mdl = getSavedObjectFromPreference(c, "preference", ruid, collectionType);
-                                                      for (i=mdl.size()-1;i>=0;i--) {
-                                                          read z=mdl.get(i);
-                                                          if (z.msg.equals(model.msg)) {
-                                                              mdl.remove(i);
-                                                              break;
-                                                          }
-                                                      }
+                                                      final FirebaseUser u = FirebaseAuth.getInstance().getCurrentUser();
+                                                      if (u.getUid().equals(suid)) {
+                                                          final DatabaseReference db = FirebaseDatabase.getInstance().getReference("Private chats").child(u.getUid());
 
+                                                          final DatabaseReference db2 = FirebaseDatabase.getInstance().getReference("Private chats").child(ruid);
 
-                                                      Type collectionType2 = new TypeToken<List<chat>>() {
-                                                      }.getType();
-                                                      List<chat>mdl2;
-                                                      mdl2 = getSavedObjectFromPreference(c, "preference", "chatmodel", collectionType2);
-                                                      if(mdl2.size()!=0) {
-                                                          for(int k= mdl2.size() - 1; k >= 0; k--) {
-                                                              chat z = mdl2.get(k);
-                                                              if (z.msg.toLowerCase().equals(chat.toLowerCase())) {
-                                                                  mdl2.remove(k);
-                                                                  FirebaseAuth u = FirebaseAuth.getInstance();
-                                                                  chat zz = new chat(u.getCurrentUser().getUid(), mdl.get(mdl.size() - 2).msg, ruid, "not found", phno);
-                                                                  mdl2.add(zz);
-                                                                  break;
+                                                          Query qf = db.child(ruid).orderByChild("msg").equalTo(t1.getText().toString());
+                                                          Query qf2 = db2.child(suid).orderByChild("msg").equalTo(t1.getText().toString());
+                                                          qf.addListenerForSingleValueEvent(new ValueEventListener() {
+                                                              @Override
+                                                              public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                                                                  for (DataSnapshot d : dataSnapshot.getChildren()) {
+//                                                                                          if ((d.child("msg").getValue().toString()).equals(t1.getText())) {
+//                                                                                              db.child(d.toString()).removeValue();
+//                                                                                              db2.child(d.toString()).removeValue();
+                                                                      d.getRef().removeValue();
+                                                                  }
                                                               }
-                                                          }
+
+                                                              @Override
+                                                              public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                              }
+                                                          });
+                                                          qf2.addListenerForSingleValueEvent(new ValueEventListener() {
+                                                              @Override
+                                                              public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                                                                  for (DataSnapshot d : dataSnapshot.getChildren()) {
+//                                                                                          if ((d.child("msg").getValue().toString()).equals(t1.getText())) {
+//                                                                                              db.child(d.toString()).removeValue();
+//                                                                                              db2.child(d.toString()).removeValue();
+                                                                      d.getRef().removeValue();
+                                                                  }
+                                                              }
+
+                                                              @Override
+                                                              public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                              }
+                                                          });
+                                                          cancel.setOnClickListener(new View.OnClickListener() {
+                                                              @Override
+                                                              public void onClick(View v) {
+                                                                  dialog.cancel();
+                                                              }
+                                                          });
+
                                                       }
-                                                      final msgmodel m = new msgmodel(mdl);
-                                                      saveObjectToSharedPreference(c,"preference",ruid,mdl);
-                                                      saveObjectToSharedPreference(c,"preference","chatmodel",mdl2);
-                                                      final RecyclerView recycle = ((Activity) c).findViewById(R.id.singlerecycle);
-                                                      LinearLayoutManager lm = new LinearLayoutManager(c);
-                                                      lm.setOrientation(LinearLayoutManager.VERTICAL);
-                                                      recycle.setLayoutManager(lm);
-                                                      recycle.setAdapter(m);
-                                                      recycle.getLayoutManager().scrollToPosition(mdl.size() - 1);
-                                                      m.notifyDataSetChanged();
                                                   }
                                               });
 
-                                              cancel.setOnClickListener(new View.OnClickListener() {
-                                                  @Override
-                                                  public void onClick(View v) {
-                                                      dialog.cancel();
-                                                  }
-                                              });
+
+
+
+
+
+//                                              final AlertDialog.Builder builder = new AlertDialog.Builder(c);
+//                                              LayoutInflater lf = (LayoutInflater) c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+//                                              View v2 = lf.inflate(R.layout.pop2, null);
+//                                              final TextView cancel = v2.findViewById(R.id.cancel);
+//                                              final TextView b = v2.findViewById(R.id.delete);
+//                                              builder.setView(v2);
+//                                              final AlertDialog dialog = builder.create();
+//                                              dialog.show();
+//                                              b.setOnClickListener(new View.OnClickListener() {
+//                                                  @Override
+//                                                  public void onClick(View v) {
+//                                                      dialog.cancel();
+//                                                      List<read> mdl;
+//                                                      Type collectionType = new TypeToken<List<read>>() {
+//                                                      }.getType();
+//                                                      mdl = getSavedObjectFromPreference(c, "preference", ruid, collectionType);
+//                                                      for (i=mdl.size()-1;i>=0;i--) {
+//                                                          read z=mdl.get(i);
+//                                                          if (z.msg.equals(model.msg)) {
+//                                                              mdl.remove(i);
+//                                                              break;
+//                                                          }
+//                                                      }
+//
+//
+//                                                      Type collectionType2 = new TypeToken<List<chat>>() {
+//                                                      }.getType();
+//                                                      List<chat>mdl2;
+//                                                      mdl2 = getSavedObjectFromPreference(c, "preference", "chatmodel", collectionType2);
+//                                                      if(mdl2.size()!=0) {
+//                                                          for(int k= mdl2.size() - 1; k >= 0; k--) {
+//                                                              chat z = mdl2.get(k);
+//                                                              if (z.msg.toLowerCase().equals(chat.toLowerCase())) {
+//                                                                  mdl2.remove(k);
+//                                                                  FirebaseAuth u = FirebaseAuth.getInstance();
+//                                                                  chat zz = new chat(u.getCurrentUser().getUid(), mdl.get(mdl.size() - 2).msg, ruid, "not found", phno);
+//                                                                  mdl2.add(zz);
+//                                                                  break;
+//                                                              }
+//                                                          }
+//                                                      }
+//                                                      final msgmodel m = new msgmodel(mdl);
+//                                                      saveObjectToSharedPreference(c,"preference",ruid,mdl);
+//                                                      saveObjectToSharedPreference(c,"preference","chatmodel",mdl2);
+//                                                      final RecyclerView recycle = ((Activity) c).findViewById(R.id.singlerecycle);
+//                                                      LinearLayoutManager lm = new LinearLayoutManager(c);
+//                                                      lm.setOrientation(LinearLayoutManager.VERTICAL);
+//                                                      recycle.setLayoutManager(lm);
+//                                                      recycle.setAdapter(m);
+//                                                      recycle.getLayoutManager().scrollToPosition(mdl.size() - 1);
+//                                                      m.notifyDataSetChanged();
+//                                                  }
+//                                              });
+//
+//                                              cancel.setOnClickListener(new View.OnClickListener() {
+//                                                  @Override
+//                                                  public void onClick(View v) {
+//                                                      dialog.cancel();
+//                                                  }
+//                                              });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                                               return true;
                                           }
 

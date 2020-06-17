@@ -41,11 +41,12 @@ import java.util.List;
 
 import static com.example.convo.MainActivity.model2;
 import static com.example.convo.MainActivity.map2;
+import static com.example.convo.MainActivity.phuid;
+import static com.example.convo.MainActivity.saveObjectToSharedPreference;
 //import static com.example.convo.MainActivity.contacts;
 
 public class ContactsActivity extends AppCompatActivity {
 
-    final HashMap<String, String> phuid = new HashMap<String, String>();
 
 
    // final List<Data> model = new ArrayList<Data>();
@@ -220,8 +221,8 @@ public class ContactsActivity extends AppCompatActivity {
                     //use .toLowerCase() for better matches
                     if (d.getValue().toLowerCase().contains(text.toLowerCase())) {
                         if(phuid.get(d.getKey())!=null){
-                            Data e = new Data(d.getValue(), "not found", 1, ContactsActivity.this, phuid.get(d.getKey()), d.getKey());
-                            temp.add(e);
+                            Data e1 = new Data(d.getValue(), "not found", 1, ContactsActivity.this, phuid.get(d.getKey()), d.getKey());
+                            temp.add(e1);
                         } else{
                             Data e = new Data(d.getValue(), "not found", 0, ContactsActivity.this, " ", d.getKey());
                             temp.add(e);
@@ -251,6 +252,36 @@ public class ContactsActivity extends AppCompatActivity {
         });
     }
 
+     public void contactsadd() {
+        List<String> az = new ArrayList<String>();
+        while (model2.size() == 0) {
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            if (model2.size() != 0) {
+                break;
+            }
+        }
+        for (int i = 0; i < model2.size(); i++) {
+            Log.d("PHU", model2.get(i).getPhno());
+            az.add(model2.get(i).phno);
+        }
+        for (String j : map2.keySet()) {
+            int i;
+            for (i = 0; i < az.size(); i++) {
+                if (j.toLowerCase().equals(az.get(i).toLowerCase().toString())) {
+                    break;
+                }
+            }
+            if (i == az.size()) {
+                Data e = new Data(map2.get(j), "not found", 0, ContactsActivity.this, "null", j);
+                model2.add(e);
+            }
+        }
+    }
+
 
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
@@ -273,7 +304,7 @@ public class ContactsActivity extends AppCompatActivity {
                 df.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        if(documentSnapshot.exists()) {
+                        if (documentSnapshot.exists()) {
                             for (final String j : map2.keySet()) {
                                 if (documentSnapshot.getString(j) != null) {
                                     final String userid = documentSnapshot.getString(j);
@@ -283,14 +314,14 @@ public class ContactsActivity extends AppCompatActivity {
                                         @Override
                                         public void onSuccess(DocumentSnapshot documentSnapshot) {
                                             if (documentSnapshot.exists()) {
-                                               // Data d = new Data(map.get(j), documentSnapshot.getString("photo"), 1, ContactsActivity.this, userid, j);
-                                               // model.add(d);
+                                                // Data d = new Data(map.get(j), documentSnapshot.getString("photo"), 1, ContactsActivity.this, userid, j);
+                                                // model.add(d);
                                             }
                                         }
                                     });
-                                            Data d = new Data(map2.get(j), "not found", 1, ContactsActivity.this, userid, j);
-                                          phuid.put(j,userid);
-                                            model2.add(d);
+                                    Data d = new Data(map2.get(j), "not found", 1, ContactsActivity.this, userid, j);
+                                    //  phuid.put(j,userid);
+                                    model2.add(d);
                                 }
 //                                else{
 //                                        Data d = new Data(map.get(j), "not found", 0, ContactsActivity.this, "null", j);
@@ -298,24 +329,26 @@ public class ContactsActivity extends AppCompatActivity {
 //                                    }
                             }
 
-                            //final Model m2 = new Model(model);
-                            Collections.sort(model2, new sortbyfound());
+                        }
+contactsadd();
+                    }
+                });
+                           Collections.sort(model2, new sortbyfound());
                             RecyclerView recycle = findViewById(R.id.contactsrecycle);
                             LinearLayoutManager lm = new LinearLayoutManager(getApplicationContext());
                             lm.setOrientation(LinearLayoutManager.VERTICAL);
                             recycle.setLayoutManager(lm);
                             recycle.setAdapter(m);
-                            recycle.getLayoutManager().scrollToPosition(model2.size() - 1);
                             m.notifyDataSetChanged();
-                            Log.d("Phone",""+documentSnapshot.getData());
-                        }
-                    }
-                });
-                return true;
+                            saveObjectToSharedPreference(ContactsActivity.this,"contacts","contact",model2);
+                //            Log.d("Phone",""+documentSnapshot.getData());
+
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
+
+
 
     }
     class sortbyfound implements Comparator<Data>
