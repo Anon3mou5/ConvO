@@ -8,6 +8,7 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -16,6 +17,7 @@ import android.os.IBinder;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
+import androidx.core.app.RemoteInput;
 
 import android.os.Binder;
 import android.util.Log;
@@ -37,6 +39,7 @@ import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -46,6 +49,10 @@ import static com.example.convo.MainActivity.model3;
 
 public class myservice extends Service {
     private final LocalBinder mBinder = new LocalBinder();
+    static  List<notifidata> Messages = new ArrayList<notifidata>();
+    Type collectionType = new TypeToken<HashMap<String, String>>() {
+    }.getType();
+    static  HashMap<String,String> mode ;
     public class LocalBinder extends Binder {
         public myservice getService() {
             return myservice .this;
@@ -81,7 +88,9 @@ public class myservice extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
                 final FirebaseAuth auth = FirebaseAuth.getInstance();
-                final DatabaseReference db = FirebaseDatabase.getInstance().getReference("Private chats").child(auth.getCurrentUser().getUid());
+        mode = getSavedObjectFromPreference(getApplicationContext(),"contacts","contactnumber",collectionType);
+
+        final DatabaseReference db = FirebaseDatabase.getInstance().getReference("Private chats").child(auth.getCurrentUser().getUid());
                 db.addChildEventListener(new ChildEventListener() {
                     @Override
                     public void onChildAdded(@NonNull final DataSnapshot dataSnapshot, @Nullable String s) {
@@ -210,7 +219,9 @@ public class myservice extends Service {
                                 }
                                 for (chat j : model) {
                                     if (!j.suid.equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
-                                        createNotificationChannel(j.phno, j.getMsg(), getApplicationContext());
+                                        notifidata d = new notifidata(mode.get(j.phno),j.msg);
+                                        Messages.add(d);
+                                        createNotificationChannel(j.phno, j.getMsg(), getApplicationContext(),j.suid);
                                     }
                                 }
                             }
@@ -258,24 +269,53 @@ public class myservice extends Service {
 
     }
 
-    private void createNotificationChannel(String nme,String descr,Context params){
+    private void createNotificationChannel(String nme,String descr,Context params,String suid){
         // Create the NotificationChannel, but only on API 26+ because
         // the NotificationChannel class is new and not in the support library
         Intent intent = new Intent(params, Acti.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         PendingIntent pendingIntent = PendingIntent.getActivity(params, 0, intent, 0);
         Drawable dr = getResources().getDrawable(R.drawable.photo);
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(params);
-        builder
-                .setSmallIcon(R.mipmap.logoz)
-                .setContentTitle(nme)
-                .setContentText(descr)
-                .setPriority(NotificationCompat.PRIORITY_MAX)
-                .setDefaults(Notification.DEFAULT_ALL)
-                .setSmallIcon(R.mipmap.ic_round)
-                .setLargeIcon(((BitmapDrawable)dr).getBitmap())
-                .setContentIntent(pendingIntent).setAutoCancel(true);
+//        NotificationCompat.Builder builder = new NotificationCompat.Builder(params);
+//        builder
+//                .setSmallIcon(R.mipmap.logoz)
+//                .setContentTitle(nme)
+//                .setContentText(descr)
+//                .setPriority(NotificationCompat.PRIORITY_MAX)
+//                .setDefaults(Notification.DEFAULT_ALL)
+//                .setSmallIcon(R.mipmap.ic_round)
+//                .setLargeIcon(((BitmapDrawable)dr).getBitmap())
+//                .setContentIntent(pendingIntent).setAutoCancel(true);
+
+        Intent intent1 = new Intent(getApplicationContext(), Acti.class);
+        intent1.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        PendingIntent pendingIntent1 = PendingIntent.getActivity(getApplicationContext(), 0, intent, 0);
+
+//////////////////////////////////////intent for dismiss
+        Long when = System.currentTimeMillis();
+
         NotificationManager mNotificationManager = (NotificationManager) params.getSystemService(Context.NOTIFICATION_SERVICE);
+        Intent intent2 = new Intent(getApplicationContext(), closenotify.class);
+        String userid = suid;
+
+        intent2.putExtra("suid", suid);
+        intent2.putExtra("number", nme);
+        intent2.putExtra("name", mode.get(nme));
+        //  b.putString("userid",userid);
+        intent2.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        PendingIntent pendingIntent2 = PendingIntent.getBroadcast(getApplicationContext(), 0, intent2, 0);
+
+        RemoteInput remoteinput = new RemoteInput.Builder("replymessage").setLabel("Your Reply...").build();
+        NotificationCompat.Action replyActiion = new NotificationCompat.Action.Builder(R.drawable.send,"Reply",pendingIntent2).addRemoteInput(remoteinput).build();
+        NotificationCompat.MessagingStyle messaging = new NotificationCompat.MessagingStyle("Me");
+        messaging.setConversationTitle(mode.get(nme));
+
+
+        for(notifidata entry : Messages ) {
+            NotificationCompat.MessagingStyle.Message notificationmessage = new NotificationCompat.MessagingStyle.Message(entry.getMsg(), when, entry.getUser());
+            messaging.addMessage(notificationmessage);
+        }
+
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             CharSequence name = getString(R.string.app_name);
@@ -286,11 +326,15 @@ public class myservice extends Service {
             // Register the channel with the system; you can't change the importance
             // or other notification behaviors after this
             mNotificationManager.createNotificationChannel(channel);
-            builder.setChannelId("123");
+        //    builder.setChannelId("123");
         }
+        Notification notifications = new NotificationCompat.Builder(params,"123").setSmallIcon(R.drawable.logo).setStyle(messaging)
+                .setContentIntent(pendingIntent1).setAutoCancel(true).
+                        setPriority(Notification.PRIORITY_MAX).setOnlyAlertOnce(true).addAction(replyActiion).setColor(Color.rgb(237,19,14)).setDefaults(Notification.DEFAULT_ALL).build();
+        mNotificationManager.notify(0,notifications);
 
 // notificationID allows you to update the notification later on.
-        mNotificationManager.notify(0, builder.build());
+    //    mNotificationManager.notify(0, builder.build());
 
     }
 

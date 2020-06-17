@@ -1,17 +1,21 @@
 package com.example.convo;
 
+import android.app.Activity;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.EditText;
@@ -93,6 +97,10 @@ public class Singleactivity extends AppCompatActivity {
         Log.d("ruid",ruid);
         final String phno=intent.getStringExtra("phno");
         String name=intent.getStringExtra("name");
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            Window w = getWindow(); // in Activity's onCreate() for instance
+            w.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+        }
      //   contactsfetcher cf = new contactsfetcher();
     //    contacts= cf.getContactList(getApplicationContext());
          setContentView(R.layout.single_main);
@@ -356,7 +364,7 @@ db.addChildEventListener(child);
                     FirebaseAuth a = FirebaseAuth.getInstance();
                     data2 d = new data2(msg,phonenum,photo,ruid,a.getCurrentUser().getUid());
                     sender send = new sender(d,tokens);
-                    apiservice.sendData(send).enqueue(new Callback<myrespone>() {
+                    apiservice.sendNotification(send).enqueue(new Callback<myrespone>() {
                         @Override
                         public void onResponse(Call<myrespone> call, Response<myrespone> response) {
 //                            if (response.code() == 200) {

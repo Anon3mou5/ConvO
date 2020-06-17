@@ -50,52 +50,40 @@ public class myfirebasemessaging extends FirebaseMessagingService {
     static  List<notifidata> Messages = new ArrayList<notifidata>();
 
     private void sendNotification(RemoteMessage remoteMessage) {
- String usernum=remoteMessage.getData().get("sender");
- String suid = remoteMessage.getData().get("suid");
- String user = null;
+        String usernum = remoteMessage.getData().get("sender");
+        String suid = remoteMessage.getData().get("suid");
+        String user = null;
         String icon = remoteMessage.getData().get("photo");
         String msg = remoteMessage.getData().get("msg");
         contactsfetcher contacts = new contactsfetcher();
-        HashMap<String,String> map2;
-        Type collectionType = new TypeToken<HashMap<String,String>>() {
+        HashMap<String, String> map2;
+        Type collectionType = new TypeToken<HashMap<String, String>>() {
         }.getType();
         map2 = getSavedObjectFromPreference(getApplicationContext(), "contacts", "contactnumber", collectionType);
-       //map2 = contacts.getContactList(getApplicationContext());
-        if(map2!=null) {
-            for (String j : map2.keySet()) {
-                if (j.toLowerCase().equals(usernum.toLowerCase())) {
-                    user = map2.get(j);
-                    break;
-                }
-            }
+        //map2 = contacts.getContactList(getApplicationContext());
+        if (map2 != null) {
+                    user = map2.get(usernum);
         }
-     if(user==null)
-     {
-         user=usernum;
-     }
-        if(usernumcopy==null)
-        {
+        if (user == null) {
+            user = usernum;
+        }
+        if (usernumcopy == null) {
             usernumcopy = usernum;
-            notifidata d = new notifidata(user,msg);
+            notifidata d = new notifidata(user, msg);
             Messages.add(d);
-        }
-        else
-        {
-            if(usernumcopy.equals(usernum))
-            {
-                notifidata d = new notifidata(user,msg);
+        } else {
+            if (usernumcopy.equals(usernum)) {
+                notifidata d = new notifidata(user, msg);
                 Messages.add(d);
-            }
-            else
-            {
-                i+=1;
+            } else {
+                i += 1;
             }
         }
 
         int icon2 = R.mipmap.logo;
         long when = System.currentTimeMillis();
-      //Notification notification2 = new Notification(icon2, "Conv0", when);
-       // RemoteViews contentView;
+        //Notification notification2 = new Notification(icon2, "Conv0", when);
+        // RemoteViews contentView;
 
         Intent intent = new Intent(getApplicationContext(), Acti.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -103,14 +91,13 @@ public class myfirebasemessaging extends FirebaseMessagingService {
 
 //////////////////////////////////////intent for dismiss
         Intent intent2 = new Intent(getApplicationContext(), closenotify.class);
-        String userid=suid;
-        intent2.putExtra("suid",suid);
-        intent2.putExtra("number",usernum);
-        intent2.putExtra("name",user);
-      //  b.putString("userid",userid);
-       // intent2.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        String userid = suid;
+        intent2.putExtra("suid", suid);
+        intent2.putExtra("number", usernum);
+        intent2.putExtra("name", user);
+        //  b.putString("userid",userid);
+        intent2.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         pendingIntent2 = PendingIntent.getBroadcast(getApplicationContext(), 0, intent2, 0);
-
 
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -123,9 +110,8 @@ public class myfirebasemessaging extends FirebaseMessagingService {
             // or other notification behaviors after this
 
         }
-
-        notificationbuilder(getApplicationContext(),user,when);
- //////////////////////////////////intent for  acti.cclass
+          notificationbuilder(getApplicationContext(),user,when);
+        //////////////////////////////////intent for  acti.cclass
 
         //       notification2.contentView = contentView;
 //        notification2.contentIntent = pendingIntent2;
@@ -134,7 +120,6 @@ public class myfirebasemessaging extends FirebaseMessagingService {
 //        notification2.defaults |= Notification.DEFAULT_LIGHTS; // LED
 //        notification2.defaults |= Notification.DEFAULT_VIBRATE; //Vibration
 //        notification2.defaults |= Notification.DEFAULT_SOUND;
-
 
 
 //        Drawable dr = getResources().getDrawable(R.drawable.photo);
@@ -148,14 +133,32 @@ public class myfirebasemessaging extends FirebaseMessagingService {
 //                .setDefaults(Notification.DEFAULT_ALL)
 
 //                .setLargeIcon(((BitmapDrawable)dr).getBitmap())
-                //.addAction(R.id.reply,"reply",pendingIntent1)
-                //.addAction(R.id.dismiss,"dismiss",pendingIntent2)
-               // .setContentIntent(pendingIntent1).setAutoCancel(true);
+        //.addAction(R.id.reply,"reply",pendingIntent1)
+        //.addAction(R.id.dismiss,"dismiss",pendingIntent2)
+        // .setContentIntent(pendingIntent1).setAutoCancel(true);
 
 
 //
 //            builder.setChannelId("123");
 //        }
+//        NotificationManager mNotificationManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
+//
+//        NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
+//        builder
+//                .setSmallIcon(R.mipmap.logo)
+//            //   .setContent(contentView)
+//                .setContentTitle(user)
+//               .setContentText(msg)
+//                .setPriority(NotificationCompat.PRIORITY_MAX)
+//                .setDefaults(Notification.DEFAULT_ALL).setColor(Color.YELLOW)
+//        //        .setLargeIcon(((BitmapDrawable)dr).getBitmap())
+//               .addAction(R.id.reply,"Reply",pendingIntent1)
+//               .setContentIntent(pendingIntent1).setAutoCancel(true);
+//        builder.setChannelId("123");
+//    mNotificationManager.notify(1,builder.build());
+//    }
+    }
+
 
        // mNotificationManager.notify(1, notification2);
     //    if(i>j)
@@ -167,7 +170,6 @@ public class myfirebasemessaging extends FirebaseMessagingService {
 
 
 
-    }
   public static void notificationbuilder(Context c,String user,long when)
    {
 
@@ -199,7 +201,8 @@ public class myfirebasemessaging extends FirebaseMessagingService {
 
        Notification notifications = new NotificationCompat.Builder(c,"123").setSmallIcon(R.drawable.logo).setStyle(messaging)
                .setContentIntent(pendingIntent1).setAutoCancel(true).
-                       setPriority(Notification.PRIORITY_MAX).setOnlyAlertOnce(true).addAction(replyActiion).setColor(Color.rgb(17,139,234)).setDefaults(Notification.DEFAULT_ALL).build();
+                       setPriority(Notification.PRIORITY_MAX).setOnlyAlertOnce(true).addAction(replyActiion).setColor(Color.rgb(255,165,0)).setDefaults(Notification.DEFAULT_ALL).build();
        mNotificationManager.notify(0,notifications);
+
    }
 }

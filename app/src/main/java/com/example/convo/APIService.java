@@ -13,6 +13,6 @@ public interface APIService {
     }
     )
     @POST("fcm/send")
-    Call<myrespone> sendData(@Body sender body);
+    Call<myrespone> sendNotification(@Body sender body);
 
 }

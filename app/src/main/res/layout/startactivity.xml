@@ -115,10 +115,23 @@
         android:layout_width="match_parent"
         android:layout_height="605dp"
         android:layout_marginTop="15dp"
+        android:background="#FFFFFF"
         android:elevation="5dp"
         app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/arcView" />
+        app:layout_constraintTop_toBottomOf="@+id/arcView">
+
+    </androidx.recyclerview.widget.RecyclerView>
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:elevation="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/gradient" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

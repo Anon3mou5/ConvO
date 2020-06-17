@@ -1,8 +1,10 @@
 package com.example.convo;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.ActivityOptions;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Pair;
@@ -33,6 +35,11 @@ public class loginactivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.authenticate);
         final ImageView logo = findViewById(R.id.img);
+
+        if (checkSelfPermission(Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[]{Manifest.permission.READ_CONTACTS}, 100);
+        }
+
         //logoz.animate().translationY(500).setDuration(100);
         Animation b = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.transition);
 

@@ -8,7 +8,6 @@
     android:backgroundTintMode="src_in"
     android:fitsSystemWindows="true"
     android:orientation="horizontal"
-    android:windowSoftInputMode="adjustPan"
     tools:context=".MainActivity">
 
     <!--    <View-->
@@ -18,6 +17,14 @@
     <!--        android:visibility="invisible"-->
     <!--        app:layout_constraintTop_toBottomOf="@+id/tool"-->
     <!--        tools:layout_editor_absoluteX="3dp" />-->
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/cd2"
+        app:srcCompat="@drawable/gradient" />
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cd2"

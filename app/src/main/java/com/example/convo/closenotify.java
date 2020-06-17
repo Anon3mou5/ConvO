@@ -35,33 +35,34 @@ import static com.example.convo.myfirebasemessaging.notificationbuilder;
 
 public class closenotify extends BroadcastReceiver {
 
-static  String rud=null;
     @Override
     public void onReceive(final Context context, Intent intent) {
 
         Bundle remote = RemoteInput.getResultsFromIntent(intent);
-        final String user = intent.getStringExtra("user");
-        final String phno = intent.getStringExtra("num");
-        if(remote!=null)
-        {
+        final String user = intent.getStringExtra("name");
+        final String phno = intent.getStringExtra("number");
+        final  String suid = intent.getStringExtra("suid");
+        if(remote!=null) {
             final CharSequence message = remote.getCharSequence("replymessage");
-            notifidata d = new notifidata(null,message.toString());
+            notifidata d = new notifidata(null, message.toString());
             Messages.add(d);
+
+
             long when = System.currentTimeMillis();
-            notificationbuilder(context,user,when);
+            notificationbuilder(context, user, when);
             NotificationManager mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-            mNotificationManager.cancel(0);
-            FirebaseFirestore fb = FirebaseFirestore.getInstance();
-            DocumentReference df = fb.collection("phonelist").document("list");
-            df.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                @Override
-                public void onSuccess(DocumentSnapshot documentSnapshot) {
-                    if (documentSnapshot.exists()) {
-                        rud = documentSnapshot.get(phno).toString();
-                        final FirebaseUser u = FirebaseAuth.getInstance().getCurrentUser();
-                        final DatabaseReference db1 = FirebaseDatabase.getInstance().getReference("Private chats");
-                        final String text =message.toString();
-                        read me = new read(u.getUid(), text, rud, phno, "blah-blah");
+            //  mNotificationManager.cancel(0);
+//            FirebaseFirestore fb = FirebaseFirestore.getInstance();
+//            DocumentReference df = fb.collection("phonelist").document("list");
+//            df.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+//                @Override
+//                public void onSuccess(DocumentSnapshot documentSnapshot) {
+//                    if (documentSnapshot.exists()) {
+//                        rud = documentSnapshot.get(phno).toString();
+            final FirebaseUser u = FirebaseAuth.getInstance().getCurrentUser();
+            final DatabaseReference db1 = FirebaseDatabase.getInstance().getReference("Private chats");
+            final String text = message.toString();
+                     read me = new read(u.getUid(), text, suid, phno, "blah-blah");
                         FirebaseFirestore bd = FirebaseFirestore.getInstance();
                         CollectionReference cd = bd.collection("phonelist");
                         DocumentReference ref = cd.document("list");
@@ -73,8 +74,8 @@ static  String rud=null;
                                     for (Map.Entry<String, Object> ent : entity.entrySet()) {
                                         if (ent.getValue().toString().equals(u.getUid())) {
                                             String ph = ent.getKey().toString();
-                                            read m = new read(u.getUid(), text, rud, ph, "blah-");
-                                            db1.child(rud).child(u.getUid()).push().setValue(m);
+                                            read m = new read(u.getUid(), text, suid, ph, "blah-");
+                                            db1.child(suid).child(u.getUid()).push().setValue(m);
                                         }
                                     }
 //                                String ph = documentSnapshot.getString("phno");
@@ -83,15 +84,15 @@ static  String rud=null;
                                 }
                             }
                         });
-                        db1.child(u.getUid()).child(rud).push().setValue(me);
+                        db1.child(u.getUid()).child(suid).push().setValue(me);
                         //  DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
                         //FirebaseUser u = FirebaseAuth.getInstance().getCurrentUser();
 
-                        sendNotification(rud, text, "no photo",context);
+                        sendNotification(suid, text, "no photo",context);
 
-                    }
-                }
-            });
+//                    }
+//                }
+//            });
 
         }
     }
