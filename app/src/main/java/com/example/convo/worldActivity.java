@@ -172,6 +172,7 @@ public class worldActivity extends AppCompatActivity {
                 recycle.setLayoutManager(lm);
                 recycle.setAdapter(m);
                 recycle.getLayoutManager().scrollToPosition(model.size() - 1);
+                ((LinearLayoutManager)recycle.getLayoutManager()).setStackFromEnd(true);
                 m.notifyDataSetChanged();
             }
             @Override

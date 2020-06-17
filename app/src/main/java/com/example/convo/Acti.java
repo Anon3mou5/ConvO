@@ -500,6 +500,7 @@ public class Acti extends AppCompatActivity {
                 FirebaseAuth c = FirebaseAuth.getInstance();
                 c.signOut();
                 startActivity(t);
+                finish();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

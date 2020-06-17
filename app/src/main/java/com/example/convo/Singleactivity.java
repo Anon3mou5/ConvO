@@ -108,6 +108,7 @@ public class Singleactivity extends AppCompatActivity {
         final ImageView fb = findViewById(R.id.send);
 
 
+
        // apiservice = Client.getclient("https://fcm.googleapis.com/").create(APIService.class);
 
         fb.setOnClickListener(new View.OnClickListener() {
@@ -169,6 +170,7 @@ public class Singleactivity extends AppCompatActivity {
             recycle.setLayoutManager(lm);
             recycle.setAdapter(m);
             recycle.getLayoutManager().scrollToPosition(mdl.size() - 1);
+        ((LinearLayoutManager)recycle.getLayoutManager()).setStackFromEnd(true);
             m.notifyDataSetChanged();
 
 
