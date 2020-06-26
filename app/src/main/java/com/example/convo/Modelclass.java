@@ -2,6 +2,7 @@ package com.example.convo;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Paint;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -176,6 +177,8 @@ public class Modelclass extends RecyclerView.Adapter<viewholder> {
 //             t1.setHeight(h);
 //         }
 
+         t1.setPaintFlags(t1.getPaintFlags() & (~ Paint.UNDERLINE_TEXT_FLAG));
+         t2.setPaintFlags(t1.getPaintFlags() & (~ Paint.UNDERLINE_TEXT_FLAG));
              t1.setText(name);
              t2.setText(chat);
              Log.d("URL",""+url);

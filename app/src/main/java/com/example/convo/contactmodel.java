@@ -6,11 +6,16 @@ import android.app.ActivityOptions;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Paint;
+import android.graphics.drawable.BitmapDrawable;
+import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -21,6 +26,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -31,6 +37,8 @@ import java.net.URL;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class contactmodel extends RecyclerView.Adapter<contactviewholder> {
 
@@ -123,10 +131,11 @@ class contactviewholder extends RecyclerView.ViewHolder {
     ////////////////////////////STATIC DATA CREATES DATA BEING REPEATING and only last view being updated
 
      TextView nameView;
-     ImageView profile;
+     CircleImageView profile;
      ConstraintLayout lay;
     CardView cd;
     View view;
+    Button invite;
 
 
     public contactviewholder(@NonNull View itemView,int j) {
@@ -139,14 +148,31 @@ class contactviewholder extends RecyclerView.ViewHolder {
         profile=itemView.findViewById(R.id.profile);
         //t3 = itemView.findViewById(R.id.textView);
        cd =itemView.findViewById(R.id.card);
+       invite = itemView.findViewById((R.id.invite));
     }
 
-     void setdata(final String name, String url,final String uid,final String phno,int found) {
+     void setdata(final String name, final String url, final String uid, final String phno, int found) {
         //card.setLayoutParams(t2.getLayoutParams());
 //             ConstraintLayout.LayoutParams p = new ConstraintLayout.LayoutParams(
 //                     ConstraintLayout.LayoutParams.WRAP_CONTENT,
 //                     ConstraintLayout.LayoutParams.WRAP_CONTENT
 //
+
+
+         if(found==0)
+         {
+             invite.setOnClickListener(new View.OnClickListener() {
+                 @Override
+                 public void onClick(View v) {
+                     Intent sendIntent = new Intent();
+                     sendIntent.setAction(Intent.ACTION_SEND);
+                     sendIntent.putExtra(Intent.EXTRA_TEXT, "Lets,chat on Conv0,a one stop solution for small,secure,fast and cloud messaging.\nMoreover its simple and 6mb only.\nDownload it now at : https://www.dropbox.com/sh/xfnqdwm6seplzdp/AABzJAu9s-KvaIfb642N3IPRa?dl=0 ");
+                     sendIntent.setType("text/plain");
+                     Intent shareIntent = Intent.createChooser(sendIntent, "Invite through");
+                     view.getContext().startActivity(shareIntent);
+                 }
+             });
+         }
         if(found==1) {
             cd.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -162,6 +188,11 @@ class contactviewholder extends RecyclerView.ViewHolder {
                     t.putExtra("uid", uid);
                     t.putExtra("name", name);
                     t.putExtra("phno", phno);
+                    BitmapDrawable drawable = (BitmapDrawable) profile.getDrawable();
+                    Bitmap bitmap = drawable.getBitmap();
+                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                    File dir = new File(Environment.getExternalStorageDirectory().getAbsolutePath(), "Convo/photos/IMG_"+phno +".jpg");
+                    t.putExtra("photo",dir);
                     ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation((Activity) view.getContext(), pairs);
                     view.getContext().startActivity(t, options.toBundle());
                     ((Activity) view.getContext()).finish();
@@ -219,19 +250,56 @@ class contactviewholder extends RecyclerView.ViewHolder {
 //         }
 
         nameView.setText(name);
+         nameView.setPaintFlags(nameView.getPaintFlags() & (~ Paint.UNDERLINE_TEXT_FLAG));
         //  Bitmap b =loadImageFromStorage(MainActivity.PATH);
-        try {
-            if (url.equals("not found")) {
-            } else {
-                Bitmap bitmap = BitmapFactory.decodeStream((InputStream) new URL(url).getContent());
-                profile.setImageBitmap(bitmap);
-            }
-        }catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+     Thread nw  =new Thread(new Runnable() {
+         @Override
+         public void run() {
+             try {
+                 final Bitmap bitmap = loadImageFromStorage(phno);
+                 if (bitmap == null) {
+                     if (url.equals("not found")) {
+                     } else {
+                         URL url1 = new URL(url);
+                         final Bitmap bmp = BitmapFactory.decodeStream(url1.openConnection().getInputStream());
+                         ((Activity) itemView.getContext()).runOnUiThread(new Runnable() {
 
+                             @Override
+                             public void run() {
+
+                                 // Stuff that updates the UI
+                                 storeimagetodevice y = new storeimagetodevice();
+                                 y.store(bmp,"", phno);
+                                 profile.setImageBitmap(bmp);
+
+                             }
+                         });
+                     }
+                 }
+                 else
+                 {
+                     ((Activity) itemView.getContext()).runOnUiThread(new Runnable() {
+
+                         @Override
+                         public void run() {
+
+                             // Stuff that updates the UI
+                             profile.setImageBitmap(bitmap);
+
+                         }
+                     });
+
+                 }
+                 }catch(MalformedURLException e){
+                     e.printStackTrace();
+                 } catch(IOException e){
+                     e.printStackTrace();
+                 }
+
+
+         }
+     }) ;
+     nw.start();
 //             t1.setLayoutParams(t2.getLayoutParams());
 //             Date d = new Date();
         Log.d("contacts", "setcontacts");
@@ -252,8 +320,9 @@ class contactviewholder extends RecyclerView.ViewHolder {
     {
         Bitmap b=null;
         try {
-            File f=new File(path, "profile.jpg");
-            b = BitmapFactory.decodeStream(new FileInputStream(f));
+            File sdCard = Environment.getExternalStorageDirectory();
+            File dir = new File(sdCard.getAbsolutePath(), "Convo/photos/IMG_"+path+".jpg");
+            b = BitmapFactory.decodeStream(new FileInputStream(dir));
         }
         catch (FileNotFoundException e)
         {

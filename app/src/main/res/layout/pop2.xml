@@ -7,7 +7,7 @@
     android:layout_alignParentStart="true"
     android:layout_alignParentEnd="true"
     android:layout_alignParentBottom="true"
-    android:background="@drawable/gradient2"
+    android:background="@drawable/gradient"
     android:padding="7dp"
     android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
     tools:context=".MainActivity">
@@ -17,7 +17,7 @@
         android:layout_width="match_parent"
         android:layout_height="268dp"
         android:layout_marginTop="30dp"
-        android:background="@drawable/gradient2"
+        android:background="@drawable/gradient"
         android:fontFamily="@font/cabin_semibold"
         android:padding="10dp"
         android:text="Do you want to Delete this item ?"

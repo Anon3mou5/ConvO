@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/cont"
-    android:layout_width="395dp"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:fitsSystemWindows="true"
     android:orientation="horizontal"
@@ -49,37 +49,35 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/name"
                 android:layout_alignParentStart="true"
+                android:layout_marginEnd="3dp"
                 android:background="@android:color/transparent"
                 android:fontFamily="@font/cabin"
+                android:minWidth="20dp"
                 android:inputType="textMultiLine"
                 android:maxWidth="320dp"
-                android:minWidth="80dp"
-                android:padding="2.5dp"
+                android:padding="3dp"
                 android:paddingStart="15dp"
                 android:paddingEnd="15dp"
-                android:text="TextView"
                 android:textAlignment="viewStart"
                 android:textColor="#FFFFFF"
                 android:textSize="15sp"
                 android:visibility="visible"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/time"
                 app:layout_constraintTop_toBottomOf="@+id/name" />
 
             <TextView
                 android:id="@+id/time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
-                android:layout_marginEnd="7dp"
+                android:layout_marginEnd="5dp"
                 android:layout_marginBottom="1dp"
                 android:fontFamily="@font/cabin_semibold"
                 android:text="10:30"
                 android:textColor="#FFFFFF"
                 android:textSize="10sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/status" />
+                app:layout_constraintEnd_toEndOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

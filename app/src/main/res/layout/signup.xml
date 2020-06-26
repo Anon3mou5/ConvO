@@ -5,11 +5,11 @@
     android:id="@+id/constraint2"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/gradient3"
+    android:background="@drawable/gradient"
     android:fitsSystemWindows="true"
     android:textAllCaps="false"
-    android:transitionName="constraint"
-   >
+    android:theme="@style/AppTheme3"
+    android:transitionName="constraint">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -18,288 +18,290 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         tools:layout_editor_absoluteY="-68dp">
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/constraint3"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/gradient3"
-            android:fitsSystemWindows="true"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="1.0">
 
-            <TextView
-                android:id="@+id/signup"
-                android:layout_width="162dp"
-                android:layout_height="59dp"
-                android:layout_marginStart="44dp"
-                android:layout_marginTop="108dp"
-                android:fontFamily="@font/cabin_semibold"
-                android:paddingTop="20dp"
-                android:text="Sign Up"
-                android:textAlignment="viewStart"
-                android:textColor="#FFFFFF"
-                android:textSize="28sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-
-            <EditText
-                android:id="@+id/nameedit"
-                android:layout_width="300dp"
-                android:layout_height="47dp"
-                android:layout_marginStart="52dp"
-                android:layout_marginTop="7dp"
-                android:background="@drawable/strokes"
-                android:ems="10"
-                android:fontFamily="@font/cabin_semibold"
-                android:inputType="textPersonName"
-                android:padding="5dp"
-                android:paddingStart="15dp"
-                android:paddingEnd="15dp"
-                android:textColor="#FFFFFF"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/name" />
-
-            <EditText
-                android:id="@+id/phedit"
-                android:layout_width="300dp"
-                android:layout_height="47dp"
-                android:layout_marginStart="52dp"
-                android:layout_marginTop="7dp"
-                android:background="@drawable/strokes"
-                android:ems="10"
-                android:fontFamily="@font/cabin_semibold"
-                android:inputType="textPersonName"
-                android:padding="5dp"
-                android:paddingStart="15dp"
-                android:paddingEnd="15dp"
-                android:textColor="#FFFFFF"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/ph" />
-
-            <TextView
-                android:id="@+id/email"
-                android:layout_width="138dp"
-                android:layout_height="36dp"
-                android:layout_marginStart="52dp"
-                android:layout_marginTop="7dp"
-                android:fontFamily="@font/cabin_bold"
-                android:paddingTop="10dp"
-                android:text="Email"
-                android:textColor="#FFFFFF"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:transitionName="email"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/phedit" />
-
-            <EditText
-                android:id="@+id/emailedit"
-                android:layout_width="300dp"
-                android:layout_height="45dp"
-                android:layout_marginStart="52dp"
-                android:layout_marginTop="7dp"
-                android:background="@drawable/strokes"
-                android:ems="10"
-                android:fontFamily="@font/cabin_semibold"
-                android:inputType="textPersonName"
-                android:padding="5dp"
-                android:paddingStart="15dp"
-                android:paddingEnd="15dp"
-                android:textColor="#FFFFFF"
-                android:transitionName="emailedit"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/email" />
-
-
-            <TextView
-                android:id="@+id/name"
-                android:layout_width="131dp"
-                android:layout_height="37dp"
-                android:layout_marginStart="52dp"
-                android:layout_marginTop="16dp"
-                android:fontFamily="@font/cabin_bold"
-                android:paddingTop="12dp"
-                android:text="Name"
-                android:textColor="#FFFFFF"
-                android:textSize="18dp"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/photo" />
-
-            <TextView
-                android:id="@+id/ph"
-                android:layout_width="131dp"
-                android:layout_height="37dp"
-                android:layout_marginStart="52dp"
-                android:layout_marginTop="7dp"
-                android:fontFamily="@font/cabin_bold"
-                android:paddingTop="12dp"
-                android:text="Phone Number"
-                android:textColor="#FFFFFF"
-                android:textSize="18dp"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/nameedit" />
-
-            <EditText
-                android:id="@+id/passedit"
-                android:layout_width="300dp"
-                android:layout_height="47dp"
-                android:layout_marginStart="52dp"
-                android:layout_marginTop="7dp"
-                android:background="@drawable/strokes"
-                android:ems="10"
-                android:fontFamily="@font/cabin_semibold"
-                android:inputType="textPersonName"
-                android:padding="5dp"
-                android:paddingStart="15dp"
-                android:paddingEnd="15dp"
-                android:textColor="#FFFFFF"
-                android:transitionName="passedit"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/pass" />
-
-
-            <TextView
-                android:id="@+id/pass"
-                android:layout_width="138dp"
-                android:layout_height="36dp"
-                android:layout_marginStart="52dp"
-                android:layout_marginTop="7dp"
-                android:fontFamily="@font/cabin_bold"
-                android:paddingTop="10dp"
-                android:text="Password"
-                android:textColor="#FFFFFF"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:transitionName="pass"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/emailedit" />
-
-            <EditText
-                android:id="@+id/confirmpassedit"
-                android:layout_width="300dp"
-                android:layout_height="45dp"
-                android:layout_marginStart="52dp"
-                android:layout_marginTop="7dp"
-                android:background="@drawable/strokes"
-                android:ems="10"
-                android:fontFamily="@font/cabin_semibold"
-                android:inputType="textPersonName"
-                android:padding="5dp"
-                android:paddingStart="15dp"
-                android:paddingEnd="15dp"
-                android:textColor="#FFFFFF"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/confirmpass" />
-
-            <TextView
-                android:id="@+id/confirmpass"
-                android:layout_width="170dp"
-                android:layout_height="36dp"
-                android:layout_marginStart="52dp"
-                android:layout_marginTop="7dp"
-                android:fontFamily="@font/cabin_bold"
-                android:paddingTop="12dp"
-                android:text="Confirm Password"
-                android:textColor="#FFFFFF"
-                android:textSize="18dp"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/passedit" />
-
-            <Button
-                android:id="@+id/signin"
-                android:layout_width="172dp"
-                android:layout_height="64dp"
-                android:layout_marginTop="32dp"
-                android:layout_marginBottom="20dp"
-                android:background="@drawable/strokes"
-                android:fontFamily="@font/cabin_semibold"
-                android:text="Sign In"
-                android:textColor="#FFFFFF"
-                android:textSize="18sp"
-                android:textStyle="bold"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraint3"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/gradient"
+                android:fitsSystemWindows="true"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/confirmpassedit" />
-
-            <TextView
-                android:id="@+id/passindication"
-                android:layout_width="176dp"
-                android:layout_height="29dp"
-                android:background="@drawable/text_design"
-                android:fontFamily="@font/cabin_semibold"
-                android:text="must conatain 6 letters and a number"
-                android:textAlignment="center"
-                android:textColor="#000000"
-                android:textSize="10dp"
-                android:visibility="invisible"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.466"
+                app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.611" />
+                app:layout_constraintVertical_bias="1.0">
 
-            <TextView
-                android:id="@+id/emailindication"
-                android:layout_width="171dp"
-                android:layout_height="27dp"
-                android:background="@drawable/text_design"
-                android:fontFamily="@font/cabin_semibold"
-                android:text="Inavild emailAddress"
-                android:textAlignment="center"
-                android:textColor="#020202"
-                android:textSize="10dp"
-                android:visibility="invisible"
-                app:layout_constraintBottom_toBottomOf="parent"
+                <TextView
+                    android:id="@+id/signup"
+                    android:layout_width="162dp"
+                    android:layout_height="59dp"
+                    android:layout_marginStart="44dp"
+                    android:layout_marginTop="108dp"
+                    android:fontFamily="@font/cabin_semibold"
+                    android:paddingTop="20dp"
+                    android:text="Sign Up"
+                    android:textAlignment="viewStart"
+                    android:textColor="#FFFFFF"
+                    android:textSize="28sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+
+                <EditText
+                    android:id="@+id/nameedit"
+                    android:layout_width="300dp"
+                    android:layout_height="47dp"
+                    android:layout_marginTop="7dp"
+                    android:background="@drawable/strokes"
+                    android:ems="10"
+                    android:fontFamily="@font/cabin_semibold"
+                    android:inputType="textPersonName"
+                    android:padding="5dp"
+                    android:paddingStart="15dp"
+                    android:paddingEnd="15dp"
+                    android:textColor="#FFFFFF"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/name" />
+
+                <EditText
+                    android:id="@+id/phedit"
+                    android:layout_width="300dp"
+                    android:layout_height="47dp"
+                    android:layout_marginTop="7dp"
+                    android:background="@drawable/strokes"
+                    android:ems="10"
+                    android:fontFamily="@font/cabin_semibold"
+                    android:inputType="textPersonName"
+                    android:padding="5dp"
+                    android:paddingStart="15dp"
+                    android:paddingEnd="15dp"
+                    android:textColor="#FFFFFF"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/ph" />
+
+                <TextView
+                    android:id="@+id/email"
+                    android:layout_width="138dp"
+                    android:layout_height="36dp"
+                    android:layout_marginStart="52dp"
+                    android:layout_marginTop="7dp"
+                    android:fontFamily="@font/cabin_bold"
+                    android:paddingTop="10dp"
+                    android:text="Email"
+                    android:textColor="#FFFFFF"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:transitionName="email"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/phedit" />
+
+                <EditText
+                    android:id="@+id/emailedit"
+                    android:layout_width="300dp"
+                    android:layout_height="45dp"
+                    android:layout_marginTop="7dp"
+                    android:background="@drawable/strokes"
+                    android:ems="10"
+                    android:fontFamily="@font/cabin_semibold"
+                    android:inputType="textPersonName"
+                    android:padding="5dp"
+                    android:paddingStart="15dp"
+                    android:paddingEnd="15dp"
+                    android:textColor="#FFFFFF"
+                    android:transitionName="emailedit"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/email" />
+
+
+                <TextView
+                    android:id="@+id/name"
+                    android:layout_width="131dp"
+                    android:layout_height="37dp"
+                    android:layout_marginStart="52dp"
+                    android:layout_marginTop="16dp"
+                    android:fontFamily="@font/cabin_bold"
+                    android:paddingTop="12dp"
+                    android:text="Name"
+                    android:textColor="#FFFFFF"
+                    android:textSize="18dp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/photo" />
+
+                <TextView
+                    android:id="@+id/ph"
+                    android:layout_width="131dp"
+                    android:layout_height="37dp"
+                    android:layout_marginStart="52dp"
+                    android:layout_marginTop="7dp"
+                    android:fontFamily="@font/cabin_bold"
+                    android:paddingTop="12dp"
+                    android:text="Phone Number"
+                    android:textColor="#FFFFFF"
+                    android:textSize="18dp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/nameedit" />
+
+                <EditText
+                    android:id="@+id/passedit"
+                    android:layout_width="300dp"
+                    android:layout_height="47dp"
+                    android:layout_marginTop="7dp"
+                    android:background="@drawable/strokes"
+                    android:ems="10"
+                    android:fontFamily="@font/cabin_semibold"
+                    android:inputType="textPersonName"
+                    android:padding="5dp"
+                    android:paddingStart="15dp"
+                    android:paddingEnd="15dp"
+                    android:textColor="#FFFFFF"
+                    android:transitionName="passedit"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/pass" />
+
+
+                <TextView
+                    android:id="@+id/pass"
+                    android:layout_width="138dp"
+                    android:layout_height="36dp"
+                    android:layout_marginStart="52dp"
+                    android:layout_marginTop="7dp"
+                    android:fontFamily="@font/cabin_bold"
+                    android:paddingTop="10dp"
+                    android:text="Password"
+                    android:textColor="#FFFFFF"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:transitionName="pass"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/emailedit" />
+
+                <EditText
+                    android:id="@+id/confirmpassedit"
+                    android:layout_width="300dp"
+                    android:layout_height="45dp"
+                    android:layout_marginStart="52dp"
+                    android:layout_marginTop="7dp"
+                    android:background="@drawable/strokes"
+                    android:ems="10"
+                    android:fontFamily="@font/cabin_semibold"
+                    android:inputType="textPersonName"
+                    android:padding="5dp"
+                    android:paddingStart="15dp"
+                    android:paddingEnd="15dp"
+                    android:textColor="#FFFFFF"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/confirmpass" />
+
+                <TextView
+                    android:id="@+id/confirmpass"
+                    android:layout_width="170dp"
+                    android:layout_height="36dp"
+                    android:layout_marginStart="52dp"
+                    android:layout_marginTop="7dp"
+                    android:fontFamily="@font/cabin_bold"
+                    android:paddingTop="12dp"
+                    android:text="Confirm Password"
+                    android:textColor="#FFFFFF"
+                    android:textSize="18dp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/passedit" />
+
+                <Button
+                    android:id="@+id/signin"
+                    android:layout_width="172dp"
+                    android:layout_height="64dp"
+                    android:layout_marginTop="32dp"
+                    android:layout_marginBottom="20dp"
+                    android:background="@drawable/strokes"
+                    android:fontFamily="@font/cabin_semibold"
+                    android:text="Sign In"
+                    android:textColor="#FFFFFF"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/confirmpassedit" />
+
+                <TextView
+                    android:id="@+id/passindication"
+                    android:layout_width="176dp"
+                    android:layout_height="29dp"
+                    android:background="@drawable/text_design"
+                    android:fontFamily="@font/cabin_semibold"
+                    android:text="must conatain 6 letters and a number"
+                    android:textAlignment="center"
+                    android:textColor="#000000"
+                    android:textSize="10dp"
+                    android:visibility="invisible"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.466"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.611" />
+
+                <TextView
+                    android:id="@+id/emailindication"
+                    android:layout_width="171dp"
+                    android:layout_height="27dp"
+                    android:background="@drawable/text_design"
+                    android:fontFamily="@font/cabin_semibold"
+                    android:text="Inavild emailAddress"
+                    android:textAlignment="center"
+                    android:textColor="#020202"
+                    android:textSize="10dp"
+                    android:visibility="invisible"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.466"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.489" />
+
+
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/photo"
+                    android:layout_width="180dp"
+                    android:layout_height="141dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginTop="180dp"
+                    android:elevation="0dp"
+                    android:src="@drawable/photo"
+                    android:transitionName="profile"
+                    app:elevation="0dp"
+                    app:fabCustomSize="140dp"
+                    app:fabSize="normal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/signup"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:maxImageSize="100dp" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <ImageView
+                android:id="@+id/img"
+                android:layout_width="256dp"
+                android:layout_height="147dp"
+                android:tint="#FFFFFF"
+                android:transitionName="logo"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.466"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.489" />
-
-
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/photo"
-                android:layout_width="180dp"
-                android:layout_height="141dp"
-                android:layout_alignParentStart="true"
-                android:layout_marginTop="180dp"
-                android:elevation="0dp"
-                android:src="@drawable/photo"
-                android:transitionName="profile"
-                app:elevation="0dp"
-                app:fabCustomSize="140dp"
-                app:fabSize="normal"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/signup"
-                app:layout_constraintTop_toTopOf="parent"
-                app:maxImageSize="100dp" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <ImageView
-        android:id="@+id/img"
-        android:layout_width="256dp"
-        android:layout_height="147dp"
-        android:tint="#FFFFFF"
-        android:transitionName="logo"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/logo" />
+                app:srcCompat="@drawable/logo" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

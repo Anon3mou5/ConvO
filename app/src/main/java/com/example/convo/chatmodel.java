@@ -5,6 +5,9 @@ import android.app.ActivityOptions;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Paint;
+import android.graphics.drawable.BitmapDrawable;
+import android.os.Environment;
 import android.util.Log;
 import android.util.Pair;
 import android.view.LayoutInflater;
@@ -24,19 +27,26 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.gson.reflect.TypeToken;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Type;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
+import static com.example.convo.MainActivity.getSavedObjectFromPreference;
 import static com.example.convo.MainActivity.map2;
+import static com.example.convo.MainActivity.mode;
+import static com.example.convo.MainActivity.saveObjectToSharedPreference;
 
 public class chatmodel extends RecyclerView.Adapter<chatviewholder> {
     public int MSG_RIGHT = 0;
@@ -45,6 +55,7 @@ public class chatmodel extends RecyclerView.Adapter<chatviewholder> {
     public List<chat> modelclasslisting;
     String suid,phno;
     String chat, ruid, url;
+    int unread;
     Boolean s;
 
     public chatmodel(List<chat> modelclasslist) {
@@ -58,15 +69,13 @@ public class chatmodel extends RecyclerView.Adapter<chatviewholder> {
     public chatviewholder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v;
         int j = 0;
-//        if(viewType==MSG_LEFT) {
-//            v = LayoutInflater.from(parent.getContext()).inflate(R.layout.ls, parent, false);
-//            j=0;
-//        }
-//        else
-//        {
-        v = LayoutInflater.from(parent.getContext()).inflate(R.layout.lastmessage, parent, false);
-        Log.d("holder", "View holder created");
-        return new chatviewholder(v, j);
+        if (viewType == MSG_LEFT) {
+            v = LayoutInflater.from(parent.getContext()).inflate(R.layout.newmessage, parent, false);
+            j=0;
+        } else {
+            v = LayoutInflater.from(parent.getContext()).inflate(R.layout.lastmessage, parent, false);
+        } Log.d("holder", "View holder created");
+            return new chatviewholder(v, j);
 
     }
 
@@ -77,8 +86,9 @@ public class chatmodel extends RecyclerView.Adapter<chatviewholder> {
         ruid = modelclasslisting.get(position).getRuid();
         url = modelclasslisting.get(position).getUrl();
         phno=modelclasslisting.get(position).getPhno();
+        unread=modelclasslisting.get(position).getUnread();
         try {
-            holder.setdata(suid, chat, ruid, url,phno);
+            holder.setdata(suid, chat, ruid, url,phno,unread,modelclasslisting.get(position));
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -91,36 +101,31 @@ public class chatmodel extends RecyclerView.Adapter<chatviewholder> {
         return modelclasslisting.size();
     }
 
-    @Override
-    public int getItemViewType(int position) {
-        return super.getItemViewType(position);
-    }
 
     @Override
     public long getItemId(int position) {
         return position;
     }
-//    public int getItemViewType(int position)
-//    {
-//        FirebaseAuth f = FirebaseAuth.getInstance();
-//        if(modelclasslist.get(position).getSuid().equals(f.getCurrentUser().getUid()))
-//        {
-//            return  MSG_RIGHT;
-//        }
-//        else
-//        {
-//            return MSG_LEFT;
-//        }
-//    }
-//}
+    public int getItemViewType(int position)
+    {
+        FirebaseAuth f = FirebaseAuth.getInstance();
+        if(modelclasslisting.get(position).getUnread()==0)
+        {
+            return  MSG_RIGHT;
+        }
+        else
+        {
+            return MSG_LEFT;
+        }
+    }
 }
 
 class chatviewholder extends RecyclerView.ViewHolder {
 
      TextView t1;
-     TextView t2;
+     TextView t2,count;
      CardView card;
-     FloatingActionButton photo;
+     CircleImageView profile;
      View view;
      String name=null;
 
@@ -130,19 +135,29 @@ class chatviewholder extends RecyclerView.ViewHolder {
 
         t1 = itemView.findViewById(R.id.naam);
         t2= itemView.findViewById(R.id.status);
-        photo=itemView.findViewById(R.id.profile);
+        count = itemView.findViewById(R.id.counter);
+        profile=itemView.findViewById(R.id.profile);
         view = itemView;
         card = itemView.findViewById(R.id.card);
 
         //t3 = itemView.findViewById(R.id.textView);
     }
 
-    void setdata(final String suid, String chat,final String ruid,String url,final String phno) throws InterruptedException {
+    void setdata(final String suid, final String chat,final String ruid,final String url,final String phno,final int unread,final chat model) throws InterruptedException {
         //card.setLayoutParams(t2.getLayoutParams());
 //             ConstraintLayout.LayoutParams p = new ConstraintLayout.LayoutParams(
 //                     ConstraintLayout.LayoutParams.WRAP_CONTENT,
 //                     ConstraintLayout.LayoutParams.WRAP_CONTENT
 //
+
+        t1.setPaintFlags(t1.getPaintFlags() & (~ Paint.UNDERLINE_TEXT_FLAG));
+        t2.setPaintFlags(t1.getPaintFlags() & (~ Paint.UNDERLINE_TEXT_FLAG));
+
+
+        if(unread!=0)
+        {
+            count.setText(unread+"");
+        }
 
 //             p.setMargins(220, 4, 0, 5);
 //             card.setLayoutParams(p);
@@ -216,6 +231,7 @@ while(map2==null)
          }
           t2.setText(chat);
           t1.setText(name);
+
         //  Bitmap b =loadImageFromStorage(MainActivity.PATH);
 //            try {
 //                Bitmap bitmap = BitmapFactory.decodeStream((InputStream)new URL(url).getContent());
@@ -230,8 +246,24 @@ while(map2==null)
             card.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    if(unread!=0) {
+                        count.setVisibility(View.INVISIBLE);
+                        model.setUnread(0);
+                        Type collectionType1 = new TypeToken<List<chat>>() {
+                        }.getType();
+                        List<chat> z = getSavedObjectFromPreference(itemView.getContext(),"preference","chatmodel",collectionType1);
+                        for(int i=0;i<z.size();i++)
+{
+    if(z.get(i).msg.equals(chat) && z.get(i).getRuid().equals(ruid))
+    {
+        z.get(i).setUnread(0);
+    break;
+    }
+    saveObjectToSharedPreference(itemView.getContext(),"preference","chatmodel",collectionType1);
+}
+                    }
                     Pair pairs[] = new  Pair[2];
-                    pairs[0]=new Pair<View,String>(photo,"profile");
+                    pairs[0]=new Pair<View,String>(profile,"profile");
                     pairs[1]=new Pair<View,String>(t1,"name");
                     //   pairs[1]=new Pair<View,String>(emailid,"email");
 //                pairs[2]=new Pair<View,String>(emaileditid,"emailedit");
@@ -247,6 +279,10 @@ while(map2==null)
 
                     }t.putExtra("name",name);
                     t.putExtra("phno",phno);
+                    BitmapDrawable drawable = (BitmapDrawable) profile.getDrawable();
+                    Bitmap bitmap = drawable.getBitmap();
+                    File dir = new File(Environment.getExternalStorageDirectory().getAbsolutePath(), "Convo/photos/IMG_"+phno +".jpg");
+                    t.putExtra("photo",dir);
                     ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation( (Activity) view.getContext(),pairs);
                     view.getContext().startActivity(t,options.toBundle());
                 }
@@ -256,6 +292,56 @@ while(map2==null)
 //             Date d = new Date();
         Log.d("setdata2", "settingdata");
 //        t3.setText((int) d.getTime());
+
+        Thread nw  =new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    final Bitmap bitmap = loadImageFromStorage(phno);
+                    if (bitmap == null) {
+                        if (url.equals("not found")) {
+                        } else {
+                            URL url1 = new URL(url);
+                            final Bitmap bmp = BitmapFactory.decodeStream(url1.openConnection().getInputStream());
+                            ((Activity) itemView.getContext()).runOnUiThread(new Runnable() {
+
+                                @Override
+                                public void run() {
+
+                                    // Stuff that updates the UI
+                                    storeimagetodevice y = new storeimagetodevice();
+                                    y.store(bmp,"",phno);
+                                    profile.setImageBitmap(bmp);
+
+                                }
+                            });
+                        }
+                    }
+                    else
+                    {
+                        ((Activity) itemView.getContext()).runOnUiThread(new Runnable() {
+
+                            @Override
+                            public void run() {
+
+                                // Stuff that updates the UI
+                                profile.setImageBitmap(bitmap);
+
+                            }
+                        });
+
+                    }
+                }catch(MalformedURLException e){
+                    e.printStackTrace();
+                } catch(IOException e){
+                    e.printStackTrace();
+                }
+
+
+            }
+        }) ;
+        nw.start();
+
 
     }
 //     public static Drawable LoadImageFromWebOperations(String url) {
@@ -272,8 +358,9 @@ while(map2==null)
     {
         Bitmap b=null;
         try {
-            File f=new File(path, "profile.jpg");
-            b = BitmapFactory.decodeStream(new FileInputStream(f));
+            File sdCard = Environment.getExternalStorageDirectory();
+            File dir = new File(sdCard.getAbsolutePath(), "Convo/photos/"+path+".jpg");
+            b = BitmapFactory.decodeStream(new FileInputStream(dir));
         }
         catch (FileNotFoundException e)
         {

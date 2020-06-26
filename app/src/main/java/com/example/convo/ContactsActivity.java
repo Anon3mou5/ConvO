@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.EditText;
@@ -83,6 +84,8 @@ public class ContactsActivity extends AppCompatActivity {
 //            }
 //        });
 //        tz.start();
+        Window window =getWindow();
+        window.setNavigationBarColor(getResources().getColor(R.color.pink));
 
         setContentView(R.layout.contacts_view);
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
@@ -152,6 +155,7 @@ public class ContactsActivity extends AppCompatActivity {
         m.notifyDataSetChanged();
         recycle.setAdapter(m);
 
+
         ImageView fab = findViewById(R.id.rtrn);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -165,7 +169,7 @@ public class ContactsActivity extends AppCompatActivity {
 
         final FloatingActionButton button4 = findViewById(R.id.button4);
 
-        final ImageView button5 = findViewById(R.id.button5);
+        final ImageView button5 = findViewById(R.id.invite);
 
         final EditText searchField = findViewById(R.id.searchview);
 
@@ -214,23 +218,29 @@ public class ContactsActivity extends AppCompatActivity {
 
             void filter(String text) {
                 final List<Data> temp = new ArrayList();
-                for (final HashMap.Entry<String, String> d : map2.entrySet()) {
+                //for (final HashMap.Entry<String, String> d : map2.entrySet()) {
+for(int i =0;i<model2.size();i++) {
+    if (model2.get(i).getname().toLowerCase().contains(text.toLowerCase())) {
+        temp.add(model2.get(i));
+    }  m.updateList(temp);
+
+}
 
 
                     //or use .equal(text) with you want equal match
                     //use .toLowerCase() for better matches
-                    if (d.getValue().toLowerCase().contains(text.toLowerCase())) {
-                        if(phuid.get(d.getKey())!=null){
-                            Data e1 = new Data(d.getValue(), "not found", 1, ContactsActivity.this, phuid.get(d.getKey()), d.getKey());
-                            temp.add(e1);
-                        } else{
-                            Data e = new Data(d.getValue(), "not found", 0, ContactsActivity.this, " ", d.getKey());
-                            temp.add(e);
-                        }
+//                    if (d.getValue().toLowerCase().contains(text.toLowerCase())) {
+//                        if(phuid.get(d.getKey())!=null){
+//                           Data e1 = new Data(d.getValue(), "not found", 1, ContactsActivity.this, phuid.get(d.getKey()), d.getKey());
+//                            temp.add(e1);
+//                        } else{
+//                            Data e = new Data(d.getValue(), "not found", 0, ContactsActivity.this, " ", d.getKey());
+//                            temp.add(e);
+//                        }
 
-                        m.updateList(temp);
-                    }
-                }   //update recyclerview
+//                        m.updateList(temp);
+//                    }
+//                }   //update recyclerview
 
             }
         });
@@ -302,46 +312,54 @@ public class ContactsActivity extends AppCompatActivity {
                 FirebaseFirestore fb = FirebaseFirestore.getInstance();
                 DocumentReference df = fb.collection("phonelist").document("list");
                 df.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                    @Override
-                    public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        if (documentSnapshot.exists()) {
-                            for (final String j : map2.keySet()) {
-                                if (documentSnapshot.getString(j) != null) {
-                                    final String userid = documentSnapshot.getString(j);
-                                    FirebaseFirestore db = FirebaseFirestore.getInstance();
-                                    DocumentReference zf = db.collection("users").document(userid);
-                                    zf.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                                        @Override
-                                        public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                            if (documentSnapshot.exists()) {
-                                                // Data d = new Data(map.get(j), documentSnapshot.getString("photo"), 1, ContactsActivity.this, userid, j);
-                                                // model.add(d);
-                                            }
-                                        }
-                                    });
-                                    Data d = new Data(map2.get(j), "not found", 1, ContactsActivity.this, userid, j);
-                                    //  phuid.put(j,userid);
-                                    model2.add(d);
-                                }
-//                                else{
-//                                        Data d = new Data(map.get(j), "not found", 0, ContactsActivity.this, "null", j);
-//                                        model.add(d);
-//                                    }
-                            }
+                                                  @Override
+                                                  public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                                      if (documentSnapshot.exists()) {
+                                                          for (final String j : map2.keySet()) {
+                                                              if (documentSnapshot.getString(j) != null) {
+                                                                  final String userid = documentSnapshot.getString(j);
+                                                                  FirebaseFirestore db = FirebaseFirestore.getInstance();
+                                                                  DocumentReference zf = db.collection("userswithph").document(j);
+                                                                  zf.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                                                      @Override
+                                                                      public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                                                          if (documentSnapshot.exists()) {
+                                                                               Data d = new Data(map2.get(j), documentSnapshot.getString("photo"), 1, ContactsActivity.this, userid, j);
+                                                                               model2.add(0,d);
+                                                                          }
+                                                                      }
+                                                                  });
+                                                               //   Data d = new Data(map2.get(j), "not found", 1, ContactsActivity.this, userid, j);
+                                                                  //  phuid.put(j,userid);
+                                                                  //model2.add(0,d);
+                                                              }
+                                                              else{
+                                                                  Data d = new Data(map2.get(j), "not found", 0, ContactsActivity.this, "null", j);
+                                                                  model2.add(d);
+                                                              }
 
-                        }
-contactsadd();
-                    }
-                });
-                           Collections.sort(model2, new sortbyfound());
-                            RecyclerView recycle = findViewById(R.id.contactsrecycle);
-                            LinearLayoutManager lm = new LinearLayoutManager(getApplicationContext());
-                            lm.setOrientation(LinearLayoutManager.VERTICAL);
-                            recycle.setLayoutManager(lm);
-                            recycle.setAdapter(m);
-                            m.notifyDataSetChanged();
-                            saveObjectToSharedPreference(ContactsActivity.this,"contacts","contact",model2);
+                                                          }
+                                                          RecyclerView recycle = findViewById(R.id.contactsrecycle);
+                                                          LinearLayoutManager lm = new LinearLayoutManager(getApplicationContext());
+                                                          lm.setOrientation(LinearLayoutManager.VERTICAL);
+                                                          recycle.setLayoutManager(lm);
+                                                          recycle.setAdapter(m);
+                                                          m.notifyDataSetChanged();
+                                                          saveObjectToSharedPreference(ContactsActivity.this,"contacts","contact",model2);
+
+                                                      }
+                                                  }
+                                              }
+                );
                 //            Log.d("Phone",""+documentSnapshot.getData());
+
+            case R.id.invitefriend:
+                Intent sendIntent = new Intent();
+                sendIntent.setAction(Intent.ACTION_SEND);
+                sendIntent.putExtra(Intent.EXTRA_TEXT, "Lets,chat on Conv0,a one stop solution for small,secure,fast and cloud messaging.\nMoreover its simple and 6mb only.\nDownload it now at : https://www.dropbox.com/sh/xfnqdwm6seplzdp/AABzJAu9s-KvaIfb642N3IPRa?dl=0 ");
+                sendIntent.setType("text/plain");
+                Intent shareIntent = Intent.createChooser(sendIntent, "Invite through");
+                startActivity(shareIntent);
 
             default:
                 return super.onOptionsItemSelected(item);

@@ -20,28 +20,15 @@
     <!--        app:layout_constraintTop_toBottomOf="@+id/tool"-->
     <!--        tools:layout_editor_absoluteX="3dp" />-->
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="0dp"
-        android:layout_marginEnd="0dp"
-        android:layout_marginBottom="-6dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/cd2"
-        app:srcCompat="@drawable/gradient" />
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/contactsrecycle"
         android:layout_width="match_parent"
-        android:layout_height="658dp"
+        android:layout_height="663dp"
         android:layout_below="@+id/toolbar2"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="8dp"
+        android:layout_marginBottom="0dp"
         android:background="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -179,7 +166,7 @@
                 android:visibility="invisible" />
 
             <ImageView
-                android:id="@+id/button5"
+                android:id="@+id/invite"
                 android:layout_width="35dp"
                 android:layout_height="35dp"
                 android:layout_alignParentTop="true"

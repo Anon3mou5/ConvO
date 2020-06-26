@@ -5,15 +5,12 @@ import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.transition.Transition;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -37,16 +34,13 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.gson.reflect.TypeToken;
-import com.jaeger.library.StatusBarUtil;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import static com.example.convo.MainActivity.model;
-import static com.example.convo.MainActivity.model3;
-import static com.example.convo.asynch.getSavedObjectFromPreference;
+import static com.example.convo.MainActivity.getSavedObjectFromPreference;
 
 
 public class Acti extends AppCompatActivity {
@@ -57,18 +51,19 @@ public class Acti extends AppCompatActivity {
     static String PATH = null;
     static chat ch;
     static contactsfetcher contacts;
-    chatmodel m;
-    RecyclerView recycle;
+    static chatmodel m;
+    HashMap<String, Long> unread = new HashMap<String, Long>();
+    static RecyclerView recycle;
+
 
     //  List<message> listmsg = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        StatusBarUtil.setTransparent(this);
+        Window window =getWindow();
+        window.setNavigationBarColor(getResources().getColor(R.color.pink));
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
         final Context c = getApplicationContext();
-
         if (checkSelfPermission(Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(new String[]{Manifest.permission.READ_CONTACTS}, 100);
         }
@@ -100,11 +95,28 @@ public class Acti extends AppCompatActivity {
 
 
         final DatabaseReference db = FirebaseDatabase.getInstance().getReference("Private chats").child(auth.getCurrentUser().getUid());
-        db.addChildEventListener(new ChildEventListener() {
+        ChildEventListener list = new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull final DataSnapshot dataSnapshot, @Nullable String s) {
                 final String key = dataSnapshot.getKey();
                 DatabaseReference bd = FirebaseDatabase.getInstance().getReference("Private chats").child(auth.getCurrentUser().getUid()).child(key);
+                bd.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if (unread.get(key)!= null) {
+                            unread.put(key, dataSnapshot.getChildrenCount() + unread.get(key));
+                        }
+                        else
+                        {
+                            unread.put(key, dataSnapshot.getChildrenCount() );
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
                 Query q = bd.orderByValue().limitToLast(1);
                 q.addValueEventListener(new ValueEventListener() {
                     @Override
@@ -128,8 +140,13 @@ public class Acti extends AppCompatActivity {
                                     }
                                 }
                             });
-                            ch = new chat(suid, msg, ruid, "not found", phno);
-
+                            if(!suid.equals(auth.getUid())) {
+                                ch = new chat(suid, msg, ruid, "not found", phno, Integer.valueOf(String.valueOf(unread.get(suid))));
+                            }
+                            else
+                            {
+                                ch = new chat(suid, msg, ruid, "not found", phno, 0);
+                            }
                            if(mdl2.size()!=0)
                            {
                                for(int i = mdl2.size()-1;i>=0;i--)
@@ -226,7 +243,8 @@ public class Acti extends AppCompatActivity {
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
-        });
+        };
+      //  db.addChildEventListener(list);
 
 
 
@@ -498,6 +516,9 @@ public class Acti extends AppCompatActivity {
             case R.id.logout:
                 Intent t = new Intent(getApplicationContext(), loginactivity.class);
                 FirebaseAuth c = FirebaseAuth.getInstance();
+
+                DatabaseReference d = FirebaseDatabase.getInstance().getReference().child("Tokens").child(c.getUid());
+                d.removeValue();
                 c.signOut();
                 startActivity(t);
                 finish();
@@ -517,6 +538,20 @@ public class Acti extends AppCompatActivity {
         }
         Log.i ("isMyServiceRunning?", false+"");
         return false;
+    }
+    public static void refresh(Context c) {
+        if (m != null) {
+            Type collectionType = new TypeToken<List<chat>>() {
+            }.getType();
+            mdl2 = getSavedObjectFromPreference(c, "preference", "chatmodel", collectionType);
+            m = new chatmodel(mdl2);
+            LinearLayoutManager lm = new LinearLayoutManager(c);
+            lm.setOrientation(LinearLayoutManager.VERTICAL);
+            recycle.setLayoutManager(lm);
+            // recycle.getLayoutManager().scrollToPosition(mdl2.size() - 1);
+            m.notifyDataSetChanged();
+            recycle.setAdapter(m);
+        }
     }
 
 

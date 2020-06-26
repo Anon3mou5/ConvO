@@ -1,8 +1,11 @@
 package com.example.convo;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.NotificationCompat;
+import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.app.Notification;
@@ -22,12 +25,21 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -39,19 +51,27 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
+import static com.example.convo.Singleactivity.refresh;
 import static com.google.firebase.database.FirebaseDatabase.getInstance;
 
 public class MainActivity extends AppCompatActivity {
 
     static List<Data> model2 = new ArrayList<Data>();
     static List<chat> model = new ArrayList<chat>();
+    static List<read> mdl = new ArrayList<read>();
+    static  HashMap<String,String> mode ;
     static List<read> model3 = new ArrayList<read>();
     static List<read> model4 = new ArrayList<read>();
     static contactsfetcher contacts;
+    static  String timings;
     static HashMap<String,String> map2;
     static int delay=50;
     static HashMap<String ,String> phuid =new HashMap<String, String>();
@@ -62,19 +82,27 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         StatusBarUtil.setTransparent(this);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            Window w = getWindow(); // in Activity's onCreate() for instance
+            w.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+        }
         setContentView(R.layout.homepage);
         final ConstraintLayout lay = findViewById(R.id.homepage);
         final Animation a = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.faded);
 
-
-        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-
-        final FirebaseAuth auth = FirebaseAuth.getInstance();
-
-        if (checkSelfPermission(Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(new String[]{Manifest.permission.READ_CONTACTS}, 100);
+        if (ContextCompat.checkSelfPermission(MainActivity.this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED)
+        {
+            requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},100);
+            requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},100);
         }
 
+
+//        if (checkSelfPermission(Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
+//            requestPermissions(new String[]{Manifest.permission.READ_CONTACTS}, 100);
+//        }
+FirebaseAuth auth = FirebaseAuth.getInstance();
         if (auth.getCurrentUser() == null) {
 
             Intent intent = new Intent(MainActivity.this, loginactivity.class);
@@ -103,10 +131,10 @@ public class MainActivity extends AppCompatActivity {
                 contacts = new contactsfetcher();
                 map2 = contacts.getContactList(MainActivity.this);
                 saveObjectToSharedPreference(MainActivity.this, "contacts", "contactnumber", map2);
-                List<Data> md = null ;
+                List<Data> md = null;
                 Type collectionType = new TypeToken<List<Data>>() {
                 }.getType();
-              md = getSavedObjectFromPreference(getApplicationContext(), "contacts", "contact", collectionType);
+                md = getSavedObjectFromPreference(getApplicationContext(), "contacts", "contact", collectionType);
                 if (md == null) {
                     md = new ArrayList<Data>();
                 }
@@ -123,19 +151,19 @@ public class MainActivity extends AppCompatActivity {
                                     if (documentSnapshot.getString(j) != null) {
                                         final String userid = documentSnapshot.getString(j);
                                         FirebaseFirestore db = FirebaseFirestore.getInstance();
-                                        DocumentReference zf = db.collection("users").document(userid);
+                                        DocumentReference zf = db.collection("userswithph").document(j);
                                         zf.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                                             @Override
                                             public void onSuccess(DocumentSnapshot documentSnapshot) {
                                                 if (documentSnapshot.exists()) {
-                                                    // Data d = new Data(map.get(j), documentSnapshot.getString("photo"), 1, ContactsActivity.this, userid, j);
-                                                    // model.add(d);
+                                                     Data d = new Data(map2.get(j), documentSnapshot.getString("photo"), 1, MainActivity.this, userid, j);
+                                                     model2.add(0,d);
                                                 }
                                             }
                                         });
-                                        Data d = new Data(map2.get(j), "not found", 1, MainActivity.this, userid, j);
+                                      //  Data d = new Data(map2.get(j), "not found", 1, MainActivity.this, userid, j);
                                         //  phuid.put(j,userid);
-                                        model2.add(0, d);
+                                       // model2.add(0, d);
                                     } else {
                                         Data d = new Data(map2.get(j), "not found", 0, MainActivity.this, "null", j);
                                         model2.add(d);
@@ -181,7 +209,7 @@ public class MainActivity extends AppCompatActivity {
 //                    rollback.start();
                     saveObjectToSharedPreference(MainActivity.this, "contacts", "contact", model2);
                 } else {
-                    model2 =md;
+                    model2 = md;
                     //                Log.d("MAPVALUzzz", "" + map2);
 //                model2.clear();
 //                FirebaseFirestore fb = FirebaseFirestore.getInstance();
@@ -254,8 +282,177 @@ public class MainActivity extends AppCompatActivity {
 //                rollback.start();
             }
         });
-k.start();
-k.setPriority(10);// final HashMap<String,String> map = contacts.getContactList(ContactsActivity.this);
+        k.start();
+        k.setPriority(10);
+
+        startService(getApplicationContext());
+
+        Thread timer1 = new Thread(new Runnable() {
+            Timer timer = new Timer();
+            @Override
+            public void run() {
+                TimerTask timerTask = new TimerTask() {
+                    @Override
+                    public void run() {
+                        DatabaseReference status = FirebaseDatabase.getInstance().getReference("STATUS").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("status");
+                        status.setValue(1);
+                        DatabaseReference time= FirebaseDatabase.getInstance().getReference("STATUS").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("time");
+                        SimpleDateFormat formatter = new SimpleDateFormat("HH:mm:ss");
+                        Date date = new Date();
+                        String time1 = formatter.format(date);
+                        time.setValue(time1);
+                    }
+                };
+                timer.schedule(timerTask, 0, 1000);
+            }
+            }
+        );
+                timer1.start();
+
+//        Type collectionType = new TypeToken<HashMap<String, String>>() {
+//        }.getType();
+//        mode = getSavedObjectFromPreference(getApplicationContext(), "contacts", "contactnumber", collectionType);
+//
+//        final DatabaseReference db = FirebaseDatabase.getInstance().getReference("Private chats").child(auth.getCurrentUser().getUid());
+//        db.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                for (DataSnapshot post : dataSnapshot.getChildren()) {
+//                    String key = post.getKey();
+//                    final DatabaseReference bd = FirebaseDatabase.getInstance().getReference("Private chats").child(auth.getCurrentUser().getUid()).child(key);
+//                    bd.addListenerForSingleValueEvent(new ValueEventListener() {
+//                        @Override
+//                        public void onDataChange(@NonNull DataSnapshot datapost) {
+//
+//                            model3.clear();
+//                            String ruuid =null ;
+//                            for (DataSnapshot post : datapost.getChildren()) {
+//                                String msg = (String) post.child("msg").getValue();
+//                                suid = (String) post.child("suid").getValue();
+//                                ruid = (String) post.child("ruid").getValue();
+//                                ruuid =ruid;
+//                                String phno = (String) post.child("phno").getValue();
+//                                SimpleDateFormat formatter = new SimpleDateFormat("HH:mm");
+//                                Date date = new Date();
+//                                String time1 = formatter.format(date);
+//                                read rd = new read(suid, msg, ruid, phno, time1);
+//                                model3.add(rd);
+//                            List<read> md;
+//                            Type collectionType = new TypeToken<List<read>>() {
+//                            }.getType();
+//                            if (ruuid.equals(FirebaseAuth.getInstance().getUid())) {
+//                                md = getSavedObjectFromPreference(getApplicationContext(), "preference", suid, collectionType);
+//                            } else {
+//                                md = getSavedObjectFromPreference(getApplicationContext(), "preference", ruid, collectionType);
+//                            }
+//                            if (md != null && md.size() != 0) {
+//                                for (int j = 0; j < model3.size(); j++) {
+//                                    read r = model3.get(j);
+//                                    md.add(r);
+//                                }
+//                                if (ruid.equals(FirebaseAuth.getInstance().getUid())) {
+//                                    saveObjectToSharedPreference(getApplicationContext(), "preference", suid, md);
+//                                } else {
+//                                    saveObjectToSharedPreference(getApplicationContext(), "preference", ruid, md);
+//                                }
+//                            } else {
+//                                if (ruid.equals(FirebaseAuth.getInstance().getUid())) {
+//                                    saveObjectToSharedPreference(getApplicationContext(), "preference", suid, model3);
+//                                } else {
+//                                    saveObjectToSharedPreference(getApplicationContext(), "preference", ruid, model3);
+//                                }
+//                            }
+//
+//                            }
+//                            refresh(getApplicationContext());
+//                        }
+//
+//                        @Override
+//                        public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//                        }
+//                    });
+//                    Query q = bd.orderByValue().limitToLast(1);
+//                    q.addListenerForSingleValueEvent(new ValueEventListener() {
+//                        @Override
+//                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                            model.clear();
+//                            for (DataSnapshot data : dataSnapshot.getChildren()) {
+//                                HashMap<String, String> map = (HashMap<String, String>) data.getValue();
+//                                final String msg = (String) map.get("msg").toString();
+//                                final String suid = (String) map.get("suid").toString();
+//                                final String ruid = (String) map.get("ruid").toString();
+//                                Log.d("ruid", "" + ruid);
+//                                final String phno = (String) map.get("phno").toString();
+//                                FirebaseFirestore ref = FirebaseFirestore.getInstance();
+//                                DocumentReference df = ref.collection("users").document(ruid.substring(1, ruid.length() - 1));
+//                                df.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+//                                    @Override
+//                                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+//                                        if (documentSnapshot.exists()) {
+//                                            final String photourl;
+//                                            photourl = documentSnapshot.getString("photo");
+//                                        }
+//                                    }
+//                                });
+//                                chat ch;
+//                                ch = new chat(suid, msg, ruid, "not found", phno);
+//                                model.add(ch);
+//                            }
+////
+//                            Type collectionType = new TypeToken<List<chat>>() {
+//                            }.getType();
+//                            List<chat> mdl;
+//                            mdl = getSavedObjectFromPreference(getApplicationContext(), "preference", "chatmodel", collectionType);
+//                            if (mdl != null && mdl.size() != 0) {
+//                                for (int j = 0; j < model.size(); j++) {
+//                                    chat r = model.get(j);
+//                                    for (int i = mdl.size() - 1; i >= 0; i--) {
+//                                        if (mdl.get(i).phno.toLowerCase().equals(r.phno.toLowerCase())) {
+//                                            mdl.remove(i);
+//                                            break;
+//                                        }
+//                                    }
+//                                    mdl.add(r);
+//                                }
+//                                saveObjectToSharedPreference(getApplicationContext(), "preference", "chatmodel", mdl);
+//                            } else {
+//                                saveObjectToSharedPreference(getApplicationContext()
+//                                        , "preference", "chatmodel", model);
+//                            }
+//                        }
+//
+//                        @Override
+//                        public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//                        }
+//                    });
+//                    db.child(key).removeValue();
+//                }
+//            }
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// final HashMap<String,String> map = contacts.getContactList(ContactsActivity.this);
 //startService(getApplicationContext());
 
 //                    if (zz != null) {

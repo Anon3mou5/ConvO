@@ -3,8 +3,9 @@ package com.example.convo;
 public class data2 {
      String msg;
      String sender;
-    String photo;
+    String profilephoto,photo;
     String ruid;
+    int isphoto;
 
     public String getSuid() {
         return suid;
@@ -24,12 +25,30 @@ public class data2 {
         this.ruid = ruid;
     }
 
-    public data2(String msg, String sender, String photo, String ruid,String suid) {
+    public String getProfilephoto() {
+        return profilephoto;
+    }
+
+    public void setProfilephoto(String profilephoto) {
+        this.profilephoto = profilephoto;
+    }
+
+    public int getIsphoto() {
+        return isphoto;
+    }
+
+    public void setIsphoto(int isphoto) {
+        this.isphoto = isphoto;
+    }
+
+    public data2(String msg, String sender, String profilephoto, String ruid, String suid, String photo,int isphoto) {
         this.msg=msg;
         this.sender=sender;
-        this.photo=photo;
+        this.profilephoto=profilephoto;
         this.ruid = ruid;
         this.suid=suid;
+        this.isphoto = isphoto;
+        this.photo = photo;
     }
 
     public String getMsg() {

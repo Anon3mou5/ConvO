@@ -4,13 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg"
-    android:backgroundTint="#27BCBFC0"
+    android:backgroundTint="#FFFFFF"
     android:backgroundTintMode="src_in"
     android:fitsSystemWindows="true"
     android:orientation="horizontal"
     android:windowSoftInputMode="adjustPan"
-    tools:context=".MainActivity">
+    tools:context=".Acti">
 
     <!--    <View-->
     <!--        android:layout_width="match_parent"-->
@@ -32,6 +31,42 @@
     <!--        tools:layout_editor_absoluteX="3dp"-->
     <!--        tools:layout_editor_absoluteY="3dp" />-->
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/maintoolbar"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@drawable/gdtb"
+        android:elevation="7dp"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:layout_editor_absoluteX="16dp">
+
+            <ImageView
+                android:id="@+id/img"
+                android:layout_width="119dp"
+                android:layout_height="36dp"
+                android:layout_marginEnd="20dp"
+                android:foregroundTint="#000000"
+                android:tint="#FFFFFF"
+                android:transitionName="logo"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/logo" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.appcompat.widget.Toolbar>
+
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"
         android:layout_width="match_parent"
@@ -44,56 +79,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:menu="@menu/bottom_nav" />
 
-
-    <com.github.florent37.shapeofview.shapes.ArcView
-        android:id="@+id/arcView"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:elevation="7dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:shape_arc_cropDirection="outside"
-        app:shape_arc_height="17dp"
-        app:shape_arc_position="bottom"
-        tools:ignore="MissingConstraints">
-
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/maintoolbar"
-            android:layout_width="407dp"
-            android:layout_height="62dp"
-            android:background="@drawable/gradienttoolbar"
-            android:elevation="7dp"
-            android:minHeight="?attr/actionBarSize"
-            android:theme="?attr/actionBarTheme"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                tools:layout_editor_absoluteX="16dp">
-
-                <ImageView
-                    android:id="@+id/img"
-                    android:layout_width="119dp"
-                    android:layout_height="36dp"
-                    android:layout_marginEnd="15dp"
-                    android:foregroundTint="#000000"
-                    android:tint="#FFFFFF"
-                    android:transitionName="logo"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/logo" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-        </androidx.appcompat.widget.Toolbar>
-
-    </com.github.florent37.shapeofview.shapes.ArcView>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/startchat"
@@ -113,25 +98,17 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/chatrecycle"
         android:layout_width="match_parent"
-        android:layout_height="605dp"
-        android:layout_marginTop="15dp"
-        android:background="#FFFFFF"
+        android:layout_height="match_parent"
+        android:layout_marginTop="66dp"
+        android:layout_marginBottom="60dp"
         android:elevation="5dp"
         app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/arcView">
-
-    </androidx.recyclerview.widget.RecyclerView>
-
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:elevation="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@drawable/gradient" />
+        app:layout_constraintTop_toBottomOf="@+id/maintoolbar"
+        tools:context=".Acti">
+
+    </androidx.recyclerview.widget.RecyclerView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

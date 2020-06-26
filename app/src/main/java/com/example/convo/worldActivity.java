@@ -9,6 +9,7 @@ import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.EditText;
@@ -57,6 +58,8 @@ public class worldActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
         Toolbar t = findViewById(R.id.toolbar2);
+        Window window =getWindow();
+        window.setNavigationBarColor(getResources().getColor(R.color.pink));
         setSupportActionBar(t);
 
 

@@ -8,18 +8,26 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:900880987336:android:5f5197cf3869c8195ba1fd",
+        "mobilesdk_app_id": "1:900880987336:android:1b7ce8bd2376d4e65ba1fd",
         "android_client_info": {
-          "package_name": "com.convo"
+          "package_name": "com.conversation"
         }
       },
       "oauth_client": [
         {
-          "client_id": "900880987336-dsc7gqc0d0ei6husik6ackvefaumkc9j.apps.googleusercontent.com",
+          "client_id": "900880987336-bj7qjglce7m6grtf1kqqdraem8em4ajd.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.convo",
-            "certificate_hash": "06d018cd89e1379de4b7524101fea068421db634"
+            "package_name": "com.conversation",
+            "certificate_hash": "a521742e8bfe68616a00c434941fec1f948e22f4"
+          }
+        },
+        {
+          "client_id": "900880987336-gc2668upkdjde9njq5b5o9thvu80hnlp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.conversation",
+            "certificate_hash": "0125a663083685d5242bb802288f629b06f7a730"
           }
         },
         {

@@ -2,20 +2,21 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:transitionName="constraint"
     android:id="@+id/homepage"
+    android:theme="@style/AppTheme3"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/gradient3"
-    android:textAllCaps="false"
+    android:background="@drawable/gradient"
     android:fitsSystemWindows="true"
-    tools:context=".MainActivity" >
+    android:textAllCaps="false"
+    android:transitionName="constraint"
+    tools:context=".MainActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraint"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fitsSystemWindows="true"/>
+        android:fitsSystemWindows="true" />
 
     <ImageView
         android:id="@+id/img"

@@ -12,6 +12,6 @@
         android:top="3dp" />
 
     <corners
-        android:radius="30dp"/>
+        android:radius="20dp"/>
 
 </shape>

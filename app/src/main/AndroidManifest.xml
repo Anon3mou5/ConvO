@@ -4,6 +4,13 @@
 
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.REQUEST_PASSWORD_COMPLEXITY" />
+    <uses-feature android:name="android.hardware.camera" android:required="true" />
 
     <application
         android:allowBackup="true"
@@ -25,8 +32,12 @@
         </activity>
         <activity android:name=".Acti"
             android:windowSoftInputMode="adjustResize">
-
         </activity>
+
+        <activity android:name=".exitclass"
+            android:windowSoftInputMode="adjustResize">
+        </activity>
+
         <activity android:name=".loginactivity"
             android:windowSoftInputMode="adjustPan">
         </activity>
@@ -34,6 +45,12 @@
             android:windowSoftInputMode="adjustResize">
 
         </activity>
+        <activity android:name=".galleryview"
+            android:windowSoftInputMode="adjustResize"
+            android:theme="@style/AppTheme3">
+
+        </activity>
+
         <activity android:name=".Singleactivity">
 
         </activity>
