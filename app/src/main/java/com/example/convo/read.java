@@ -9,9 +9,32 @@ import com.google.firebase.database.FirebaseDatabase;
 public class read {
 
     String msg,suid,ruid,phno,time;
-    int isphoto;
+    int isphoto,isfile;
     String photo;
     String bitmappath;
+
+    public int getIsfile() {
+        return isfile;
+    }
+
+    public void setIsfile(int isfile) {
+        this.isfile = isfile;
+    }
+
+    public read(String suid, String msg, String ruid, String phno, String time, String photo, int isphoto, String bitmappath, int isfile) {
+        this.msg = msg;
+        this.suid = suid;
+        this.ruid = ruid;
+        this.phno = phno;
+        this.time = time;
+        this.isphoto = isphoto;
+        this.isfile = isfile;
+        this.photo = photo;
+        this.bitmappath = bitmappath;
+    }
+
+
+
 
 
     public String getMsg() {
@@ -57,18 +80,19 @@ public class read {
     public void setBitmappath(String bitmap) {
         this.bitmappath = bitmap;
     }
-
-    public read(String suid, String msg, String ruid, String phno, String time, String photo, int isphoto, String bitmap)
-    {
-        this.suid=suid;
-        this.msg=msg;
-        this.phno=phno;
-        this.ruid=ruid;
-        this.time=time;
-        this.isphoto=isphoto;
-        this.photo=photo;
-        this.bitmappath = bitmap;
-    }
+//
+//    public read(String suid, String msg, String ruid, String phno, String time, String photo, int isphoto, String bitmap)
+//    {
+//        this.suid=suid;
+//        this.msg=msg;
+//        this.phno=phno;
+//        this.ruid=ruid;
+//        this.time=time;
+//        this.isphoto=isphoto;
+//        this.photo=photo;
+//        this.bitmappath = bitmap;
+//
+//    }
 
 
 

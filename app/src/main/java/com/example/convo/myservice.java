@@ -61,6 +61,7 @@ import static com.example.convo.MainActivity.mdl;
 import static com.example.convo.MainActivity.model;
 import static com.example.convo.MainActivity.model3;
 import static com.example.convo.Acti.refresh;
+import static com.example.convo.Singleactivity.m;
 
 public class myservice extends Service {
     private final LocalBinder mBinder = new LocalBinder();
@@ -323,14 +324,82 @@ refresh(getApplicationContext());
                                 final String phno = (String) post.child("phno").getValue();
                                 final String url = (String) post.child("photo").getValue();
                                 int isphoto = Integer.parseInt((Long.toString((long) post.child("isphoto").getValue())));
+                                int isfile = Integer.parseInt((Long.toString((long) post.child("isfile").getValue())));
                                 SimpleDateFormat formatter = new SimpleDateFormat("HH:mm");
                                 Date date = new Date();
                                 final String time1 = formatter.format(date);
-                                if(isphoto==1 && url!=null && suid.equals(FirebaseAuth.getInstance().getUid()))
-                                {
+//                                if (isfile == 1 && url != null && suid.equals(FirebaseAuth.getInstance().getUid())) {
+//
+//                                } else if (isphoto == 1 && url != null) {
+//                                    msg = "📷  Photo";
+//                                    if (!suid.equals(FirebaseAuth.getInstance().getUid())) {
+//                                        Thread nw = new Thread(new Runnable() {
+//                                            @Override
+//                                            public void run() {
+//                                                try {
+//                                                    URL url1 = new URL(url);
+//                                                    final Bitmap bmp = BitmapFactory.decodeStream(url1.openConnection().getInputStream());
+//                                                    Map<String, String> specialmap;
+//                                                    Uri Filepath;
+//                                                    specialmap = loadMap("imagenum", "number");
+//                                                    if (specialmap == null || specialmap.size() == 0) {
+//                                                        specialmap = new HashMap<String, String>();
+//                                                        specialmap.put((phno), Double.toString(1));
+//                                                        saveMap(specialmap, "imagenum", "number");
+//                                                        storeimagetodevice y = new storeimagetodevice();
+//                                                        y.store(bmp, phno, Double.toString(0));
+//                                                        Filepath = Uri.fromFile(new File(Environment.getExternalStorageDirectory().getAbsolutePath(), "Convo/docs/" + phno + "/IMG_" + Double.toString(0) + ".jpg"));
+//                                                    } else {
+//                                                        storeimagetodevice y = new storeimagetodevice();
+//                                                        Double val = Double.valueOf(specialmap.get(phno));
+//                                                        y.store(bmp, phno, val.toString());
+//                                                        Filepath = Uri.fromFile(new File(Environment.getExternalStorageDirectory().getAbsolutePath(), "Convo/docs/" + phno + "/IMG_" + Double.toString(val) + ".jpg"));
+//                                                        specialmap.remove(phno);
+//                                                        val = val + 1;
+//                                                        specialmap.put((phno), val.toString());
+//                                                        saveMap(specialmap, "imagenum", "number");
+//                                                    }
+//                                                    read photodata = new read(suid, msg, ruid, phno, time1, null, 0, Filepath.toString(),1);
+//                                                    model3.add(photodata);
+//                                                    List<read> md;
+//                                                    Type collectionType = new TypeToken<List<read>>() {
+//                                                    }.getType();
+//                                                    if (ruid.equals(FirebaseAuth.getInstance().getUid())) {
+//                                                        md = getSavedObjectFromPreference(getApplicationContext(), "preference", suid, collectionType);
+//                                                    } else {
+//                                                        md = getSavedObjectFromPreference(getApplicationContext(), "preference", ruid, collectionType);
+//                                                    }
+//                                                    if (md != null && md.size() != 0) {
+//                                                        for (int j = 0; j < model3.size(); j++) {
+//                                                            read r = model3.get(j);
+//                                                            md.add(r);
+//                                                        }
+//                                                        if (ruid.equals(FirebaseAuth.getInstance().getUid())) {
+//                                                            saveObjectToSharedPreference(getApplicationContext(), "preference", suid, md);
+//                                                        } else {
+//                                                            saveObjectToSharedPreference(getApplicationContext(), "preference", ruid, md);
+//                                                        }
+//                                                    } else {
+//                                                        if (model3.size() != 0) {
+//                                                            if (ruid.equals(FirebaseAuth.getInstance().getUid())) {
+//                                                                saveObjectToSharedPreference(getApplicationContext(), "preference", suid, model3);
+//                                                            } else {
+//                                                                saveObjectToSharedPreference(getApplicationContext(), "preference", ruid, model3);
+//                                                            }
+//                                                        }
+//                                                    }
+//
+//                                                } catch (Exception e) {
+//                                                    e.printStackTrace();
+//                                                }
+//                                            }
+//                                        }
+//                                        );
+//                                        nw.start();
+//                                    }
+                                if (isphoto == 1 && url != null && suid.equals(FirebaseAuth.getInstance().getUid())) {
 
-                                }
-                                else {
+                                } else {
                                     if (isphoto == 1 && url != null) {
                                         msg = "📷  Photo";
                                         if (!suid.equals(FirebaseAuth.getInstance().getUid())) {
@@ -343,7 +412,7 @@ refresh(getApplicationContext());
                                                         Map<String, String> specialmap;
                                                         Uri Filepath;
                                                         specialmap = loadMap("imagenum", "number");
-                                                        if (specialmap == null || specialmap.size()==0) {
+                                                        if (specialmap == null || specialmap.size() == 0) {
                                                             specialmap = new HashMap<String, String>();
                                                             specialmap.put((phno), Double.toString(1));
                                                             saveMap(specialmap, "imagenum", "number");
@@ -360,7 +429,7 @@ refresh(getApplicationContext());
                                                             specialmap.put((phno), val.toString());
                                                             saveMap(specialmap, "imagenum", "number");
                                                         }
-                                                        read photodata = new read(suid, msg, ruid, phno, time1, null, 1, Filepath.toString());
+                                                        read photodata = new read(suid, msg, ruid, phno, time1, null, 1, Filepath.toString(), 0);
                                                         model3.add(photodata);
                                                         List<read> md;
                                                         Type collectionType = new TypeToken<List<read>>() {
@@ -399,7 +468,7 @@ refresh(getApplicationContext());
                                             nw.start();
                                         }
                                     } else {
-                                        read rd = new read(suid, msg, ruid, phno, time1, url, 0, null);
+                                        read rd = new read(suid, msg, ruid, phno, time1, url, 0, null, 0);
                                         model3.add(rd);
                                         List<read> md;
                                         Type collectionType = new TypeToken<List<read>>() {
@@ -429,9 +498,12 @@ refresh(getApplicationContext());
                                             }
                                         }
                                     }
-                                }
-                                }
-                            }
+
+                                    if (m != null) {
+                                        m.notifyDataSetChanged();
+                                    }
+                                    }
+                            }    }
                         @Override
                         public void onCancelled(@NonNull DatabaseError databaseError) {
 

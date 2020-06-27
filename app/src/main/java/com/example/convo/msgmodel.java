@@ -61,6 +61,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static android.provider.MediaStore.Images.Media.getBitmap;
 import static com.example.convo.MainActivity.getSavedObjectFromPreference;
@@ -73,12 +75,14 @@ public class msgmodel extends RecyclerView.Adapter<msgviewholder> {
         public int MSG_LEFT=1;
         public  int MSG_LEFT_PHOTO=2;
     public  int MSG_RIGHT_PHOTO=3;
+    public  int FILE_LEFT_PHOTO=4;
+    public  int FILE_RIGHT_PHOTO=5;
 
         List<read> modelclasslist;
         String suid,phno;
 
         String chat,ruid,time,photo,profilephotourl;
-        int isphoto;
+        int isphoto,isfile;
         Uri bitmap;
         Boolean s;
         read model;
@@ -102,6 +106,14 @@ public class msgmodel extends RecyclerView.Adapter<msgviewholder> {
             else if(viewType==MSG_RIGHT_PHOTO) {
                 v = LayoutInflater.from(parent.getContext()).inflate(R.layout.mphotodirect, parent, false);
             }
+            else if(viewType==FILE_RIGHT_PHOTO) {
+                v = LayoutInflater.from(parent.getContext()).inflate(R.layout.filelayoutright, parent, false);
+            }
+
+            else if(viewType==FILE_LEFT_PHOTO) {
+                v = LayoutInflater.from(parent.getContext()).inflate(R.layout.filelayout, parent, false);
+            }
+
             else
             {
                 v = LayoutInflater.from(parent.getContext()).inflate(R.layout.ms,parent, false);
@@ -121,12 +133,13 @@ public class msgmodel extends RecyclerView.Adapter<msgviewholder> {
             time=modelclasslist.get(position).getTime();
             photo=modelclasslist.get(position).getPhoto();
             isphoto=modelclasslist.get(position).getIsphoto();
+            isfile = modelclasslist.get(position).getIsfile();
             model = modelclasslist.get(position);
             String j = modelclasslist.get(position).getBitmappath();
             if(j!=null) {
                 bitmap = Uri.parse(modelclasslist.get(position).getBitmappath());
 
-            }holder.setdata(suid, chat,ruid,phno,model,time,photo,isphoto,bitmap);
+            }holder.setdata(suid, chat,ruid,phno,model,time,photo,isphoto,bitmap,isfile);
             Log.d("holder", "View holder Binded");
         }
 
@@ -151,6 +164,14 @@ public class msgmodel extends RecyclerView.Adapter<msgviewholder> {
             {
                 return MSG_LEFT_PHOTO;
             }
+            else if(!modelclasslist.get(position).getSuid().equals(f.getCurrentUser().getUid()) &&  modelclasslist.get(position).isfile==1)
+            {
+                return FILE_LEFT_PHOTO;
+            }
+            else if(modelclasslist.get(position).getSuid().equals(f.getCurrentUser().getUid()) &&  modelclasslist.get(position).isfile==1)
+            {
+                return FILE_RIGHT_PHOTO;
+            }
             else
             {
                 return MSG_LEFT;
@@ -162,7 +183,7 @@ public class msgmodel extends RecyclerView.Adapter<msgviewholder> {
 
 
          TextView t1;
-         TextView t2;
+         TextView t2,mimetype;
          static  double retrive = 0;
          ImageView photosent;
          static int i=0;
@@ -176,6 +197,7 @@ public class msgmodel extends RecyclerView.Adapter<msgviewholder> {
             super(itemView);
 
             t1 = itemView.findViewById(R.id.status);
+            mimetype=itemView.findViewById(R.id.mimetype);
             cont = itemView.findViewById(R.id.cont);
             c=itemView.getContext();
             photosent=itemView.findViewById(R.id.photosent);
@@ -184,7 +206,7 @@ public class msgmodel extends RecyclerView.Adapter<msgviewholder> {
             //t3 = itemView.findViewById(R.id.textView);
         }
 
-        void setdata(final String suid, final String chat, final String ruid, final String phno, final read model, final String time1, final String photo, int isphoto, final Uri bitmap) {
+        void setdata(final String suid, final String chat, final String ruid, final String phno, final read model, final String time1, final String photo, int isphoto, final Uri bitmap,int isfile) {
             //card.setLayoutParams(t2.getLayoutParams());
 //             ConstraintLayout.LayoutParams p = new ConstraintLayout.LayoutParams(
 //                     ConstraintLayout.LayoutParams.WRAP_CONTENT,
@@ -211,17 +233,28 @@ public class msgmodel extends RecyclerView.Adapter<msgviewholder> {
 //                     ConstraintLayout.LayoutParams.WRAP_CONTENT
 //             );
 
-            if (isphoto == 1) {
-                if (bitmap != null) {
-                    try {
-                        final Bitmap photobit = MediaStore.Images.Media.getBitmap(itemView.getContext().getContentResolver(), bitmap);
-                        ((Activity) itemView.getContext()).runOnUiThread(new Runnable() {
+            if(isfile==1)
+            {
+                Pattern p = Pattern.compile("/.*$");
+                Matcher m = p.matcher(bitmap.toString());
+                if(m.find()) {
+                    mimetype.setText(m.group(1));
+                    t2.setText(time1);
+                }
+            }
+            else {
 
-                            @Override
-                            public void run() {
+                if (isphoto == 1) {
+                    if (bitmap != null) {
+                        try {
+                            final Bitmap photobit = MediaStore.Images.Media.getBitmap(itemView.getContext().getContentResolver(), bitmap);
+                            ((Activity) itemView.getContext()).runOnUiThread(new Runnable() {
 
-                                // Stuff that updates the UI\
-                                // Stuff that updates the UI
+                                @Override
+                                public void run() {
+
+                                    // Stuff that updates the UI\
+                                    // Stuff that updates the UI
 //                                if (photobit.getHeight() > 300) {
 //                                    FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) photosent.getLayoutParams();
 //                                    photosent.setLayoutParams(new FrameLayout.LayoutParams(photobit.getWidth()+200,400 ));
@@ -229,30 +262,30 @@ public class msgmodel extends RecyclerView.Adapter<msgviewholder> {
 //                                    FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) photosent.getLayoutParams();
 //                                    photosent.setLayoutParams(new FrameLayout.LayoutParams(photobit.getWidth()+200,220 ));
 //                                }
-                                //specialmap = getSavedObjectFromPreference(itemView.getContext(),"imagenum","number",collectionType)
-                                photosent.setImageBitmap(photobit);
-                            }
-                        });
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                                    //specialmap = getSavedObjectFromPreference(itemView.getContext(),"imagenum","number",collectionType)
+                                    photosent.setImageBitmap(photobit);
+                                }
+                            });
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+
+                    } else {
+
+                        //= getSavedObjectFromPreference(itemView.getContext(),"imagenum","number",collectionType);
+                        Toast.makeText(itemView.getContext(), "Unable to retrive", Toast.LENGTH_LONG).show();
                     }
 
-                } else {
-
-                    //= getSavedObjectFromPreference(itemView.getContext(),"imagenum","number",collectionType);
-                    Toast.makeText(itemView.getContext(), "Unable to retrive", Toast.LENGTH_LONG).show();
                 }
-
-            }
 //             //p.setMargins(0, 4, 220, 5);
-            //card.setLayoutParams(p);
-            // t1.setVisibility(View.VISIBLE);
-            //  lay.setBackgroundColor(Color.parseColor("#FFFFFF"));
-            //card.setLayoutParams(new ConstraintLayout.LayoutParams(t2.getLayoutParams()));
-            // t2.setBackgroundColor(Color.parseColor("#FFFFFF"));
-            // t2.setTextColor(Color.parseColor("#000000"));
-            Log.d("Set", "model data");
-            //   Log.d("Set", "model data");
+                //card.setLayoutParams(p);
+                // t1.setVisibility(View.VISIBLE);
+                //  lay.setBackgroundColor(Color.parseColor("#FFFFFF"));
+                //card.setLayoutParams(new ConstraintLayout.LayoutParams(t2.getLayoutParams()));
+                // t2.setBackgroundColor(Color.parseColor("#FFFFFF"));
+                // t2.setTextColor(Color.parseColor("#000000"));
+                Log.d("Set", "model data");
+                //   Log.d("Set", "model data");
 //         if(name.length()>chat.length()) {
 //             t1.setText(name);
 //             t2.setText(chat);
@@ -263,7 +296,7 @@ public class msgmodel extends RecyclerView.Adapter<msgviewholder> {
 //             t2.setWidth(w);
 //             t2.setHeight(h);
 
-            t2.setText(time1);
+                t2.setText(time1);
 //         else {
 //             t1.setText(name);
 //             t2.setText(chat);
@@ -274,19 +307,19 @@ public class msgmodel extends RecyclerView.Adapter<msgviewholder> {
 //             t1.setWidth(w);
 //             t1.setHeight(h);
 //         }
-            if (isphoto == 0) {
-                t1.setPaintFlags(t1.getPaintFlags() & (~Paint.UNDERLINE_TEXT_FLAG));
-                t1.setText(chat);
-                t1.setOnLongClickListener(new View.OnLongClickListener() {
-                    @Override
-                    public boolean onLongClick(View v) {
+                if (isphoto == 0) {
+                    t1.setPaintFlags(t1.getPaintFlags() & (~Paint.UNDERLINE_TEXT_FLAG));
+                    t1.setText(chat);
+                    t1.setOnLongClickListener(new View.OnLongClickListener() {
+                        @Override
+                        public boolean onLongClick(View v) {
 
-                        //  Drawable d = ResourcesCompat.getDrawable(c.getResources(),R.drawable.bg2,null);
-                        //     cont.setForeground(d);
+                            //  Drawable d = ResourcesCompat.getDrawable(c.getResources(),R.drawable.bg2,null);
+                            //     cont.setForeground(d);
 
 
-                        //Drawable d = ResourcesCompat.getDrawable(c.getResources(),R.drawable.bg2,null);
-                        //cont.setForeground(d);
+                            //Drawable d = ResourcesCompat.getDrawable(c.getResources(),R.drawable.bg2,null);
+                            //cont.setForeground(d);
 //                                              final AlertDialog.Builder builder = new AlertDialog.Builder(c);
 //                                              LayoutInflater lf= (LayoutInflater) c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 //                                              View v2 = lf.inflate(R.layout.pop2,null);
@@ -352,76 +385,76 @@ public class msgmodel extends RecyclerView.Adapter<msgviewholder> {
 //                                                  }
 //                                              });
 
-                        final AlertDialog.Builder builder = new AlertDialog.Builder(c);
-                        LayoutInflater lf = (LayoutInflater) c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                        View v2 = lf.inflate(R.layout.pop2, null);
-                        final TextView cancel = v2.findViewById(R.id.cancel);
-                        final TextView b = v2.findViewById(R.id.delete);
-                        builder.setView(v2);
-                        final AlertDialog dialog = builder.create();
-                        dialog.show();
-                        b.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                dialog.cancel();
-                                List<read> mdl;
-                                Type collectionType = new TypeToken<List<read>>() {
-                                }.getType();
-                                mdl = getSavedObjectFromPreference(c, "preference", ruid, collectionType);
-                                for (i = mdl.size() - 1; i >= 0; i--) {
-                                    read z = mdl.get(i);
-                                    if (z.msg.equals(model.msg)) {
-                                        mdl.remove(i);
-                                        break;
-                                    }
-                                }
-
-
-                                Type collectionType2 = new TypeToken<List<chat>>() {
-                                }.getType();
-                                List<chat> mdl2;
-                                mdl2 = getSavedObjectFromPreference(c, "preference", "chatmodel", collectionType2);
-                                if (mdl2.size() != 0) {
-                                    for (int k = mdl2.size() - 1; k >= 0; k--) {
-                                        chat z = mdl2.get(k);
-                                        if (z.msg.toLowerCase().equals(chat.toLowerCase())) {
-                                            mdl2.remove(k);
-                                            FirebaseAuth u = FirebaseAuth.getInstance();
-                                            chat zz = new chat(u.getCurrentUser().getUid(), mdl.get(mdl.size() - 2).msg, ruid, "not found", phno, 0);
-                                            mdl2.add(zz);
+                            final AlertDialog.Builder builder = new AlertDialog.Builder(c);
+                            LayoutInflater lf = (LayoutInflater) c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                            View v2 = lf.inflate(R.layout.pop2, null);
+                            final TextView cancel = v2.findViewById(R.id.cancel);
+                            final TextView b = v2.findViewById(R.id.delete);
+                            builder.setView(v2);
+                            final AlertDialog dialog = builder.create();
+                            dialog.show();
+                            b.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    dialog.cancel();
+                                    List<read> mdl;
+                                    Type collectionType = new TypeToken<List<read>>() {
+                                    }.getType();
+                                    mdl = getSavedObjectFromPreference(c, "preference", ruid, collectionType);
+                                    for (i = mdl.size() - 1; i >= 0; i--) {
+                                        read z = mdl.get(i);
+                                        if (z.msg.equals(model.msg)) {
+                                            mdl.remove(i);
                                             break;
                                         }
                                     }
+
+
+                                    Type collectionType2 = new TypeToken<List<chat>>() {
+                                    }.getType();
+                                    List<chat> mdl2;
+                                    mdl2 = getSavedObjectFromPreference(c, "preference", "chatmodel", collectionType2);
+                                    if (mdl2.size() != 0) {
+                                        for (int k = mdl2.size() - 1; k >= 0; k--) {
+                                            chat z = mdl2.get(k);
+                                            if (z.msg.toLowerCase().equals(chat.toLowerCase())) {
+                                                mdl2.remove(k);
+                                                FirebaseAuth u = FirebaseAuth.getInstance();
+                                                chat zz = new chat(u.getCurrentUser().getUid(), mdl.get(mdl.size() - 2).msg, ruid, "not found", phno, 0);
+                                                mdl2.add(zz);
+                                                break;
+                                            }
+                                        }
+                                    }
+                                    final msgmodel m = new msgmodel(mdl);
+                                    saveObjectToSharedPreference(c, "preference", ruid, mdl);
+                                    saveObjectToSharedPreference(c, "preference", "chatmodel", mdl2);
+                                    final RecyclerView recycle = ((Activity) c).findViewById(R.id.singlerecycle);
+                                    LinearLayoutManager lm = new LinearLayoutManager(c);
+                                    lm.setOrientation(LinearLayoutManager.VERTICAL);
+                                    recycle.setLayoutManager(lm);
+                                    recycle.setAdapter(m);
+                                    recycle.getLayoutManager().scrollToPosition(mdl.size() - 1);
+                                    m.notifyDataSetChanged();
                                 }
-                                final msgmodel m = new msgmodel(mdl);
-                                saveObjectToSharedPreference(c, "preference", ruid, mdl);
-                                saveObjectToSharedPreference(c, "preference", "chatmodel", mdl2);
-                                final RecyclerView recycle = ((Activity) c).findViewById(R.id.singlerecycle);
-                                LinearLayoutManager lm = new LinearLayoutManager(c);
-                                lm.setOrientation(LinearLayoutManager.VERTICAL);
-                                recycle.setLayoutManager(lm);
-                                recycle.setAdapter(m);
-                                recycle.getLayoutManager().scrollToPosition(mdl.size() - 1);
-                                m.notifyDataSetChanged();
-                            }
-                        });
+                            });
 
-                        cancel.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                dialog.cancel();
-                            }
-                        });
+                            cancel.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    dialog.cancel();
+                                }
+                            });
 
-                        return true;
-                    }
+                            return true;
+                        }
 
 
-                });
+                    });
 
 
-            }
-            //  Bitmap b =loadImageFromStorage(MainActivity.PATH);
+                }
+                //  Bitmap b =loadImageFromStorage(MainActivity.PATH);
 //            try {
 //
 //                Bitmap bitmap = BitmapFactory.decodeStream((InputStream)new URL(url).getContent());
@@ -434,30 +467,31 @@ public class msgmodel extends RecyclerView.Adapter<msgviewholder> {
 
 //             t1.setLayoutParams(t2.getLayoutParams());
 //             Date d = new Date();
-            Log.d("setdata2", "settingdata");
+                Log.d("setdata2", "settingdata");
 //        t3.setText((int) d.getTime());
-            if (isphoto == 1) {
-                photosent.setOnClickListener(new View.OnClickListener() {
-                                                 @Override
-                                                 public void onClick(View v) {
-                                                     Pair pairs[] = new Pair[2];
-                                                     pairs[1] = new Pair<View, String>(photosent, "name");
-                                                     pairs[0] = new Pair<View, String>(t2, "profile2");
-                                                     //   pairs[1]=new Pair<View,String>(emailid,"email");
+                if (isphoto == 1) {
+                    photosent.setOnClickListener(new View.OnClickListener() {
+                                                     @Override
+                                                     public void onClick(View v) {
+                                                         Pair pairs[] = new Pair[2];
+                                                         pairs[1] = new Pair<View, String>(photosent, "name");
+                                                         pairs[0] = new Pair<View, String>(t2, "profile2");
+                                                         //   pairs[1]=new Pair<View,String>(emailid,"email");
 //                pairs[2]=new Pair<View,String>(emaileditid,"emailedit");
 //                pairs[3]=new Pair<View,String>(password,"pass");
 //                pairs[4]=new Pair<View,String>(passeditid,"passedit");
-                                                     Intent t = new Intent(itemView.getContext(), galleryview.class);
-                                                     t.putExtra("sender",phno );
-                                                     t.putExtra("when",time1);
-                                                     t.putExtra("url", bitmap);
-                                                     ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation((Activity) itemView.getContext(), pairs);
-                                                     itemView.getContext().startActivity(t, options.toBundle());
+                                                         Intent t = new Intent(itemView.getContext(), galleryview.class);
+                                                         t.putExtra("sender", phno);
+                                                         t.putExtra("when", time1);
+                                                         t.putExtra("url", bitmap);
+                                                         ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation((Activity) itemView.getContext(), pairs);
+                                                         itemView.getContext().startActivity(t, options.toBundle());
 
 
+                                                     }
                                                  }
-                                             }
-                );
+                    );
+                }
             }
         }
 //     public static Drawable LoadImageFromWebOperations(String url) {

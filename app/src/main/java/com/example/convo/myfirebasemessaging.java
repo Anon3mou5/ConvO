@@ -291,7 +291,7 @@ public class myfirebasemessaging extends FirebaseMessagingService {
                             SimpleDateFormat formatter = new SimpleDateFormat("HH:mm");
                             Date date = new Date();
                             String time1 = formatter.format(date);
-                            read rd = new read(suid, msg, ruid, phno, time1,null,0,null);
+                            read rd = new read(suid, msg, ruid, phno, time1,null,0,null,0);
                             model3.add(rd);
                         }
                         List<read> md;

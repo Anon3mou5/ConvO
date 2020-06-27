@@ -110,6 +110,7 @@ public class Singleactivity extends AppCompatActivity {
     static int CAMERA_REQUEST=004;
     static int MY_CAMERA_PERMISSION_CODE=003;
     static int PICK_IMAGE_MULTIPLE=004;
+    static int PICK_FILEs_MULTIPLE=005;
     private ScaleGestureDetector mScaleGestureDetector;
     private float mScaleFactor = 1.0f;
     private ImageView mImageView;
@@ -203,7 +204,7 @@ public class Singleactivity extends AppCompatActivity {
                     final FirebaseUser u = FirebaseAuth.getInstance().getCurrentUser();
                     final DatabaseReference db1 = FirebaseDatabase.getInstance().getReference("Private chats");
                     final String text = msg.getText().toString();
-                    read me = new read(u.getUid(), msg.getText().toString(), ruid, phno, "blah-blah",null,(int) 0,null);
+                    read me = new read(u.getUid(), msg.getText().toString(), ruid, phno, "blah-blah",null,(int) 0,null,0);
                     FirebaseFirestore bd = FirebaseFirestore.getInstance();
                     CollectionReference cd = bd.collection("phonelist");
                     DocumentReference ref = cd.document("list");
@@ -215,7 +216,7 @@ public class Singleactivity extends AppCompatActivity {
                                 for (Map.Entry<String, Object> ent : entity.entrySet()) {
                                     if (ent.getValue().toString().equals(u.getUid())) {
                                         String ph = ent.getKey().toString();
-                                        read m = new read(u.getUid(), text, ruid, ph, "blah-",null,(int)0,null);
+                                        read m = new read(u.getUid(), text, ruid, ph, "blah-",null,(int)0,null,0);
                                         db1.child(ruid).child(u.getUid()).push().setValue(m);
                                     }
                                 }
@@ -301,6 +302,26 @@ public class Singleactivity extends AppCompatActivity {
 //**The following line is the important one!
                 intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
                 startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_MULTIPLE); //SELECT_PICTURES is simply a global int used to check the calling intent in onActivityResult
+            }
+        });
+
+        attach.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)
+//                {
+//                   // requestPermissions(new String[]{Manifest.permission.CAMERA}, MY_CAMERA_PERMISSION_CODE);
+//                }
+//                else
+//                {
+//                    Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+//                    startActivityForResult(cameraIntent, CAMERA_REQUEST);
+//                }
+                Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+                intent.setType("*/*"); //allows any image file type. Change * to specific extension to limit it
+//**The following line is the important one!
+                intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+                startActivityForResult(Intent.createChooser(intent, "Select Files"), PICK_FILEs_MULTIPLE); //SELECT_PICTURES is simply a global int used to check the calling intent in onActivityResult
             }
         });
 
@@ -663,11 +684,11 @@ public class Singleactivity extends AppCompatActivity {
                             SimpleDateFormat formatter = new SimpleDateFormat("HH:mm");
                             Date date = new Date();
                             String time1 = formatter.format(date);
-                            read r = new read(FirebaseAuth.getInstance().getUid(), null, ruid, phno, time1,null,1,filePath.toString());
+                            read r = new read(FirebaseAuth.getInstance().getUid(), null, ruid, phno, time1,null,1,filePath.toString(),0);
                             mdl.add(r);
+                            m.notifyDataSetChanged();
                             //r = new read(FirebaseAuth.getInstance().getUid(), "l", ruid, phno, time1, "nolink", 1,null);
                             saveObjectToSharedPreference(getApplicationContext(), "preference", ruid, mdl);
-                            m.notifyDataSetChanged();
                             uploadImage(filePath);
                         } catch (IOException e) {
                             e.printStackTrace();
@@ -685,11 +706,55 @@ public class Singleactivity extends AppCompatActivity {
                     SimpleDateFormat formatter = new SimpleDateFormat("HH:mm");
                     Date date = new Date();
                     String time1 = formatter.format(date);
-                    read r = new read(FirebaseAuth.getInstance().getUid(), null, ruid, phno, time1, null, 1, filePath.toString());
+                    read r = new read(FirebaseAuth.getInstance().getUid(), null, ruid, phno, time1, null, 1, filePath.toString(),0);
                     mdl.add(r);
+                    m.notifyDataSetChanged();
              //       r = new read(FirebaseAuth.getInstance().getUid(), "", ruid, phno, time1, "nolink", 1,null);
                     saveObjectToSharedPreference(getApplicationContext(), "preference", ruid, mdl);
+
+                    try {
+                        uploadImage(filePath);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    //do something with the image (save it to some directory or whatever you need to do with it here)
+                }
+            }
+        }
+        if (requestCode == PICK_FILEs_MULTIPLE) {
+            if (resultCode == Activity.RESULT_OK) {
+                if (data.getClipData() != null) {
+
+                    int count = data.getClipData().getItemCount(); //evaluate the count before the for loop --- otherwise, the count is evaluated every loop.
+                    for (int i = 0; i < count; i++) {
+                        filePath = data.getClipData().getItemAt(i).getUri();
+                        try {
+
+                            SimpleDateFormat formatter = new SimpleDateFormat("HH:mm");
+                            Date date = new Date();
+                            String time1 = formatter.format(date);
+                            read r = new read(FirebaseAuth.getInstance().getUid(), null, ruid, phno, time1,null,0,filePath.toString(),1);
+                            mdl.add(r);
+                            m.notifyDataSetChanged();
+                            //r = new read(FirebaseAuth.getInstance().getUid(), "l", ruid, phno, time1, "nolink", 1,null);
+                            saveObjectToSharedPreference(getApplicationContext(), "preference", ruid, mdl);
+                            uploadImage(filePath);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        //do something with the image (save it to some directory or whatever you need to do with it here)
+                    }
+                } else if (data.getData() != null) {
+                    filePath = data.getData();
+                    SimpleDateFormat formatter = new SimpleDateFormat("HH:mm");
+                    Date date = new Date();
+                    String time1 = formatter.format(date);
+                    read r = new read(FirebaseAuth.getInstance().getUid(), null, ruid, phno, time1, null, 0, filePath.toString(),1);
+                    mdl.add(r);
                     m.notifyDataSetChanged();
+                    //       r = new read(FirebaseAuth.getInstance().getUid(), "", ruid, phno, time1, "nolink", 1,null);
+                    saveObjectToSharedPreference(getApplicationContext(), "preference", ruid, mdl);
+
                     try {
                         uploadImage(filePath);
                     } catch (IOException e) {
@@ -765,7 +830,7 @@ public class Singleactivity extends AppCompatActivity {
 
                                             final FirebaseUser u = FirebaseAuth.getInstance().getCurrentUser();
                                             final DatabaseReference db1 = FirebaseDatabase.getInstance().getReference("Private chats");
-                                            read me = new read(u.getUid(), "", ruid, phno, "blah-blah",download.toString(),1,null);
+                                            read me = new read(u.getUid(), "", ruid, phno, "blah-blah",download.toString(),1,null,0);
                                             FirebaseFirestore bd = FirebaseFirestore.getInstance();
                                             CollectionReference cd = bd.collection("phonelist");
                                             DocumentReference ref = cd.document("list");
@@ -777,7 +842,7 @@ public class Singleactivity extends AppCompatActivity {
                                                         for (Map.Entry<String, Object> ent : entity.entrySet()) {
                                                             if (ent.getValue().toString().equals(u.getUid())) {
                                                                 String ph = ent.getKey().toString();
-                                                                read m = new read(u.getUid(), "", ruid, ph, "blah-",download.toString(),1,null);
+                                                                read m = new read(u.getUid(), "", ruid, ph, "blah-",download.toString(),1,null,0);
                                                                 db1.child(ruid).child(u.getUid()).push().setValue(m);
                                                             }
                                                         }

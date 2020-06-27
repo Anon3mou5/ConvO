@@ -2,9 +2,9 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/cont"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:backgroundTint="#FFFFFF"
     android:fitsSystemWindows="true"
     android:orientation="horizontal"
     android:padding="1dp"
@@ -21,11 +21,10 @@
         android:layout_marginTop="10dp"
         android:layout_marginEnd="10dp"
         android:layout_marginBottom="10dp"
-        android:adjustViewBounds="true"
+        android:background="@drawable/recycleround"
         android:dividerHeight="0.0px"
         android:elevation="8dp"
         android:foregroundGravity="left"
-        android:maxWidth="20dp"
         app:cardBackgroundColor="#00ffffff"
         app:cardCornerRadius="7dp"
         app:cardElevation="9dp"
@@ -33,59 +32,35 @@
         app:cardUseCompatPadding="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHeight_min="wrap"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintWidth_min="wrap">
+        app:layout_constraintTop_toTopOf="parent">
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/lay"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/gradient"
+            android:background="#FFFFFF"
             android:fitsSystemWindows="true"
             android:padding="1dp"
             tools:context=".MainActivity">
 
 
-            <FrameLayout
-                android:id="@+id/image_frame"
+            <TextView
+                android:id="@+id/mimetype"
                 android:layout_width="wrap_content"
-                android:layout_height="220dp"
-                android:layout_alignParentLeft="true"
-                android:layout_marginStart="2dp"
-                android:layout_marginTop="2dp"
-                android:layout_marginEnd="2dp"
-                android:layout_marginBottom="2dp"
-                android:maxWidth="50dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="7dp"
+                android:layout_marginTop="7dp"
+                android:layout_marginEnd="7dp"
+                android:layout_marginBottom="7dp"
+                android:background="#1D000000"
+                android:padding="5dp"
+                android:text="mimetype"
+                android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <ImageView
-                    android:id="@+id/photosent"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="2dp"
-                    android:layout_marginTop="3dp"
-                    android:layout_marginEnd="2dp"
-                    android:layout_marginBottom="2dp"
-                    android:adjustViewBounds="true"
-                    android:cropToPadding="false"
-                    android:maxWidth="400dp"
-                    android:maxHeight="340dp"
-                    android:scaleType="centerCrop"
-                    android:transitionName="name"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/name"
-                    app:srcCompat="@mipmap/ic"
-                    tools:srcCompat="@tools:sample/backgrounds/scenic" />
-
-
-            </FrameLayout>
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/time"
@@ -95,16 +70,17 @@
                 android:layout_alignParentEnd="true"
                 android:layout_marginStart="5dp"
                 android:layout_marginEnd="7dp"
-                android:layout_marginBottom="5dp"
+                android:layout_marginBottom="2dp"
                 android:layout_toEndOf="@+id/status"
                 android:fontFamily="@font/cabin_semibold"
                 android:text="9:30"
-                android:textColor="#FFFFFF"
+                android:textColor="#000000"
                 android:textSize="10sp"
                 android:transitionName="profile2"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/status" />
+                app:layout_constraintStart_toEndOf="@+id/status"
+                app:layout_constraintTop_toBottomOf="@+id/mimetype" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
