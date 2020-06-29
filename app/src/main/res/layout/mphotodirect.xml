@@ -51,7 +51,7 @@
             <FrameLayout
                 android:id="@+id/image_frame"
                 android:layout_width="wrap_content"
-                android:layout_height="220dp"
+                android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_marginStart="2dp"
                 android:layout_marginTop="2dp"
@@ -73,7 +73,7 @@
                     android:layout_marginBottom="2dp"
                     android:adjustViewBounds="true"
                     android:cropToPadding="false"
-                    android:maxWidth="400dp"
+                    android:maxWidth="340dp"
                     android:maxHeight="340dp"
                     android:scaleType="centerCrop"
                     android:transitionName="name"
@@ -82,7 +82,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/name"
                     app:srcCompat="@mipmap/ic"
-                    tools:srcCompat="@tools:sample/backgrounds/scenic" />
+                    tools:srcCompat="@drawable/wall" />
 
 
             </FrameLayout>

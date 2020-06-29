@@ -208,7 +208,7 @@ public class signactivity extends AppCompatActivity {
                                                                         finish();
                                                                     }
                                                                 });
-                                                        read zz = new read(user.getUid(), name.getText().toString(), user.getUid(), ph.getText().toString(), "blah",null,0,null);
+                                                        read zz = new read(user.getUid(), name.getText().toString(), user.getUid(), ph.getText().toString(), "blah",null,0,null,0);
                                                         saveObjectToSharedPreference(getApplicationContext(), "urnum", user.getUid(), zz);
 
                                                         Toast.makeText(signactivity.this, "Account Created Succesfully", Toast.LENGTH_SHORT).show();

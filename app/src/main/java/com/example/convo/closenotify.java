@@ -62,7 +62,7 @@ public class closenotify extends BroadcastReceiver {
             final FirebaseUser u = FirebaseAuth.getInstance().getCurrentUser();
             final DatabaseReference db1 = FirebaseDatabase.getInstance().getReference("Private chats");
             final String text = message.toString();
-                     read me = new read(u.getUid(), text, suid, phno, "blah-blah",null,0,null);
+                     read me = new read(u.getUid(), text, suid, phno, "blah-blah",null,0,null,0);
                         FirebaseFirestore bd = FirebaseFirestore.getInstance();
                         CollectionReference cd = bd.collection("phonelist");
                         DocumentReference ref = cd.document("list");
@@ -74,7 +74,7 @@ public class closenotify extends BroadcastReceiver {
                                     for (Map.Entry<String, Object> ent : entity.entrySet()) {
                                         if (ent.getValue().toString().equals(u.getUid())) {
                                             String ph = ent.getKey().toString();
-                                            read m = new read(u.getUid(), text, suid, ph, "blah-",null,0,null);
+                                            read m = new read(u.getUid(), text, suid, ph, "blah-",null,0,null,0);
                                             db1.child(suid).child(u.getUid()).push().setValue(m);
                                         }
                                     }

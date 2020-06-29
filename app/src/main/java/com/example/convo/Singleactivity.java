@@ -137,20 +137,20 @@ public class Singleactivity extends AppCompatActivity {
         return;
     }
 //
-//    @Override
-//    protected void onPause() {
-//        super.onPause();
-//        if (child != null && db != null) {
-//            db.removeEventListener(child);
-//        }
-//            }
-//    @Override
-//    protected void onResume() {
-//        super.onResume();
-//        if (child != null && db != null) {
-//            db.addChildEventListener(child);
-//        }
-//            }
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (child != null && db != null) {
+            db.removeEventListener(child);
+        }
+            }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (child != null && db != null) {
+            db.addChildEventListener(child);
+        }
+            }
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -367,63 +367,68 @@ public class Singleactivity extends AppCompatActivity {
         auth = FirebaseAuth.getInstance();
         db = FirebaseDatabase.getInstance().getReference("Private chats").child(auth.getCurrentUser().getUid()).child(ruid);
 
-//        child = new ChildEventListener() {
-//            @Override
-//            public void onChildAdded(@NonNull DataSnapshot post, @Nullable String s) {
-//                //mdl3.clear();
-//                String ruidd = "";
-//                //  for (DataSnapshot post : dataSnapshot.getChildren()) {
-//                // message m = (message)  post.getValue(message.class);
-//                String msg = (String) post.child("msg").getValue();
-//                final String suid = (String) post.child("suid").getValue();
-//                String ruid = (String) post.child("ruid").getValue();
-//                int isphoto = Integer.parseInt((Long.toString((long) post.child("isphoto").getValue())));
-//                if(isphoto==1 && suid==FirebaseAuth.getInstance().getUid())
+        child = new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot post, @Nullable String s) {
+                //mdl3.clear();
+                String ruidd = "";
+                //  for (DataSnapshot post : dataSnapshot.getChildren()) {
+                // message m = (message)  post.getValue(message.class);
+                String msg = (String) post.child("msg").getValue();
+                final String suid = (String) post.child("suid").getValue();
+                String ruid = (String) post.child("ruid").getValue();
+                int isphoto = Integer.parseInt((Long.toString((long) post.child("isphoto").getValue())));
+                int isfile= Integer.parseInt((Long.toString((long) post.child("isfile").getValue())));
+                if(isphoto==1 && suid==FirebaseAuth.getInstance().getUid())
+                {
+                    return;
+                }
+                if(isfile==1 && suid==FirebaseAuth.getInstance().getUid())
+                {
+                    return;
+                }
+                ruidd = ruid;
+                String phno = (String) post.child("phno").getValue();
+                SimpleDateFormat formatter = new SimpleDateFormat("HH:mm");
+                Date date = new Date();
+                String time1 = formatter.format(date);
+                read rd = new read(suid, msg, ruidd, phno, time1,null,0,null,0);
+                mdl.add(rd);
+                ((LinearLayoutManager) recycle.getLayoutManager()).setStackFromEnd(true);
+                recycle.getLayoutManager().scrollToPosition(mdl.size() - 1);
+                m.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot post) {
+//                for(int i =0 ;i<mdl.size();i++)
 //                {
-//                    return;
+//                    if(mdl.get(i).getMsg().equals(post.child("msg").getValue().toString()))
+//                    {
+//                        mdl.remove(mdl.get(i));
+//                        break;
+//                    }
 //                }
-//                ruidd = ruid;
-//                String phno = (String) post.child("phno").getValue();
-//                SimpleDateFormat formatter = new SimpleDateFormat("HH:mm");
-//                Date date = new Date();
-//                String time1 = formatter.format(date);
-//                read rd = new read(suid, msg, ruidd, phno, time1,null,0,null);
-//                mdl.add(rd);
-//                ((LinearLayoutManager) recycle.getLayoutManager()).setStackFromEnd(true);
 //                recycle.getLayoutManager().scrollToPosition(mdl.size() - 1);
 //                m.notifyDataSetChanged();
-//            }
-//
-//            @Override
-//            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-//
-//            }
-//
-//            @Override
-//            public void onChildRemoved(@NonNull DataSnapshot post) {
-////                for(int i =0 ;i<mdl.size();i++)
-////                {
-////                    if(mdl.get(i).getMsg().equals(post.child("msg").getValue().toString()))
-////                    {
-////                        mdl.remove(mdl.get(i));
-////                        break;
-////                    }
-////                }
-////                recycle.getLayoutManager().scrollToPosition(mdl.size() - 1);
-////                m.notifyDataSetChanged();
-//            }
-//
-//            @Override
-//            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-//
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        };
-//      //  db.addChildEventListener(child);
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        };
+        db.addChildEventListener(child);
 
 //        db.addValueEventListener(new ValueEventListener() {
 //                    @Override
