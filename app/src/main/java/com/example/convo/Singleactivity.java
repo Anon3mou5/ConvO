@@ -305,25 +305,25 @@ public class Singleactivity extends AppCompatActivity {
             }
         });
 
-        attach.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)
-//                {
-//                   // requestPermissions(new String[]{Manifest.permission.CAMERA}, MY_CAMERA_PERMISSION_CODE);
-//                }
-//                else
-//                {
-//                    Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-//                    startActivityForResult(cameraIntent, CAMERA_REQUEST);
-//                }
-                Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
-                intent.setType("*/*"); //allows any image file type. Change * to specific extension to limit it
-//**The following line is the important one!
-                intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-                startActivityForResult(Intent.createChooser(intent, "Select Files"), PICK_FILEs_MULTIPLE); //SELECT_PICTURES is simply a global int used to check the calling intent in onActivityResult
-            }
-        });
+//        attach.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+////                if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)
+////                {
+////                   // requestPermissions(new String[]{Manifest.permission.CAMERA}, MY_CAMERA_PERMISSION_CODE);
+////                }
+////                else
+////                {
+////                    Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+////                    startActivityForResult(cameraIntent, CAMERA_REQUEST);
+////                }
+//                Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+//                intent.setType("*/*"); //allows any image file type. Change * to specific extension to limit it
+////**The following line is the important one!
+//                intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+//                startActivityForResult(Intent.createChooser(intent, "Select Files"), PICK_FILEs_MULTIPLE); //SELECT_PICTURES is simply a global int used to check the calling intent in onActivityResult
+//            }
+//        });
 
         Type collectionType = new TypeToken<List<read>>() {
         }.getType();
