@@ -17,11 +17,11 @@ Currently there are 8 branches with Different functionality among them 2 are com
 
 3) Install and Register using your Email-address,Photo and Phone number
 
-## NOTE: Do not fake your Phone num as it helps finding Firends and users ,Do not fake email as well...if you forget-password you wouldnt be able to recover again
+NOTE: Do not fake your Phone num as it helps finding Firends and users ,Do not fake email as well...if you forget-password you wouldnt be able to recover again
 
 4)Chat and Enjoy
 
-## Note : Please give Password with 1 small letter,1 Caps,1 num,1 special symbol and length range is 6-16
+NOTE: Please give Password with 1 small letter,1 Caps,1 num,1 special symbol and length range is 6-16
 
 # How to Contribute:
    1)Clone the project and open it in studio
