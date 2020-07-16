@@ -78,11 +78,11 @@ NOTE: Do not fake your Phone num as it helps finding Firends and users ,Do not f
 
 <img src="https://user-images.githubusercontent.com/56636039/87726484-be708880-c7dc-11ea-95d8-ea40610f2e52.jpg" width=300 height=600>
 
-### Contact List
+### Group Chat UI 
 
 <img src="https://user-images.githubusercontent.com/56636039/87726491-c0d2e280-c7dc-11ea-9290-ea7ced415f12.jpg" width=300 height=600>
 
-### Group Chat UI
+### Contact List
 
 <img src="https://user-images.githubusercontent.com/56636039/87726496-c29ca600-c7dc-11ea-95d1-68464ba03abb.jpg" width=300 height=600>
 
