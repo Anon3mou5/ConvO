@@ -74,11 +74,19 @@ NOTE: Do not fake your Phone num as it helps finding Firends and users ,Do not f
 
 <img src="https://user-images.githubusercontent.com/56636039/87723872-12c53980-c7d8-11ea-8e64-3e0d3feab502.jpg" width=300 height=600>
 
+### Home Screen
+
 <img src="https://user-images.githubusercontent.com/56636039/87726484-be708880-c7dc-11ea-95d8-ea40610f2e52.jpg" width=300 height=600>
+
+### Contact List
 
 <img src="https://user-images.githubusercontent.com/56636039/87726491-c0d2e280-c7dc-11ea-9290-ea7ced415f12.jpg" width=300 height=600>
 
+### Group Chat UI
+
 <img src="https://user-images.githubusercontent.com/56636039/87726496-c29ca600-c7dc-11ea-95d1-68464ba03abb.jpg" width=300 height=600>
+
+### Notification replied
 
 <img src="https://user-images.githubusercontent.com/56636039/87726501-c4666980-c7dc-11ea-92f7-83a5cfeb8cc3.jpg" width=300 height=600>
 
@@ -86,11 +94,12 @@ NOTE: Do not fake your Phone num as it helps finding Firends and users ,Do not f
 
 <img src="https://user-images.githubusercontent.com/56636039/87726513-c8928700-c7dc-11ea-85cb-87ff50b159d8.jpg" width=300 height=600>
 
+###  Images Constrained to Screen of any Sizes
+
 <img src="https://user-images.githubusercontent.com/56636039/87726525-cdefd180-c7dc-11ea-92ea-582eb049585c.jpg" width=300 height=600>
-
-
+<br\>
 <img src="https://user-images.githubusercontent.com/56636039/87726521-cb8d7780-c7dc-11ea-982a-406867d88a64.jpg" width=300 height=600>
-
+<br\>
 <img src="https://user-images.githubusercontent.com/56636039/87726531-d0522b80-c7dc-11ea-9d5f-129751c8db83.jpg" width=300 height=600>
 
 
