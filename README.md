@@ -46,29 +46,26 @@ Currently there are 8 branches with Different functionality among them 2 are com
 
 ### Login Screen =>
 
-![Screenshot_2020-07-17-02-21-22-741_com mxtech videoplayer pro](https://user-images.githubusercontent.com/56636039/87723961-39837000-c7d8-11ea-92d4-48572fce87ed.jpg)
+<img src='https://user-images.githubusercontent.com/56636039/87723961-39837000-c7d8-11ea-92d4-48572fce87ed.jpg' width=300 height=600>
 
-![Screenshot_2020-07-17-02-23-32-427_com mxtech videoplayer pro](https://user-images.githubusercontent.com/56636039/87723852-08a33b00-c7d8-11ea-9f5b-f267841c560a.jpg)
+<img src="https://user-images.githubusercontent.com/56636039/87723852-08a33b00-c7d8-11ea-9f5b-f267841c560a.jpg" width=300 height=600>
 
+<img src="https://user-images.githubusercontent.com/56636039/87723856-0b9e2b80-c7d8-11ea-95c4-bbdb0875afe2.jpg" width=300 height=600>
 
-![Screenshot_2020-07-17-02-23-42-502_com mxtech videoplayer pro](https://user-images.githubusercontent.com/56636039/87723856-0b9e2b80-c7d8-11ea-95c4-bbdb0875afe2.jpg)
+<img src="https://user-images.githubusercontent.com/56636039/87723861-0c36c200-c7d8-11ea-856f-3a3da7214195.jpg" width=300 height=600>
 
+<img src="https://user-images.githubusercontent.com/56636039/87723864-0d67ef00-c7d8-11ea-902a-3e58d56f2c9f.jpg" width=300 height=600>
 
-![Screenshot_2020-07-17-02-24-08-647_com mxtech videoplayer pro](https://user-images.githubusercontent.com/56636039/87723861-0c36c200-c7d8-11ea-856f-3a3da7214195.jpg)
-
-
-![Screenshot_2020-07-17-02-24-32-281_com mxtech videoplayer pro](https://user-images.githubusercontent.com/56636039/87723864-0d67ef00-c7d8-11ea-902a-3e58d56f2c9f.jpg)
-
-![Screenshot_2020-07-17-02-24-55-414_com mxtech videoplayer pro](https://user-
-images.githubusercontent.com/56636039/87723865-0e991c00-c7d8-11ea-8a90-cc18d54ca1c6.jpg)
+<img src="https://user-
+images.githubusercontent.com/56636039/87723865-0e991c00-c7d8-11ea-8a90-cc18d54ca1c6.jpg" width=300 height=600>
 
 
-![Screenshot_2020-07-17-02-25-00-301_com mxtech videoplayer pro](https://user-
-images.githubusercontent.com/56636039/87723868-1062df80-c7d8-11ea-85d3-6d6b7fff6867.jpg)
+<img src="https://user-
+images.githubusercontent.com/56636039/87723868-1062df80-c7d8-11ea-85d3-6d6b7fff6867.jpg" width=300 height=600>
 
 
-![Screenshot_2020-07-17-02-25-12-036_com mxtech videoplayer pro](https://user-
-images.githubusercontent.com/56636039/87723870-11940c80-c7d8-11ea-8ec2-2376a799ad2e.jpg)
+<img src="https://user-
+images.githubusercontent.com/56636039/87723870-11940c80-c7d8-11ea-8ec2-2376a799ad2e.jpg" width=300 height=600>
 
-![Screenshot_2020-07-17-02-26-26-210_com mxtech videoplayer pro](https://user-
-images.githubusercontent.com/56636039/87723872-12c53980-c7d8-11ea-8e64-3e0d3feab502.jpg)
+<img src="https://user-
+images.githubusercontent.com/56636039/87723872-12c53980-c7d8-11ea-8e64-3e0d3feab502.jpg" width=300 height=600>
