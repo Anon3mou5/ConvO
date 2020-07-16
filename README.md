@@ -11,30 +11,30 @@ Currently there are 8 branches with Different functionality among them 2 are com
 
 # How to Use:
 
-### 1)Download the app from the given link : https://www.dropbox.com/sh/xfnqdwm6seplzdp/AABzJAu9s-KvaIfb642N3IPRa?dl=0
+#### 1)Download the app from the given link : https://www.dropbox.com/sh/xfnqdwm6seplzdp/AABzJAu9s-KvaIfb642N3IPRa?dl=0
 
-### 2) Allow installation permission
+##### 2) Allow installation permission
 
-### 3) Install and Register using your Email-address,Photo and Phone number
+##### 3) Install and Register using your Email-address,Photo and Phone number
 
-#### NOTE: Do not fake your Phone num as it helps finding Firends and users ,Do not fake email as well...if you forget-password you wouldnt be able to recover again
+NOTE: Do not fake your Phone num as it helps finding Firends and users ,Do not fake email as well...if you forget-password you wouldnt be able to recover again
 
-### 4)Chat and Enjoy
+##### 4)Chat and Enjoy
 
-#### NOTE: Please give Password with 1 small letter,1 Caps,1 num,1 special symbol and length range is 6-16
+ NOTE: Please give Password with 1 small letter,1 Caps,1 num,1 special symbol and length range is 6-16
 
 # How to Contribute:
    
-   ### 1)Clone the project and open it in studio
+   #### 1)Clone the project and open it in studio
 
-   ### 2)Dm me for Authorization
+   #### 2)Dm me for Authorization
 
-  ###  3)Create your own Branch and commit your updates
+  ####  3)Create your own Branch and commit your updates
 	 
 # Contact:
- #### If you have any doubt you can contact me @ Sourabhraobharadwaj@gmail.com
+ ##### If you have any doubt you can contact me @ Sourabhraobharadwaj@gmail.com
 
- #### Below there are some Screenshots ...Hope it helps :)
+   Below there are some Screenshots ...Hope it helps :)
 
 # Screenshots
 
@@ -64,13 +64,33 @@ Currently there are 8 branches with Different functionality among them 2 are com
 
 ### Reply in Notification =>
 
-<img src="https://user-images.githubusercontent.com/56636039/87723865-0e991c00-c7d8-11ea-8a90-cc18d54ca1c6.jpg" width=300 height=600>
-
-###
-
 <img src="https://user-images.githubusercontent.com/56636039/87723868-1062df80-c7d8-11ea-85d3-6d6b7fff6867.jpg" width=300 height=600>
 
+### After-Replied =>
 
 <img src="https://user-images.githubusercontent.com/56636039/87723870-11940c80-c7d8-11ea-8ec2-2376a799ad2e.jpg" width=300 height=600>
 
+### Notification even after app get killed(Background notification)
+
 <img src="https://user-images.githubusercontent.com/56636039/87723872-12c53980-c7d8-11ea-8e64-3e0d3feab502.jpg" width=300 height=600>
+
+<img src="https://user-images.githubusercontent.com/56636039/87726484-be708880-c7dc-11ea-95d8-ea40610f2e52.jpg" width=300 height=600>
+
+<img src="https://user-images.githubusercontent.com/56636039/87726491-c0d2e280-c7dc-11ea-9290-ea7ced415f12.jpg" width=300 height=600>
+
+<img src="https://user-images.githubusercontent.com/56636039/87726496-c29ca600-c7dc-11ea-95d1-68464ba03abb.jpg" width=300 height=600>
+
+<img src="https://user-images.githubusercontent.com/56636039/87726501-c4666980-c7dc-11ea-92f7-83a5cfeb8cc3.jpg" width=300 height=600>
+
+<img src="https://user-images.githubusercontent.com/56636039/87726507-c6302d00-c7dc-11ea-997b-9265e6edef5e.jpg" width=300 height=600>
+
+<img src="https://user-images.githubusercontent.com/56636039/87726513-c8928700-c7dc-11ea-85cb-87ff50b159d8.jpg" width=300 height=600>
+
+<img src="https://user-images.githubusercontent.com/56636039/87726525-cdefd180-c7dc-11ea-92ea-582eb049585c.jpg" width=300 height=600>
+
+
+<img src="https://user-images.githubusercontent.com/56636039/87726521-cb8d7780-c7dc-11ea-982a-406867d88a64.jpg" width=300 height=600>
+
+<img src="https://user-images.githubusercontent.com/56636039/87726531-d0522b80-c7dc-11ea-9d5f-129751c8db83.jpg" width=300 height=600>
+
+
