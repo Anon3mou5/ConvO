@@ -55,6 +55,7 @@ NOTE: Do not fake your Phone num as it helps finding Firends and users ,Do not f
 <img src="https://user-images.githubusercontent.com/56636039/87723856-0b9e2b80-c7d8-11ea-95c4-bbdb0875afe2.jpg" width=300 height=600>
 
 </p>
+
 ### Single-Single Chat =>
 
 <img src="https://user-images.githubusercontent.com/56636039/87723861-0c36c200-c7d8-11ea-856f-3a3da7214195.jpg" width=300 height=600>
@@ -91,9 +92,7 @@ NOTE: Do not fake your Phone num as it helps finding Firends and users ,Do not f
 ###  Images Constrained to Screen of any Sizes
 <p align="center">
 <img src="https://user-images.githubusercontent.com/56636039/87726525-cdefd180-c7dc-11ea-92ea-582eb049585c.jpg" width=300 height=600>
-</br>
 <img src="https://user-images.githubusercontent.com/56636039/87726521-cb8d7780-c7dc-11ea-982a-406867d88a64.jpg" width=300 height=600>
-</br>
 <img src="https://user-images.githubusercontent.com/56636039/87726531-d0522b80-c7dc-11ea-9d5f-129751c8db83.jpg" width=300 height=600>
 </p>
 
