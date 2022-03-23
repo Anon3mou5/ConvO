@@ -1,6 +1,6 @@
 # ConvO
 
-ConvO is an one stop solution for secure,fast and Messaging Platform, moreover it is simple and small.Now you can update your profile with Photos, and send Photos an Files easily as in Whats app but at Higher Efficiency and Additional File Size.
+ConvO is an one stop solution for secure,fast and Messaging Platform, moreover it is simple and small.Now you can update your profile with Photos, and send Photos and Files easily as in Whatsapp but at Higher Efficiency and Additional File Size.
 
 # About 
 
